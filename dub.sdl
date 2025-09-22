@@ -1,4 +1,4 @@
-name "kelp_render"
+name "kelp-render"
 description "shared library of kelp"
 authors "RiceShark"
 copyright "Copyright © 2025, RiceShark"
@@ -8,6 +8,11 @@ dependency "kelp-api" path="..\\kelp_api"
 dependency "kelp-core" path="..\\kelp_core"
 dependency "bindbc-sdl" version="~>2.2.2"
 
-targetType "dynamicLibrary"
+targetType "library"
 targetName "kelp_render"
 targetPath "build"
+
+versions "SDL_3_2_18"
+libs "SDL3"
+
+dflags "-H" "-Hd=include"
