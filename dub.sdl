@@ -6,13 +6,14 @@ license "proprietary"
 
 dependency "kelp-api" path="..\\kelp_api"
 dependency "kelp-core" path="..\\kelp_core"
+dependency "kelp-sdl" path="..\\kelp_sdl"
 dependency "bindbc-sdl" version="~>2.2.2"
 
 targetType "library"
 targetName "kelp_render"
 targetPath "build"
 
+dflags "-H" "-Hd=include"
+
 versions "SDL_3_2_18"
 libs "SDL3"
-
-dflags "-H" "-Hd=include"
