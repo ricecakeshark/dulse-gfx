@@ -50,12 +50,31 @@ public:
 	}
 
 	typeof(this) begin(GPUColorTargetInfo[] color_target_info_list)
+	in (color_target_info_list.length >= 1)
 	{
 		if (!this.renderable)
 		{
 			return this;
 		}
 		this.render_pass.begin(this.command_buffer, color_target_info_list);
+		return this;
+	}
+
+	typeof(this) begin(
+		GPUColorTargetInfo[] color_target_info_list,
+		GPUDepthStencilTargetInfo depth_stencil_target_info
+	)
+	in (color_target_info_list.length >= 1)
+	{
+		if (!this.renderable)
+		{
+			return this;
+		}
+		this.render_pass.begin(
+			this.command_buffer,
+			color_target_info_list,
+			depth_stencil_target_info
+		);
 		return this;
 	}
 
@@ -99,6 +118,15 @@ public:
 		return this;
 	}
 
+	typeof(this) if_acquired(void delegate() dlg)
+	{
+		if (this.swapchain_texture.handle is null)
+		{
+			return this;
+		}
+		dlg();
+		return this;
+	}
 	/+typeof(this) bind(GPUTextureSamplerBinding[] binding_list, uint first_slot = 0)
 	{
 		if(!this.renderable)
