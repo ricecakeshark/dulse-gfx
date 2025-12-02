@@ -98,9 +98,17 @@ public:
 		return this;
 	}
 
+	typeof(this) bind(GPUGraphicsPipeline pipeline)
+	in (pipeline !is null)
+	in (pipeline.handle !is null)
+	{
+		this.render_pass.bind(pipeline);
+		return this;
+	}
+
 	typeof(this) bind(GPUVertexBuffer[] vertex_buffer_list, uint first_slot = 0)
 	{
-		if (!this.renderable)
+		if (this.swapchain_texture.handle is null)
 		{
 			return this;
 		}
@@ -125,6 +133,38 @@ public:
 			return this;
 		}
 		dlg();
+		return this;
+	}
+
+	typeof(this) draw(
+		ParamPrimitive param
+	)
+	{
+		this.render_pass.draw(param);
+		return this;
+	}
+
+	typeof(this) draw_indexed(
+		ParamIndexedPrimitive param
+	)
+	{
+		this.render_pass.draw_indexed(param);
+		return this;
+	}
+
+	@disable typeof(this) draw_indirect(
+		GPUDrawBuffer draw_buffer, ParamPrimitiveIndirect param
+	)
+	{
+		this.render_pass.draw_indirect(draw_buffer, param);
+		return this;
+	}
+
+	@disable typeof(this) draw_indexed_indirect(
+		GPUDrawBuffer draw_buffer, ParamPrimitiveIndirect param
+	)
+	{
+		this.render_pass.draw_indexed_indirect(draw_buffer, param);
 		return this;
 	}
 	/+typeof(this) bind(GPUTextureSamplerBinding[] binding_list, uint first_slot = 0)
