@@ -20,6 +20,7 @@ class GPUUploadContext
 
 	~this()
 	{
+		this.release();
 		return;
 	}
 
