@@ -117,6 +117,17 @@ class GPUGraphicsContext
 		return temp_index_buffer;
 	}
 
+	bool support_format(
+		SDL_GPUTextureFormat format,
+		SDL_GPUTextureType type,
+		SDL_GPUTextureUsageFlags usage
+	)
+	in (this.device !is null)
+	in (this.device.handle !is null)
+	{
+		return this.device.supportFormat(format, type, usage);
+	}
+
 	SDL_GPUTextureFormat getSwapchainTextureFormat()
 	in (this.device !is null)
 	in (this.device.handle !is null)
