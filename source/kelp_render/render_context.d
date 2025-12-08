@@ -129,6 +129,16 @@ public:
 		return this;
 	}
 
+	typeof(this) bind(GPUTextureSamplerBinding[] texture_sampler_binding, uint first_slot = 0)
+	{
+		if (this.swapchain_texture.handle is null)
+		{
+			return this;
+		}
+		this.render_pass.bind(texture_sampler_binding, first_slot);
+		return this;
+	}
+
 	typeof(this) if_acquired(void delegate() dlg)
 	{
 		if (this.swapchain_texture.handle is null)

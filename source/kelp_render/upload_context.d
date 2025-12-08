@@ -61,4 +61,16 @@ class GPUUploadContext
 		);
 		return this;
 	}
+
+	typeof(this) upload(
+		GPUTextureTransferInfo transfer_buffer_location,
+		GPUTextureRegion texture_region,
+	)
+	{
+		this.copy_pass.upload(
+			transfer_buffer_location,
+			texture_region,
+		);
+		return this;
+	}
 }

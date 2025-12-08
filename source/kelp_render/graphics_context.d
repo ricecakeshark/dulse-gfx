@@ -12,6 +12,7 @@ class GPUGraphicsContext
 	protected GPUGraphicsPipeline[] graphics_pipeline_list;
 	protected GPUVertexBuffer[] vertex_buffer_list;
 	protected GPUIndexBuffer[] index_buffer_list;
+	protected GPUTexture[] texture_list;
 
 	this()
 	{
@@ -90,6 +91,17 @@ class GPUGraphicsContext
 			destroy(index_buffer_list[index]);
 		}
 		index_buffer_list = [];
+		// texture
+		foreach (index; 0 .. texture_list.length)
+		{
+			if (texture_list[index] is null)
+			{
+				continue;
+			}
+			texture_list[index].release();
+			destroy(texture_list[index]);
+		}
+		texture_list = [];
 		return this;
 	}
 
@@ -115,6 +127,14 @@ class GPUGraphicsContext
 		temp_index_buffer = new GPUIndexBuffer(this.device);
 		index_buffer_list ~= temp_index_buffer;
 		return temp_index_buffer;
+	}
+
+	GPUTexture createTexture()
+	{
+		GPUTexture temp_texture;
+		temp_texture = new GPUTexture(this.device);
+		texture_list ~= temp_texture;
+		return temp_texture;
 	}
 
 	bool support_format(
