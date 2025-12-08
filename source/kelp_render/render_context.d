@@ -187,6 +187,24 @@ public:
 		return this;
 	}
 
+	typeof(this) set(const GPUViewport viewport)
+	{
+		this.render_pass.set(viewport);
+		return this;
+	}
+
+	typeof(this) set(const Rect scissor_rect)
+	{
+		this.render_pass.set(scissor_rect);
+		return this;
+	}
+
+	typeof(this) set(ubyte stencil_reference)
+	{
+		this.render_pass.set(stencil_reference);
+		return this;
+	}
+
 	/+typeof(this) bind(GPUTextureSamplerBinding[] binding_list, uint first_slot = 0)
 	{
 		if (this.swapchain_texture.handle is null)
