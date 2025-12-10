@@ -215,6 +215,24 @@ public:
 		return this;
 	}
 
+	typeof(this) push_vertex(Type)(Type uniform_data, uint first_slot)
+	{
+		this.command_buffer.push_vertex(uniform_data, first_slot);
+		return this;
+	}
+
+	typeof(this) push_fragment(Type)(Type uniform_data, uint first_slot)
+	{
+		this.command_buffer.push_fragment(uniform_data, first_slot);
+		return this;
+	}
+
+	typeof(this) push_compute(Type)(Type uniform_data, uint first_slot)
+	{
+		this.command_buffer.push_compute(uniform_data, first_slot);
+		return this;
+	}
+
 	/+typeof(this) bind(GPUTextureSamplerBinding[] binding_list, uint first_slot = 0)
 	{
 		if (this.swapchain_texture.handle is null)
