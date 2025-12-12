@@ -137,6 +137,16 @@ class GPUGraphicsContext
 		return temp_texture;
 	}
 
+	GPUUploadContext createUploadContext()
+	{
+		return new GPUUploadContext(this.device);
+	}
+
+	GPURenderContext createRenderContext()
+	{
+		return new GPURenderContext(this.device, this.window);
+	}
+
 	bool support_format(
 		SDL_GPUTextureFormat format,
 		SDL_GPUTextureType type,

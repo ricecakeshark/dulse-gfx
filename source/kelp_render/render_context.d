@@ -91,16 +91,6 @@ public:
 		return this;
 	}
 
-	deprecated typeof(this) render(void delegate() dlg)
-	{
-		if (this.swapchain_texture.handle is null)
-		{
-			return this;
-		}
-		dlg();
-		return this;
-	}
-
 	typeof(this) bind(GPUGraphicsPipeline pipeline)
 	in (pipeline !is null)
 	in (pipeline.handle !is null)
@@ -233,25 +223,13 @@ public:
 		return this;
 	}
 
-	/+typeof(this) bind(GPUTextureSamplerBinding[] binding_list, uint first_slot = 0)
-	{
-		if (this.swapchain_texture.handle is null)
-		{
-			return this;
-		}
-		this.render_pass.bind(binding_list,first_slot);
-		return this;
-	}+/
-
-	/+
 	typeof(this) blit(GPUBlitInfo blit_info)
 	{
 		if (this.swapchain_texture.handle is null)
 		{
 			return this;
 		}
-		this.command_buffer.blitTexture(blit_info);
+		this.command_buffer.blit_texture(blit_info);
 		return this;
 	}
-	+/
 }
