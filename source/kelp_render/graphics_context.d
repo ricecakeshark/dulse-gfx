@@ -148,12 +148,14 @@ class GPUGraphicsContext
 		return this.device.supportFormat(format, type, usage);
 	}
 
-	SDL_GPUTextureFormat getSwapchainTextureFormat()
+	GPUTextureFormat getSwapchainTextureFormat()
 	in (this.device !is null)
 	in (this.device.handle !is null)
 	in (this.window !is null)
 	in (this.window.handle !is null)
 	{
-		return SDL_GetGPUSwapchainTextureFormat(this.device.handle, this.window.handle);
+		return cast(GPUTextureFormat) SDL_GetGPUSwapchainTextureFormat(
+			this.device.handle, this.window.handle
+		);
 	}
 }
