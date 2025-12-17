@@ -10,6 +10,7 @@ class GPUGraphicsContext
 	public GPUWindow window;
 
 	protected GPUGraphicsPipeline[] graphics_pipeline_list;
+	protected GPUComputePipeline[] compute_pipeline_list;
 	protected GPUVertexShader[] vertex_shader_list;
 	protected GPUFragmentShader[] fragment_shader_list;
 	protected GPUVertexBuffer[] vertex_buffer_list;
@@ -82,6 +83,12 @@ class GPUGraphicsContext
 	{
 		this.release_vertex_buffer();
 		this.release_index_buffer();
+		return this;
+	}
+
+	typeof(this) register(GPUComputePipeline pipeline)
+	{
+		this.compute_pipeline_list ~= pipeline;
 		return this;
 	}
 
@@ -300,4 +307,36 @@ class GPUGraphicsContext
 		List = [];
 		return this;
 	}
+}
+
+GPUComputePipeline initialize(
+	ref GPUComputePipeline pipeline,
+	ref GPUGraphicsContext graphics_context,
+)
+{
+	if (pipeline !is null)
+	{
+		return pipeline;
+	}
+	pipeline = new GPUComputePipeline(graphics_context.device);
+	graphics_context.register(pipeline);
+	return pipeline;
+}
+
+GPUComputePipeline initialize(
+	ref GPUComputePipeline pipeline,
+	GPUGraphicsContext graphics_context,
+	GPUComputePipelineCreateInfo pipeline_create_info,
+)
+{
+	if (pipeline is null)
+	{
+		pipeline = new GPUComputePipeline(graphics_context.device);
+		graphics_context.register(pipeline);
+	}
+	if (pipeline.handle is null)
+	{
+		pipeline.create(pipeline_create_info);
+	}
+	return pipeline;
 }
