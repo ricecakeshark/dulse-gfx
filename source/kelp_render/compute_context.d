@@ -6,17 +6,42 @@ class GPUComputeContext
 {
 	GPUCommandBuffer command_buffer;
 	GPUComputePass compute_pass;
+	GPUSwapchainTexture swapchain_texture;
 
-	this(GPUDevice device)
+	this(GPUDevice device, GPUWindow window)
 	{
-		this.command_buffer = new GPUCommandBuffer(device);
+		this.command_buffer = new GPUCommandBuffer(device, window);
 		this.compute_pass = new GPUComputePass();
+		this.swapchain_texture = new GPUSwapchainTexture(device, window);
 		return;
 	}
 
-	typeof(this) acquire()
+	typeof(this) release()
 	{
-		this.command_buffer.acquire();
+		this.command_buffer = null;
+		this.compute_pass = null;
+		this.swapchain_texture = null;
+		return this;
+	}
+
+	typeof(this) acquire_buffer()
+	{
+		this.command_buffer.acquire_buffer();
+		return this;
+	}
+
+	typeof(this) acquire_texture()
+	{
+		this.command_buffer.acquire_texture(swapchain_texture);
+		return this;
+	}
+
+	typeof(this) if_acquired(void delegate() dlg)
+	{
+		if (this.swapchain_texture.handle !is null)
+		{
+			dlg();
+		}
 		return this;
 	}
 
@@ -56,6 +81,12 @@ class GPUComputeContext
 		return this;
 	}
 
+	typeof(this) push_uniform(Type)(ref Type data)
+	{
+		this.command_buffer.push_uniform(data);
+		return this;
+	}
+
 	typeof(this) dispatch(uint count_x, uint count_y, uint count_z)
 	{
 		this.compute_pass.dispatch(count_x, count_y, count_z);
@@ -65,6 +96,12 @@ class GPUComputeContext
 	typeof(this) submit()
 	{
 		this.command_buffer.submit();
+		return this;
+	}
+
+	typeof(this) blit_texture(GPUBlitInfo blit_info)
+	{
+		this.command_buffer.blit_texture(blit_info);
 		return this;
 	}
 }

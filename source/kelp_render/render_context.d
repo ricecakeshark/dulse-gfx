@@ -23,17 +23,23 @@ class GPURenderContext
 	}
 
 public:
-	typeof(this) acquire()
+	typeof(this) acquire_buffer()
 	{
-		this.command_buffer.acquire();
-		if (this.command_buffer.handle is null)
-		{
-			return this;
-		}
+		this.command_buffer.acquire_buffer();
+		return this;
+	}
+
+	typeof(this) acquire_texture()
+	{
 		this.swapchain_texture.acquire(this.command_buffer);
-		if (this.swapchain_texture.handle is null)
+		return this;
+	}
+
+	typeof(this) if_acquired(void delegate() dlg)
+	{
+		if (this.swapchain_texture.handle !is null)
 		{
-			return this;
+			dlg();
 		}
 		return this;
 	}
@@ -129,16 +135,6 @@ public:
 		return this;
 	}
 
-	typeof(this) if_acquired(void delegate() dlg)
-	{
-		if (this.swapchain_texture.handle is null)
-		{
-			return this;
-		}
-		dlg();
-		return this;
-	}
-
 	typeof(this) draw(
 		ParamPrimitive param
 	)
@@ -214,12 +210,6 @@ public:
 	typeof(this) push_fragment(Type)(Type uniform_data, uint first_slot)
 	{
 		this.command_buffer.push_fragment(uniform_data, first_slot);
-		return this;
-	}
-
-	typeof(this) push_compute(Type)(Type uniform_data, uint first_slot)
-	{
-		this.command_buffer.push_compute(uniform_data, first_slot);
 		return this;
 	}
 

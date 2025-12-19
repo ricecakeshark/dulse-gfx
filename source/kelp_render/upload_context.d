@@ -33,7 +33,7 @@ class GPUUploadContext
 
 	typeof(this) begin()
 	{
-		this.command_buffer.acquire();
+		this.command_buffer.acquire_buffer();
 		this.copy_pass.begin(this.command_buffer);
 		return this;
 	}

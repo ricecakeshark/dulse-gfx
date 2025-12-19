@@ -263,6 +263,11 @@ class GPUGraphicsContext
 		return new GPURenderContext(this.device, this.window);
 	}
 
+	GPUComputeContext create_compute_context()
+	{
+		return new GPUComputeContext(this.device, this.window);
+	}
+
 	bool support_format(
 		SDL_GPUTextureFormat format,
 		SDL_GPUTextureType type,
