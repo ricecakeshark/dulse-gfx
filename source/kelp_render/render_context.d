@@ -125,6 +125,12 @@ public:
 		return this;
 	}
 
+	typeof(this) bind(GPUTexture[] texture_list, uint first_slot = 0u)
+	{
+		this.render_pass.bind(texture_list, first_slot);
+		return this;
+	}
+
 	typeof(this) bind(GPUTextureSamplerBinding[] texture_sampler_binding, uint first_slot = 0)
 	{
 		if (this.swapchain_texture.handle is null)
