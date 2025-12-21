@@ -15,6 +15,7 @@ class GPUGraphicsContext
 	protected GPUFragmentShader[] fragment_shader_list;
 	protected GPUVertexBuffer[] vertex_buffer_list;
 	protected GPUIndexBuffer[] index_buffer_list;
+	protected GPUDrawBuffer[] draw_buffer_list;
 	protected GPUTexture[] texture_list;
 	protected GPUSampler[] sampler_list;
 
@@ -204,6 +205,29 @@ class GPUGraphicsContext
 			destroy(index_buffer_list[index]);
 		}
 		index_buffer_list = [];
+		return this;
+	}
+
+	GPUDrawBuffer create_draw_buffer()
+	{
+		GPUDrawBuffer temp_draw_buffer;
+		temp_draw_buffer = new GPUDrawBuffer(this.device);
+		draw_buffer_list ~= temp_draw_buffer;
+		return temp_draw_buffer;
+	}
+
+	typeof(this) release_draw_buffer()
+	{
+		foreach (index; 0 .. draw_buffer_list.length)
+		{
+			if (draw_buffer_list[index] is null)
+			{
+				continue;
+			}
+			draw_buffer_list[index].release();
+			destroy(draw_buffer_list[index]);
+		}
+		draw_buffer_list = [];
 		return this;
 	}
 

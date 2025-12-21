@@ -165,7 +165,7 @@ public:
 		return this;
 	}
 
-	@disable typeof(this) draw_indirect(
+	typeof(this) draw_indirect(
 		GPUDrawBuffer draw_buffer, ParamPrimitiveIndirect param
 	)
 	{
@@ -177,7 +177,7 @@ public:
 		return this;
 	}
 
-	@disable typeof(this) draw_indexed_indirect(
+	typeof(this) draw_indexed_indirect(
 		GPUDrawBuffer draw_buffer, ParamPrimitiveIndirect param
 	)
 	{
