@@ -6,7 +6,7 @@ license "proprietary"
 
 dependency "kelp-core" path="..\\kelp_core"
 dependency "kelp-sdl" path="..\\kelp_sdl"
-dependency "bindbc-sdl" version="~>2.3.1"
+dependency "bindbc-sdl" version="~>2.3.3"
 
 targetType "library"
 targetName "kelp_render"
