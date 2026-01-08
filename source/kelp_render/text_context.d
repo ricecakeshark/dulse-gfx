@@ -2,17 +2,18 @@ module kelp_render.text_context;
 
 import kelp_core.core;
 import kelp_sdl.graphics;
+import kelp_sdl.image;
 import bindbc.sdl;
 
 class GPUTextContext
 {
-	GPUTextFont text_font;
+	TextFont text_font;
 	GPUTextEngine text_engine;
 	GPUText text;
 
 	this(GPUDevice device)
 	{
-		text_font = new GPUTextFont();
+		text_font = new TextFont();
 		text_engine = new GPUTextEngine(device);
 		text = new GPUText(text_engine, text_font);
 		return;
@@ -103,6 +104,57 @@ class GPUTextContext
 	typeof(this) set_align()
 	{
 		text_font.set_align();
+		return this;
+	}
+}
+
+class TextSurfaceContext
+{
+	TextFont text_font;
+	SurfaceTextEngine text_engine;
+	SurfaceText text;
+
+	this(GPUDevice device)
+	{
+		text_font = new TextFont();
+		text_engine = new SurfaceTextEngine(device);
+		text = new SurfaceText(text_engine, text_font);
+		return;
+	}
+
+	typeof(this) load_font(string font_file, float font_size)
+	{
+		text_font.create(font_file, font_size);
+		return this;
+	}
+
+	typeof(this) create_engine()
+	{
+		text_engine.create();
+		return this;
+	}
+
+	typeof(this) create_text(string str)
+	{
+		text.create(str);
+		return this;
+	}
+
+	typeof(this) draw(Surface surface, int x = 0, int y = 0)
+	{
+		this.text.draw(surface,x,y);
+		return this;
+	}
+
+	typeof(this) set(string str)
+	{
+		text.set_string(str);
+		return this;
+	}
+
+	typeof(this) get_size(out int w, out int h)
+	{
+		text.get_size(w, h);
 		return this;
 	}
 }
