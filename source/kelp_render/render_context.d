@@ -213,6 +213,12 @@ public:
 		return this;
 	}
 
+	typeof(this) push_vertex(Type)(Type uniform_data, uint first_slot, ulong size)
+	{
+		this.command_buffer.push_vertex(uniform_data, first_slot, cast(uint) size);
+		return this;
+	}
+
 	typeof(this) push_fragment(Type)(Type uniform_data, uint first_slot)
 	{
 		this.command_buffer.push_fragment(uniform_data, first_slot);

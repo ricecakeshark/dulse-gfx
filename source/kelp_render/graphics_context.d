@@ -292,6 +292,11 @@ class GPUGraphicsContext
 		return new GPUComputeContext(this.device, this.window);
 	}
 
+	GPUTextContext create_text_context()
+	{
+		return new GPUTextContext(this.device);
+	}
+
 	bool support_format(
 		SDL_GPUTextureFormat format,
 		SDL_GPUTextureType type,

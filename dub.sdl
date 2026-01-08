@@ -8,11 +8,11 @@ dependency "kelp-core" path="..\\kelp_core"
 dependency "kelp-sdl" path="..\\kelp_sdl"
 dependency "bindbc-sdl" version="~>2.3.3"
 
-targetType "library"
+targetType "sourceLibrary"
 targetName "kelp_render"
 targetPath "build"
 
-dflags "-H" "-Hd=include"
+//dflags "-H" "-Hd=include"
 
-versions "SDL_3_2_18"
-libs "SDL3"
+versions "SDL_3_4_0" "SDL_Image_3_2" "SDL_TTF_3_2_2"
+libs "SDL3" "SDL3_image" "SDL3_ttf"
