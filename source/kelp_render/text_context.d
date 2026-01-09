@@ -1,7 +1,8 @@
 module kelp_render.text_context;
 
 import kelp_core.core;
-import kelp_sdl.graphics;
+import kelp_sdl.graphics.core;
+import kelp_sdl.text;
 import kelp_sdl.image;
 import bindbc.sdl;
 
@@ -82,28 +83,101 @@ class GPUTextContext
 		sequence_ptr = text.get_draw_data();
 		return this;
 	}
+	// font align
+	@property TextAlign wrap_align()
+	{
+		return this.text_font.wrap_align;
+	}
 
+	typeof(this) set(TextAlign wrap_align)
+	{
+		this.text_font.set(wrap_align);
+		return this;
+	}
+	// font direction
+	@property TextDirection direction()
+	{
+		return this.text_font.direction;
+	}
+
+	typeof(this) set(TextDirection font_direction)
+	{
+		this.text_font.set(font_direction);
+		return this;
+	}
+	// font hinting
+	@property FontHinting hinting()
+	{
+		return this.text_font.hinting();
+	}
+
+	typeof(this) set(FontHinting font_hinting)
+	{
+		this.text_font.set(font_hinting);
+		return this;
+	}
+	// font size
+	@property float font_size()
+	{
+		return this.text_font.size();
+	}
+
+	typeof(this) set_font_size(float font_size)
+	{
+		this.text_font.set_size(font_size);
+		return this;
+	}
+	// font string size
+	typeof(this) get_string_size(in string text, out int w, out int h)
+	{
+		text_font.get_string_size(text, w, h);
+		return this;
+	}
+	// font style
+	@property FontStyle style()
+	{
+		return this.text_font.style();
+	}
+
+	typeof(this) set(FontStyle font_style)
+	{
+		this.text_font.set(font_style);
+		return this;
+	}
+	// text color
+	typeof(this) get(out ColorF color)
+	{
+		text.get(color);
+		return this;
+	}
+
+	typeof(this) set(in ColorF color)
+	{
+		text.set(color);
+		return this;
+	}
+	// text position
+	typeof(this) set(in int[2] pos)
+	{
+		text.set_pos(pos);
+		return this;
+	}
+	// text string
 	typeof(this) set(string str)
 	{
 		text.set_string(str);
 		return this;
 	}
 
-	typeof(this) get_size(out int w, out int h)
+	typeof(this) get_font_size(out float font_size)
+	{
+		text_font.get_size(font_size);
+		return this;
+	}
+
+	typeof(this) get_text_size(out int w, out int h)
 	{
 		text.get_size(w, h);
-		return this;
-	}
-
-	typeof(this) set(ColorF color)
-	{
-		text.set_color(color);
-		return this;
-	}
-
-	typeof(this) set_align()
-	{
-		text_font.set_align();
 		return this;
 	}
 }
@@ -142,7 +216,7 @@ class TextSurfaceContext
 
 	typeof(this) draw(Surface surface, int x = 0, int y = 0)
 	{
-		this.text.draw(surface,x,y);
+		this.text.draw(surface, x, y);
 		return this;
 	}
 
