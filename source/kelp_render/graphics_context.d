@@ -39,6 +39,12 @@ class GPUGraphicsContext
 		this.window = new GPUWindow();
 		this.window.create(960, 540, "");
 		this.device.claim(this.window);
+		debug
+		{
+			import std.stdio;
+
+			this.output_shader_format().writeln();
+		}
 		return this;
 	}
 
@@ -317,6 +323,24 @@ class GPUGraphicsContext
 		return cast(GPUTextureFormat) SDL_GetGPUSwapchainTextureFormat(
 			this.device.handle, this.window.handle
 		);
+	}
+
+	GPUShaderFormat get_shader_format()
+	{
+		return cast(GPUShaderFormat) cast(SDL_GPUShaderFormat) SDL_GetGPUShaderFormats(
+			this.device.handle
+		);
+	}
+
+	string output_shader_format()
+	{
+		import std.array : join;
+
+		GPUShaderFormat formats = get_shader_format();
+		string spport_spirv = "SPIRV:" ~ ((formats & GPUShaderFormat.spirv) ? "y" : "n");
+		string spport_msl = "MSL:" ~ ((formats & GPUShaderFormat.msl) ? "y" : "n");
+		string spport_dxil = "DXIL:" ~ ((formats & GPUShaderFormat.dxil) ? "y" : "n");
+		return join([spport_spirv, spport_msl, spport_dxil], " ");
 	}
 
 	private Class create_in_list(Class, alias List)()

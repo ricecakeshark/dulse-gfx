@@ -45,16 +45,16 @@ class GPUTextContext
 		assert(sequence_ptr !is null);
 		for (TTF_GPUAtlasDrawSequence* seq = sequence_ptr; seq !is null; seq = seq.next)
 		{
+			assert(seq.atlas_texture !is null);
 			assert(seq.num_vertices > 0);
 			assert(seq.num_indices > 0);
-			assert(seq.atlas_texture !is null);
 			foreach (count; 0 .. seq.numVertices)
 			{
 				vertex_data ~= [
 					seq.xy[count].x,
 					seq.xy[count].y,
 					0.0f,
-					0.1f, 0.5f, 0.9f, 1.0f,
+					1.0f, 1.0f, 0.0f, 1.0f,
 					seq.uv[count].x,
 					seq.uv[count].y,
 				];
@@ -71,10 +71,13 @@ class GPUTextContext
 		TTF_GPUAtlasDrawSequence* sequence_ptr;
 		sequence_ptr = text.get_draw_data();
 		assert(sequence_ptr !is null);
+		assert(sequence_ptr.atlas_texture !is null);
+		assert(sequence_ptr.num_indices >= 0);
 		for (TTF_GPUAtlasDrawSequence* seq = sequence_ptr; seq !is null; seq = seq.next)
 		{
 			sequence_dlg(seq);
 		}
+
 		return this;
 	}
 
@@ -144,6 +147,12 @@ class GPUTextContext
 		this.text_font.set(font_style);
 		return this;
 	}
+	// engine winding
+	typeof(this) set(TextEngineWinding winding)
+	{
+		this.text_engine.set(winding);
+		return this;
+	}
 	// text color
 	typeof(this) get(out ColorF color)
 	{
@@ -162,6 +171,12 @@ class GPUTextContext
 		text.set_pos(pos);
 		return this;
 	}
+	// text size
+	typeof(this) get_text_size(out int w, out int h)
+	{
+		text.get_size(w, h);
+		return this;
+	}
 	// text string
 	typeof(this) set(string str)
 	{
@@ -169,17 +184,6 @@ class GPUTextContext
 		return this;
 	}
 
-	typeof(this) get_font_size(out float font_size)
-	{
-		text_font.get_size(font_size);
-		return this;
-	}
-
-	typeof(this) get_text_size(out int w, out int h)
-	{
-		text.get_size(w, h);
-		return this;
-	}
 }
 
 class TextSurfaceContext
