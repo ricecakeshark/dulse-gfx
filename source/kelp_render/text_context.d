@@ -1,6 +1,8 @@
 module kelp_render.text_context;
 
 import kelp_core.core;
+import kelp_core.graphics;
+import kelp_core.math;
 import kelp_sdl.graphics.core;
 import kelp_sdl.text;
 import kelp_sdl.image;
@@ -38,7 +40,7 @@ class GPUTextContext
 		return this;
 	}
 
-	typeof(this) get_draw_data(out float[][] vertex_data, out int[] index_data)
+	typeof(this) get_draw_data(out Geometry!(VertexPCT, uint) geometry)
 	{
 		TTF_GPUAtlasDrawSequence* sequence_ptr;
 		sequence_ptr = text.get_draw_data();
@@ -50,16 +52,13 @@ class GPUTextContext
 			assert(seq.num_indices > 0);
 			foreach (count; 0 .. seq.numVertices)
 			{
-				vertex_data ~= [
-					seq.xy[count].x,
-					seq.xy[count].y,
-					0.0f,
-					1.0f, 1.0f, 0.0f, 1.0f,
-					seq.uv[count].x,
-					seq.uv[count].y,
-				];
+				geometry.vertex ~= VertexPCT(
+					Vec3(seq.xy[count].x, seq.xy[count].y, 0.0f,),
+					ColorF(1.0f, 1.0f, 0.0f, 1.0f,),
+					Vec2(seq.uv[count].x, seq.uv[count].y,),
+				);
 			}
-			index_data ~= seq.indices[0 .. seq.numIndices];
+			geometry.index ~= seq.indices[0 .. seq.numIndices];
 		}
 		return this;
 	}
