@@ -18,7 +18,6 @@ class GPURenderContext
 
 	~this()
 	{
-
 		return;
 	}
 
@@ -71,7 +70,7 @@ public:
 
 	typeof(this) begin(
 		GPUColorTargetInfo[] color_target_info_list,
-		GPUDepthStencilTargetInfo depth_stencil_target_info
+		in GPUDepthStencilTargetInfo depth_stencil_target_info
 	)
 	in (color_target_info_list.length >= 1)
 	{
@@ -105,7 +104,10 @@ public:
 		return this;
 	}
 
-	typeof(this) bind(GPUVertexBuffer[] vertex_buffer_list, uint first_slot = 0)
+	typeof(this) bind(
+		GPUVertexBuffer[] vertex_buffer_list,
+		in uint first_slot = 0,
+	)
 	{
 		if (this.swapchain_texture.handle is null)
 		{
@@ -125,13 +127,19 @@ public:
 		return this;
 	}
 
-	typeof(this) bind(GPUTexture[] texture_list, uint first_slot = 0u)
+	typeof(this) bind(
+		GPUTexture[] texture_list,
+		in uint first_slot = 0u
+	)
 	{
 		this.render_pass.bind(texture_list, first_slot);
 		return this;
 	}
 
-	typeof(this) bind(GPUTextureSamplerBinding[] texture_sampler_binding, uint first_slot = 0)
+	typeof(this) bind(
+		GPUTextureSamplerBinding[] texture_sampler_binding,
+		in uint first_slot = 0
+	)
 	{
 		if (this.swapchain_texture.handle is null)
 		{
@@ -141,9 +149,7 @@ public:
 		return this;
 	}
 
-	typeof(this) draw(
-		ParamPrimitive param
-	)
+	typeof(this) draw(in ParamPrimitive param)
 	{
 		if (this.swapchain_texture.handle is null)
 		{
@@ -153,9 +159,7 @@ public:
 		return this;
 	}
 
-	typeof(this) draw_indexed(
-		ParamIndexedPrimitive param
-	)
+	typeof(this) draw_indexed(in ParamIndexedPrimitive param)
 	{
 		if (this.swapchain_texture.handle is null)
 		{
@@ -166,7 +170,8 @@ public:
 	}
 
 	typeof(this) draw_indirect(
-		GPUDrawBuffer draw_buffer, ParamPrimitiveIndirect param
+		GPUDrawBuffer draw_buffer,
+		in ParamPrimitiveIndirect param
 	)
 	{
 		if (this.swapchain_texture.handle is null)
@@ -178,7 +183,8 @@ public:
 	}
 
 	typeof(this) draw_indexed_indirect(
-		GPUDrawBuffer draw_buffer, ParamPrimitiveIndirect param
+		GPUDrawBuffer draw_buffer,
+		in ParamPrimitiveIndirect param,
 	)
 	{
 		if (this.swapchain_texture.handle is null)
@@ -207,31 +213,44 @@ public:
 		return this;
 	}
 
-	typeof(this) push_vertex(Type)(Type uniform_data, uint first_slot)
+	typeof(this) push_vertex(Type)(Type uniform_data, in uint first_slot)
 	{
 		this.command_buffer.push_vertex(uniform_data, first_slot);
 		return this;
 	}
 
-	typeof(this) push_vertex(Type)(Type uniform_data, uint first_slot, ulong size)
+	typeof(this) push_vertex(Type)(
+		Type uniform_data,
+		in uint first_slot,
+		in size_t size,
+	)
+	in (size <= uint.max)
 	{
 		this.command_buffer.push_vertex(uniform_data, first_slot, cast(uint) size);
 		return this;
 	}
 
-	typeof(this) push_vertex_ptr(void* uniform_data_ref, uint first_slot, ulong size)
+	typeof(this) push_vertex_ptr(
+		void* uniform_data_ref,
+		in uint first_slot,
+		in size_t size,
+	)
+	in (size <= uint.max)
 	{
 		this.command_buffer.push_vertex(uniform_data_ref, first_slot, cast(uint) size);
 		return this;
 	}
 
-	typeof(this) push_fragment(Type)(Type uniform_data, uint first_slot)
+	typeof(this) push_fragment(Type)(
+		Type uniform_data,
+		in uint first_slot
+	)
 	{
 		this.command_buffer.push_fragment(uniform_data, first_slot);
 		return this;
 	}
 
-	typeof(this) blit(GPUBlitInfo blit_info)
+	typeof(this) blit(in GPUBlitInfo blit_info)
 	{
 		if (this.swapchain_texture.handle is null)
 		{

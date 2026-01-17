@@ -22,7 +22,7 @@ class GPUTextContext
 		return;
 	}
 
-	typeof(this) load_font(string font_file, float font_size)
+	typeof(this) load_font(in string font_file, in float font_size)
 	{
 		text_font.create(font_file, font_size);
 		return this;
@@ -34,7 +34,7 @@ class GPUTextContext
 		return this;
 	}
 
-	typeof(this) create_text(string str)
+	typeof(this) create_text(in string str)
 	{
 		text.create(str);
 		return this;
@@ -91,7 +91,7 @@ class GPUTextContext
 		return this.text_font.wrap_align;
 	}
 
-	typeof(this) set(TextAlign wrap_align)
+	typeof(this) set(in TextAlign wrap_align)
 	{
 		this.text_font.set(wrap_align);
 		return this;
@@ -113,7 +113,7 @@ class GPUTextContext
 		return this.text_font.hinting();
 	}
 
-	typeof(this) set(FontHinting font_hinting)
+	typeof(this) set(in FontHinting font_hinting)
 	{
 		this.text_font.set(font_hinting);
 		return this;
@@ -141,13 +141,13 @@ class GPUTextContext
 		return this.text_font.style();
 	}
 
-	typeof(this) set(FontStyle font_style)
+	typeof(this) set(in FontStyle font_style)
 	{
 		this.text_font.set(font_style);
 		return this;
 	}
 	// engine winding
-	typeof(this) set(TextEngineWinding winding)
+	typeof(this) set(in TextEngineWinding winding)
 	{
 		this.text_engine.set(winding);
 		return this;
@@ -177,7 +177,7 @@ class GPUTextContext
 		return this;
 	}
 	// text string
-	typeof(this) set(string str)
+	typeof(this) set(in string str)
 	{
 		text.set_string(str);
 		return this;
@@ -199,7 +199,7 @@ class TextSurfaceContext
 		return;
 	}
 
-	typeof(this) load_font(string font_file, float font_size)
+	typeof(this) load_font(in string font_file, in float font_size)
 	{
 		text_font.create(font_file, font_size);
 		return this;
@@ -211,19 +211,23 @@ class TextSurfaceContext
 		return this;
 	}
 
-	typeof(this) create_text(string str)
+	typeof(this) create_text(in string str)
 	{
 		text.create(str);
 		return this;
 	}
 
-	typeof(this) draw(Surface surface, int x = 0, int y = 0)
+	typeof(this) draw(
+		ref Surface surface,
+		in int x = 0,
+		in int y = 0,
+	)
 	{
 		this.text.draw(surface, x, y);
 		return this;
 	}
 
-	typeof(this) set(string str)
+	typeof(this) set(in string str)
 	{
 		text.set_string(str);
 		return this;

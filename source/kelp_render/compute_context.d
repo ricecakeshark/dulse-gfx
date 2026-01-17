@@ -87,7 +87,7 @@ class GPUComputeContext
 		return this;
 	}
 
-	typeof(this) dispatch(uint count_x, uint count_y, uint count_z)
+	typeof(this) dispatch(in uint count_x, in uint count_y, in uint count_z)
 	{
 		this.compute_pass.dispatch(count_x, count_y, count_z);
 		return this;
@@ -99,7 +99,7 @@ class GPUComputeContext
 		return this;
 	}
 
-	typeof(this) blit_texture(GPUBlitInfo blit_info)
+	typeof(this) blit_texture(in GPUBlitInfo blit_info)
 	{
 		this.command_buffer.blit_texture(blit_info);
 		return this;

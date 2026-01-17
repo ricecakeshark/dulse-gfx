@@ -311,7 +311,7 @@ class GPUGraphicsContext
 	in (this.device !is null)
 	in (this.device.handle !is null)
 	{
-		return this.device.supportFormat(format, type, usage);
+		return this.device.support_format(format, type, usage);
 	}
 
 	GPUTextureFormat get_swapchain_texture_format()
@@ -383,7 +383,7 @@ GPUComputePipeline initialize(
 
 GPUComputePipeline initialize(
 	ref GPUComputePipeline pipeline,
-	GPUGraphicsContext graphics_context,
+	ref GPUGraphicsContext graphics_context,
 	GPUComputePipelineCreateInfo pipeline_create_info,
 )
 {

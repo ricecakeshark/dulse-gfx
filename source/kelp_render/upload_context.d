@@ -51,8 +51,8 @@ class GPUUploadContext
 	}
 
 	typeof(this) upload(
-		GPUTransferBufferLocation transfer_buffer_location,
-		GPUBufferRegion buffer_region,
+		in GPUTransferBufferLocation transfer_buffer_location,
+		in GPUBufferRegion buffer_region,
 	)
 	{
 		this.copy_pass.upload(
@@ -63,8 +63,8 @@ class GPUUploadContext
 	}
 
 	typeof(this) upload(
-		GPUTextureTransferInfo transfer_buffer_location,
-		GPUTextureRegion texture_region,
+		in GPUTextureTransferInfo transfer_buffer_location,
+		in GPUTextureRegion texture_region,
 	)
 	{
 		this.copy_pass.upload(

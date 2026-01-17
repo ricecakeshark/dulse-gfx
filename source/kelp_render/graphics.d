@@ -15,9 +15,7 @@ import kelp_render;
 
 //import kelp_core;
 import bindbc.sdl;
-
-//export extern(C):
-
+/+
 class SDLGraphicsSubsystem : Subsystem
 {
 	GPUDevice[] device_list;
@@ -92,3 +90,4 @@ class SDLGraphicsSubsystem : Subsystem
 		return temp_context;
 	}
 }
++/

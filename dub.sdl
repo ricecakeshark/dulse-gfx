@@ -13,6 +13,7 @@ targetName "kelp_render"
 targetPath "build"
 
 //dflags "-H" "-Hd=include"
+dflags "-preview=in"
 
 versions "SDL_3_4_0" "SDL_Image_3_2" "SDL_TTF_3_2_2"
 libs "SDL3" "SDL3_image" "SDL3_ttf"
