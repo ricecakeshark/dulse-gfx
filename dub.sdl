@@ -1,4 +1,4 @@
-name "kelp-render"
+name "kelp-gfx"
 description "shared library of kelp"
 authors "RiceShark"
 copyright "Copyright © 2025, RiceShark"
