@@ -18,8 +18,8 @@ import bindbc.sdl;
 /+
 class SDLGraphicsSubsystem : Subsystem
 {
-	GPUDevice[] device_list;
-	GPUWindow[] window_list;
+	GpuDevice[] device_list;
+	GpuWindow[] window_list;
 	Object[] object_list;
 
 	this()
@@ -42,50 +42,50 @@ class SDLGraphicsSubsystem : Subsystem
 		return;
 	}
 
-	GPUDevice createDevice()
+	GpuDevice createDevice()
 	{
-		GPUDevice temp_device;
-		temp_device = new GPUDevice();
+		GpuDevice temp_device;
+		temp_device = new GpuDevice();
 		this.device_list ~= temp_device;
 		return temp_device;
 	}
 
-	GPUDevice createWindow()
+	GpuDevice createWindow()
 	{
-		GPUDevice temp_device;
-		temp_device = new GPUDevice();
+		GpuDevice temp_device;
+		temp_device = new GpuDevice();
 		this.device_list ~= temp_device;
 		return temp_device;
 	}
 
-	GPUGraphicsPipeline createGraphicsPipeline(GPUDevice device)
+	GpuGraphicsPipeline createGraphicsPipeline(GpuDevice device)
 	{
-		GPUGraphicsPipeline temp_pipeline;
-		temp_pipeline = new GPUGraphicsPipeline(device);
+		GpuGraphicsPipeline temp_pipeline;
+		temp_pipeline = new GpuGraphicsPipeline(device);
 		this.object_list ~= temp_pipeline;
 		return temp_pipeline;
 	}
 
-	GPUVertexBuffer createVertexBuffer(GPUDevice device)
+	GpuVertexBuffer createVertexBuffer(GpuDevice device)
 	{
-		GPUVertexBuffer temp_buffer;
-		temp_buffer = new GPUVertexBuffer(device);
+		GpuVertexBuffer temp_buffer;
+		temp_buffer = new GpuVertexBuffer(device);
 		this.object_list ~= temp_buffer;
 		return temp_buffer;
 	}
 
-	GPURenderContext createRenderContext(GPUDevice device, GPUWindow window)
+	GfxRenderContext createRenderContext(GpuDevice device, GpuWindow window)
 	{
-		GPURenderContext temp_context;
-		temp_context = new GPURenderContext(device, window);
+		GfxRenderContext temp_context;
+		temp_context = new GfxRenderContext(device, window);
 		//this.releasable_object_list ~= temp_context;
 		return temp_context;
 	}
 
-	GPUUploadContext createUploadContext(GPUDevice device)
+	GfxUploadContext createUploadContext(GpuDevice device)
 	{
-		GPUUploadContext temp_context;
-		temp_context = new GPUUploadContext(device);
+		GfxUploadContext temp_context;
+		temp_context = new GfxUploadContext(device);
 		//releasable_object_list ~= temp_context;
 		return temp_context;
 	}

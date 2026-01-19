@@ -2,17 +2,17 @@ module kelp_render.compute_context;
 
 import kelp_sdl;
 
-class GPUComputeContext
+class GfxComputeContext
 {
-	GPUCommandBuffer command_buffer;
-	GPUComputePass compute_pass;
-	GPUSwapchainTexture swapchain_texture;
+	GpuCommandBuffer command_buffer;
+	GpuComputePass compute_pass;
+	GpuSwapchainTexture swapchain_texture;
 
-	this(GPUDevice device, GPUWindow window)
+	this(GpuDevice device, GpuWindow window)
 	{
-		this.command_buffer = new GPUCommandBuffer(device, window);
-		this.compute_pass = new GPUComputePass();
-		this.swapchain_texture = new GPUSwapchainTexture(device, window);
+		this.command_buffer = new GpuCommandBuffer(device, window);
+		this.compute_pass = new GpuComputePass();
+		this.swapchain_texture = new GpuSwapchainTexture(device, window);
 		return;
 	}
 
@@ -46,7 +46,7 @@ class GPUComputeContext
 	}
 
 	typeof(this) begin(
-		GPUStorageTextureReadWriteBinding[] texture_binding_list,
+		GpuStorageTextureReadWriteBinding[] texture_binding_list,
 	)
 	{
 		this.compute_pass.begin(
@@ -57,8 +57,8 @@ class GPUComputeContext
 	}
 
 	typeof(this) begin(
-		GPUStorageTextureReadWriteBinding[] texture_binding_list,
-		GPUStorageBufferReadWriteBinding[] buffer_binding_list,
+		GpuStorageTextureReadWriteBinding[] texture_binding_list,
+		GpuStorageBufferReadWriteBinding[] buffer_binding_list,
 	)
 	{
 		this.compute_pass.begin(
@@ -75,7 +75,7 @@ class GPUComputeContext
 		return this;
 	}
 
-	typeof(this) bind(GPUComputePipeline pipeline)
+	typeof(this) bind(GpuComputePipeline pipeline)
 	{
 		this.compute_pass.bind(pipeline);
 		return this;
@@ -99,7 +99,7 @@ class GPUComputeContext
 		return this;
 	}
 
-	typeof(this) blit_texture(in GPUBlitInfo blit_info)
+	typeof(this) blit_texture(in GpuBlitInfo blit_info)
 	{
 		this.command_buffer.blit_texture(blit_info);
 		return this;

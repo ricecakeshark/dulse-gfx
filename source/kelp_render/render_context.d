@@ -2,17 +2,17 @@ module kelp_render.render_context;
 
 import kelp_sdl;
 
-class GPURenderContext
+class GfxRenderContext
 {
-	GPUCommandBuffer command_buffer;
-	GPURenderPass render_pass;
-	GPUSwapchainTexture swapchain_texture;
+	GpuCommandBuffer command_buffer;
+	GpuRenderPass render_pass;
+	GpuSwapchainTexture swapchain_texture;
 
-	this(GPUDevice device, GPUWindow window)
+	this(GpuDevice device, GpuWindow window)
 	{
-		this.command_buffer = new GPUCommandBuffer(device);
-		this.render_pass = new GPURenderPass();
-		this.swapchain_texture = new GPUSwapchainTexture(device, window);
+		this.command_buffer = new GpuCommandBuffer(device);
+		this.render_pass = new GpuRenderPass();
+		this.swapchain_texture = new GpuSwapchainTexture(device, window);
 		return;
 	}
 
@@ -57,7 +57,7 @@ public:
 		return this;
 	}
 
-	typeof(this) begin(GPUColorTargetInfo[] color_target_info_list)
+	typeof(this) begin(GpuColorTargetInfo[] color_target_info_list)
 	in (color_target_info_list.length >= 1)
 	{
 		if (this.swapchain_texture.handle is null)
@@ -69,8 +69,8 @@ public:
 	}
 
 	typeof(this) begin(
-		GPUColorTargetInfo[] color_target_info_list,
-		in GPUDepthStencilTargetInfo depth_stencil_target_info
+		GpuColorTargetInfo[] color_target_info_list,
+		in GpuDepthStencilTargetInfo depth_stencil_target_info
 	)
 	in (color_target_info_list.length >= 1)
 	{
@@ -96,7 +96,7 @@ public:
 		return this;
 	}
 
-	typeof(this) bind(GPUGraphicsPipeline pipeline)
+	typeof(this) bind(GpuGraphicsPipeline pipeline)
 	in (pipeline !is null)
 	in (pipeline.handle !is null)
 	{
@@ -105,7 +105,7 @@ public:
 	}
 
 	typeof(this) bind(
-		GPUVertexBuffer[] vertex_buffer_list,
+		GpuVertexBuffer[] vertex_buffer_list,
 		in uint first_slot = 0,
 	)
 	{
@@ -117,7 +117,7 @@ public:
 		return this;
 	}
 
-	typeof(this) bind(GPUIndexBuffer index_buffer)
+	typeof(this) bind(GpuIndexBuffer index_buffer)
 	{
 		if (this.swapchain_texture.handle is null)
 		{
@@ -128,7 +128,7 @@ public:
 	}
 
 	typeof(this) bind(
-		GPUTexture[] texture_list,
+		GpuTexture[] texture_list,
 		in uint first_slot = 0u
 	)
 	{
@@ -137,7 +137,7 @@ public:
 	}
 
 	typeof(this) bind(
-		GPUTextureSamplerBinding[] texture_sampler_binding,
+		GpuTextureSamplerBinding[] texture_sampler_binding,
 		in uint first_slot = 0
 	)
 	{
@@ -170,7 +170,7 @@ public:
 	}
 
 	typeof(this) draw_indirect(
-		GPUDrawBuffer draw_buffer,
+		GpuDrawBuffer draw_buffer,
 		in ParamPrimitiveIndirect param
 	)
 	{
@@ -183,7 +183,7 @@ public:
 	}
 
 	typeof(this) draw_indexed_indirect(
-		GPUDrawBuffer draw_buffer,
+		GpuDrawBuffer draw_buffer,
 		in ParamPrimitiveIndirect param,
 	)
 	{
@@ -195,7 +195,7 @@ public:
 		return this;
 	}
 
-	typeof(this) set(const GPUViewport viewport)
+	typeof(this) set(const GpuViewport viewport)
 	{
 		this.render_pass.set(viewport);
 		return this;
@@ -250,7 +250,7 @@ public:
 		return this;
 	}
 
-	typeof(this) blit(in GPUBlitInfo blit_info)
+	typeof(this) blit(in GpuBlitInfo blit_info)
 	{
 		if (this.swapchain_texture.handle is null)
 		{

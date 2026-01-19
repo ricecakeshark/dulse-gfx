@@ -4,20 +4,20 @@ import bindbc.sdl;
 import kelp_sdl;
 import kelp_render;
 
-class GPUGraphicsContext
+class GfxGraphicsContext
 {
-	public GPUDevice device;
-	public GPUWindow window;
+	public GpuDevice device;
+	public GpuWindow window;
 
-	protected GPUGraphicsPipeline[] graphics_pipeline_list;
-	protected GPUComputePipeline[] compute_pipeline_list;
-	protected GPUVertexShader[] vertex_shader_list;
-	protected GPUFragmentShader[] fragment_shader_list;
-	protected GPUVertexBuffer[] vertex_buffer_list;
-	protected GPUIndexBuffer[] index_buffer_list;
-	protected GPUDrawBuffer[] draw_buffer_list;
-	protected GPUTexture[] texture_list;
-	protected GPUSampler[] sampler_list;
+	protected GpuGraphicsPipeline[] graphics_pipeline_list;
+	protected GpuComputePipeline[] compute_pipeline_list;
+	protected GpuVertexShader[] vertex_shader_list;
+	protected GpuFragmentShader[] fragment_shader_list;
+	protected GpuVertexBuffer[] vertex_buffer_list;
+	protected GpuIndexBuffer[] index_buffer_list;
+	protected GpuDrawBuffer[] draw_buffer_list;
+	protected GpuTexture[] texture_list;
+	protected GpuSampler[] sampler_list;
 
 	this()
 	{
@@ -34,9 +34,9 @@ class GPUGraphicsContext
 
 	typeof(this) initialize()
 	{
-		this.device = new GPUDevice();
+		this.device = new GpuDevice();
 		this.device.create();
-		this.window = new GPUWindow();
+		this.window = new GpuWindow();
 		this.window.create(960, 540, "");
 		this.device.claim(this.window);
 		debug
@@ -93,16 +93,16 @@ class GPUGraphicsContext
 		return this;
 	}
 
-	typeof(this) register(GPUComputePipeline pipeline)
+	typeof(this) register(GpuComputePipeline pipeline)
 	{
 		this.compute_pipeline_list ~= pipeline;
 		return this;
 	}
 
-	GPUVertexShader create_vertex_shader()
+	GpuVertexShader create_vertex_shader()
 	{
-		GPUVertexShader temp;
-		temp = new GPUVertexShader(this.device);
+		GpuVertexShader temp;
+		temp = new GpuVertexShader(this.device);
 		this.vertex_shader_list ~= temp;
 		return temp;
 	}
@@ -122,10 +122,10 @@ class GPUGraphicsContext
 		return this;
 	}
 
-	GPUFragmentShader create_fragment_shader()
+	GpuFragmentShader create_fragment_shader()
 	{
-		GPUFragmentShader temp;
-		temp = new GPUFragmentShader(this.device);
+		GpuFragmentShader temp;
+		temp = new GpuFragmentShader(this.device);
 		this.fragment_shader_list ~= temp;
 		return temp;
 	}
@@ -145,10 +145,10 @@ class GPUGraphicsContext
 		return this;
 	}
 
-	GPUGraphicsPipeline create_graphics_pipeline()
+	GpuGraphicsPipeline create_graphics_pipeline()
 	{
-		GPUGraphicsPipeline temp_graphics_pipeline;
-		temp_graphics_pipeline = new GPUGraphicsPipeline(this.device);
+		GpuGraphicsPipeline temp_graphics_pipeline;
+		temp_graphics_pipeline = new GpuGraphicsPipeline(this.device);
 		graphics_pipeline_list ~= temp_graphics_pipeline;
 		return temp_graphics_pipeline;
 	}
@@ -168,10 +168,10 @@ class GPUGraphicsContext
 		return this;
 	}
 
-	GPUVertexBuffer create_vertex_buffer()
+	GpuVertexBuffer create_vertex_buffer()
 	{
-		GPUVertexBuffer temp_vertex_buffer;
-		temp_vertex_buffer = new GPUVertexBuffer(this.device);
+		GpuVertexBuffer temp_vertex_buffer;
+		temp_vertex_buffer = new GpuVertexBuffer(this.device);
 		vertex_buffer_list ~= temp_vertex_buffer;
 		return temp_vertex_buffer;
 	}
@@ -191,10 +191,10 @@ class GPUGraphicsContext
 		return this;
 	}
 
-	GPUIndexBuffer create_index_buffer()
+	GpuIndexBuffer create_index_buffer()
 	{
-		GPUIndexBuffer temp_index_buffer;
-		temp_index_buffer = new GPUIndexBuffer(this.device);
+		GpuIndexBuffer temp_index_buffer;
+		temp_index_buffer = new GpuIndexBuffer(this.device);
 		index_buffer_list ~= temp_index_buffer;
 		return temp_index_buffer;
 	}
@@ -214,10 +214,10 @@ class GPUGraphicsContext
 		return this;
 	}
 
-	GPUDrawBuffer create_draw_buffer()
+	GpuDrawBuffer create_draw_buffer()
 	{
-		GPUDrawBuffer temp_draw_buffer;
-		temp_draw_buffer = new GPUDrawBuffer(this.device);
+		GpuDrawBuffer temp_draw_buffer;
+		temp_draw_buffer = new GpuDrawBuffer(this.device);
 		draw_buffer_list ~= temp_draw_buffer;
 		return temp_draw_buffer;
 	}
@@ -237,10 +237,10 @@ class GPUGraphicsContext
 		return this;
 	}
 
-	GPUTexture create_texture()
+	GpuTexture create_texture()
 	{
-		GPUTexture temp_texture;
-		temp_texture = new GPUTexture(this.device);
+		GpuTexture temp_texture;
+		temp_texture = new GpuTexture(this.device);
 		texture_list ~= temp_texture;
 		return temp_texture;
 	}
@@ -260,10 +260,10 @@ class GPUGraphicsContext
 		return this;
 	}
 
-	GPUSampler create_sampler()
+	GpuSampler create_sampler()
 	{
-		GPUSampler temp_sampler;
-		temp_sampler = new GPUSampler(this.device);
+		GpuSampler temp_sampler;
+		temp_sampler = new GpuSampler(this.device);
 		sampler_list ~= temp_sampler;
 		return temp_sampler;
 	}
@@ -283,24 +283,24 @@ class GPUGraphicsContext
 		return this;
 	}
 
-	GPUUploadContext create_upload_context()
+	GfxUploadContext create_upload_context()
 	{
-		return new GPUUploadContext(this.device);
+		return new GfxUploadContext(this.device);
 	}
 
-	GPURenderContext create_render_context()
+	GfxRenderContext create_render_context()
 	{
-		return new GPURenderContext(this.device, this.window);
+		return new GfxRenderContext(this.device, this.window);
 	}
 
-	GPUComputeContext create_compute_context()
+	GfxComputeContext create_compute_context()
 	{
-		return new GPUComputeContext(this.device, this.window);
+		return new GfxComputeContext(this.device, this.window);
 	}
 
-	GPUTextContext create_text_context()
+	GfxTextContext create_text_context()
 	{
-		return new GPUTextContext(this.device);
+		return new GfxTextContext(this.device);
 	}
 
 	bool support_format(
@@ -314,20 +314,20 @@ class GPUGraphicsContext
 		return this.device.support_format(format, type, usage);
 	}
 
-	GPUTextureFormat get_swapchain_texture_format()
+	GpuTextureFormat get_swapchain_texture_format()
 	in (this.device !is null)
 	in (this.device.handle !is null)
 	in (this.window !is null)
 	in (this.window.handle !is null)
 	{
-		return cast(GPUTextureFormat) SDL_GetGPUSwapchainTextureFormat(
+		return cast(GpuTextureFormat) SDL_GetGPUSwapchainTextureFormat(
 			this.device.handle, this.window.handle
 		);
 	}
 
-	GPUShaderFormat get_shader_format()
+	GpuShaderFormat get_shader_format()
 	{
-		return cast(GPUShaderFormat) cast(SDL_GPUShaderFormat) SDL_GetGPUShaderFormats(
+		return cast(GpuShaderFormat) cast(SDL_GPUShaderFormat) SDL_GetGPUShaderFormats(
 			this.device.handle
 		);
 	}
@@ -336,10 +336,10 @@ class GPUGraphicsContext
 	{
 		import std.array : join;
 
-		GPUShaderFormat formats = get_shader_format();
-		string spport_spirv = "SPIRV:" ~ ((formats & GPUShaderFormat.spirv) ? "y" : "n");
-		string spport_msl = "MSL:" ~ ((formats & GPUShaderFormat.msl) ? "y" : "n");
-		string spport_dxil = "DXIL:" ~ ((formats & GPUShaderFormat.dxil) ? "y" : "n");
+		GpuShaderFormat formats = get_shader_format();
+		string spport_spirv = "SPIRV:" ~ ((formats & GpuShaderFormat.spirv) ? "y" : "n");
+		string spport_msl = "MSL:" ~ ((formats & GpuShaderFormat.msl) ? "y" : "n");
+		string spport_dxil = "DXIL:" ~ ((formats & GpuShaderFormat.dxil) ? "y" : "n");
 		return join([spport_spirv, spport_msl, spport_dxil], " ");
 	}
 
@@ -367,29 +367,29 @@ class GPUGraphicsContext
 	}
 }
 
-GPUComputePipeline initialize(
-	ref GPUComputePipeline pipeline,
-	ref GPUGraphicsContext graphics_context,
+GpuComputePipeline initialize(
+	ref GpuComputePipeline pipeline,
+	ref GfxGraphicsContext graphics_context,
 )
 {
 	if (pipeline !is null)
 	{
 		return pipeline;
 	}
-	pipeline = new GPUComputePipeline(graphics_context.device);
+	pipeline = new GpuComputePipeline(graphics_context.device);
 	graphics_context.register(pipeline);
 	return pipeline;
 }
 
-GPUComputePipeline initialize(
-	ref GPUComputePipeline pipeline,
-	ref GPUGraphicsContext graphics_context,
-	GPUComputePipelineCreateInfo pipeline_create_info,
+GpuComputePipeline initialize(
+	ref GpuComputePipeline pipeline,
+	ref GfxGraphicsContext graphics_context,
+	GpuComputePipelineCreateInfo pipeline_create_info,
 )
 {
 	if (pipeline is null)
 	{
-		pipeline = new GPUComputePipeline(graphics_context.device);
+		pipeline = new GpuComputePipeline(graphics_context.device);
 		graphics_context.register(pipeline);
 	}
 	if (pipeline.handle is null)

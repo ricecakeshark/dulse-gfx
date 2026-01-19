@@ -5,15 +5,15 @@ import kelp_sdl.graphics.core.gpu_device;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 
-class GPUUploadContext
+class GfxUploadContext
 {
-	GPUCommandBuffer command_buffer;
-	GPUCopyPass copy_pass;
+	GpuCommandBuffer command_buffer;
+	GpuCopyPass copy_pass;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
-		this.command_buffer = new GPUCommandBuffer(device);
-		this.copy_pass = new GPUCopyPass();
+		this.command_buffer = new GpuCommandBuffer(device);
+		this.copy_pass = new GpuCopyPass();
 
 		return;
 	}
@@ -51,8 +51,8 @@ class GPUUploadContext
 	}
 
 	typeof(this) upload(
-		in GPUTransferBufferLocation transfer_buffer_location,
-		in GPUBufferRegion buffer_region,
+		in GpuTransferBufferLocation transfer_buffer_location,
+		in GpuBufferRegion buffer_region,
 	)
 	{
 		this.copy_pass.upload(
@@ -63,8 +63,8 @@ class GPUUploadContext
 	}
 
 	typeof(this) upload(
-		in GPUTextureTransferInfo transfer_buffer_location,
-		in GPUTextureRegion texture_region,
+		in GpuTextureTransferInfo transfer_buffer_location,
+		in GpuTextureRegion texture_region,
 	)
 	{
 		this.copy_pass.upload(

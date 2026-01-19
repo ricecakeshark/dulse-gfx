@@ -8,17 +8,17 @@ import kelp_sdl.text;
 import kelp_sdl.image;
 import bindbc.sdl;
 
-class GPUTextContext
+class GfxTextContext
 {
 	TextFont text_font;
-	GPUTextEngine text_engine;
-	GPUText text;
+	GpuTextEngine text_engine;
+	GpuText text;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		text_font = new TextFont();
-		text_engine = new GPUTextEngine(device);
-		text = new GPUText(text_engine, text_font);
+		text_engine = new GpuTextEngine(device);
+		text = new GpuText(text_engine, text_font);
 		return;
 	}
 
@@ -40,7 +40,7 @@ class GPUTextContext
 		return this;
 	}
 
-	typeof(this) get_draw_data(out Geometry!(VertexPCT, uint) geometry)
+	typeof(this) get_draw_data(out GfxGeometry!(VertexPCT, uint) GfxGeometry)
 	{
 		TTF_GPUAtlasDrawSequence* sequence_ptr;
 		sequence_ptr = text.get_draw_data();
@@ -52,13 +52,13 @@ class GPUTextContext
 			assert(seq.num_indices > 0);
 			foreach (count; 0 .. seq.numVertices)
 			{
-				geometry.vertex ~= VertexPCT(
+				GfxGeometry.vertex ~= VertexPCT(
 					Vec3(seq.xy[count].x, seq.xy[count].y, 0.0f,),
 					ColorF(1.0f, 1.0f, 0.0f, 1.0f,),
 					Vec2(seq.uv[count].x, seq.uv[count].y,),
 				);
 			}
-			geometry.index ~= seq.indices[0 .. seq.numIndices];
+			GfxGeometry.index ~= seq.indices[0 .. seq.numIndices];
 		}
 		return this;
 	}
@@ -191,7 +191,7 @@ class TextSurfaceContext
 	SurfaceTextEngine text_engine;
 	SurfaceText text;
 
-	this(GPUDevice device)
+	this(GpuDevice device)
 	{
 		text_font = new TextFont();
 		text_engine = new SurfaceTextEngine(device);
