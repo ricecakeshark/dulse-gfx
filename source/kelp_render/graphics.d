@@ -1,4 +1,4 @@
-module kelp_render.graphics;
+module kelp_gfx.graphics;
 
 /+
 version (Windows)

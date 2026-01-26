@@ -9,8 +9,9 @@ dependency "kelp-sdl" path="..\\kelp_sdl"
 dependency "bindbc-sdl" version="~>2.3.3"
 
 targetType "sourceLibrary"
-targetName "kelp_render"
+targetName "kelp_gfx"
 targetPath "build"
+importPaths "source"
 
 //dflags "-H" "-Hd=include"
 dflags "-preview=in"

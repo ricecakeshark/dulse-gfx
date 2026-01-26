@@ -1,8 +1,9 @@
-module kelp_render.graphics_context;
+module kelp_gfx.graphics_context;
 
 import bindbc.sdl;
 import kelp_sdl;
-import kelp_render;
+import kelp_gfx;
+import std.format:format;
 
 class GfxGraphicsContext
 {
@@ -43,6 +44,7 @@ class GfxGraphicsContext
 		{
 			import std.stdio;
 
+			this.output_driver_list().writeln();
 			this.output_shader_format().writeln();
 		}
 		return this;
@@ -341,6 +343,11 @@ class GfxGraphicsContext
 		string spport_msl = "MSL:" ~ ((formats & GpuShaderFormat.msl) ? "y" : "n");
 		string spport_dxil = "DXIL:" ~ ((formats & GpuShaderFormat.dxil) ? "y" : "n");
 		return join([spport_spirv, spport_msl, spport_dxil], " ");
+	}
+
+	string output_driver_list()
+	{
+		return format("supported driver: %(%s%)",this.device.get_driver_list());
 	}
 
 	private Class create_in_list(Class, alias List)()

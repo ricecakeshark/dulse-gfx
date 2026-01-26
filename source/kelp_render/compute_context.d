@@ -1,4 +1,4 @@
-module kelp_render.compute_context;
+module kelp_gfx.compute_context;
 
 import kelp_sdl;
 
