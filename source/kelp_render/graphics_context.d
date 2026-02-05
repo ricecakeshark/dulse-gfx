@@ -3,7 +3,7 @@ module kelp_gfx.graphics_context;
 import bindbc.sdl;
 import kelp_sdl;
 import kelp_gfx;
-import std.format:format;
+import std.format : format;
 
 class GfxGraphicsContext
 {
@@ -33,10 +33,10 @@ class GfxGraphicsContext
 		return;
 	}
 
-	typeof(this) initialize()
+	typeof(this) initialize(in GpuBackend backend = GpuBackend.none)
 	{
 		this.device = new GpuDevice();
-		this.device.create();
+		this.device.create(backend);
 		this.window = new GpuWindow();
 		this.window.create(960, 540, "");
 		this.device.claim(this.window);
@@ -347,7 +347,7 @@ class GfxGraphicsContext
 
 	string output_driver_list()
 	{
-		return format("supported driver: %(%s%)",this.device.get_driver_list());
+		return format("supported driver: %(%s%)", this.device.get_driver_list());
 	}
 
 	private Class create_in_list(Class, alias List)()
