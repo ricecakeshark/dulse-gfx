@@ -157,6 +157,17 @@ class GfxTextContext
 		text_font.get_string_size(text, w, h);
 		return this;
 	}
+	// font SDF
+	@property bool SDF()
+	{
+		return this.text_font.SDF;
+	}
+
+	typeof(this) set_SDF(bool mode_SDF = true)
+	{
+		this.text_font.set_SDF(mode_SDF);
+		return this;
+	}
 	// font style
 	@property FontStyle style()
 	{
