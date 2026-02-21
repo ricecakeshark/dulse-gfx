@@ -8,6 +8,8 @@ import kelp_sdl.text;
 import kelp_sdl.image;
 import bindbc.sdl;
 
+import std.array : RefAppender;
+
 class GfxTextContext
 {
 	TextFont text_font;
@@ -40,9 +42,14 @@ class GfxTextContext
 		return this;
 	}
 
-	deprecated typeof(this) get_draw_data(out GfxGeometry!(VertexPCT, uint) GfxGeometry)
+	typeof(this) get_draw_data(ref GfxGeometry!(VertexPT, uint) geometry)
 	{
 		TTF_GPUAtlasDrawSequence* sequence_ptr;
+		RefAppender!(VertexPT[]) temp_vertex_list;
+		RefAppender!(uint[]) temp_index_list;
+		geometry.initialize();
+		temp_vertex_list = RefAppender!(VertexPT[])(&(geometry.vertex_list));
+		temp_index_list = RefAppender!(uint[])(&(geometry.index_list));
 		sequence_ptr = text.get_draw_data();
 		assert(sequence_ptr !is null);
 		for (TTF_GPUAtlasDrawSequence* seq = sequence_ptr; seq !is null; seq = seq.next)
@@ -52,35 +59,12 @@ class GfxTextContext
 			assert(seq.num_indices > 0);
 			foreach (count; 0 .. seq.numVertices)
 			{
-				GfxGeometry.vertex ~= VertexPCT(
-					Vec3(seq.xy[count].x, seq.xy[count].y, 0.0f,),
-					ColorF(1.0f, 1.0f, 0.0f, 1.0f,),
-					Vec2(seq.uv[count].x, seq.uv[count].y,),
-				);
-			}
-			GfxGeometry.index ~= seq.indices[0 .. seq.numIndices];
-		}
-		return this;
-	}
-
-	typeof(this) get_draw_data(out GfxGeometry!(VertexPT, uint) GfxGeometry)
-	{
-		TTF_GPUAtlasDrawSequence* sequence_ptr;
-		sequence_ptr = text.get_draw_data();
-		assert(sequence_ptr !is null);
-		for (TTF_GPUAtlasDrawSequence* seq = sequence_ptr; seq !is null; seq = seq.next)
-		{
-			assert(seq.atlas_texture !is null);
-			assert(seq.num_vertices > 0);
-			assert(seq.num_indices > 0);
-			foreach (count; 0 .. seq.numVertices)
-			{
-				GfxGeometry.vertex ~= VertexPT(
+				temp_vertex_list ~= VertexPT(
 					Vec3(seq.xy[count].x, seq.xy[count].y, 0.0f,),
 					Vec2(seq.uv[count].x, seq.uv[count].y,),
 				);
 			}
-			GfxGeometry.index ~= seq.indices[0 .. seq.numIndices];
+			temp_index_list ~= seq.indices[0 .. seq.numIndices];
 		}
 		return this;
 	}
