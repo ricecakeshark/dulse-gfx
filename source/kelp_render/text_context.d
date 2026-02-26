@@ -73,17 +73,10 @@ class GfxTextContext
 	{
 		scope TTF_GPUAtlasDrawSequence* sequence_ptr;
 
-		/+Appender!(G[]) temp_geometry_list;
+		Appender!(G[]) temp_geometry_list;
 		Appender!(V[]) temp_vertex_list;
 		Appender!(I[]) temp_index_list;
 		temp_geometry_list.clear();
-		temp_vertex_list.clear();
-		temp_index_list.clear();+/
-
-		G[] temp_geometry_list;
-		V[] temp_vertex_list;
-		I[] temp_index_list;
-
 		sequence_ptr = this.text.get_draw_data();
 		assert(sequence_ptr !is null);
 		for (TTF_GPUAtlasDrawSequence* seq = sequence_ptr; seq !is null; seq = seq.next)
@@ -91,11 +84,9 @@ class GfxTextContext
 			assert(seq.atlas_texture !is null);
 			assert(seq.num_vertices > 0);
 			assert(seq.num_indices > 0);
+			temp_vertex_list.clear();
+			temp_index_list.clear();
 
-			//temp_vertex_list.clear();
-			//temp_index_list.clear();
-			temp_vertex_list = [];
-			temp_index_list = [];
 			foreach (count; 0 .. seq.numVertices)
 			{
 				temp_vertex_list ~= V(
@@ -108,10 +99,10 @@ class GfxTextContext
 				temp_index_list ~= I(seq.indices[count]);
 			}
 			temp_geometry_list ~= G(
-				temp_vertex_list[], temp_index_list[],
+				temp_vertex_list[].dup, temp_index_list[].dup,
 			);
 		}
-		mesh.geometry_list = cast(void[])(temp_geometry_list[]);
+		mesh.geometry_list = temp_geometry_list[].dup;
 		return this;
 	}
 
