@@ -3,12 +3,13 @@ module kelp_gfx.text_context;
 import kelp_core.core;
 import kelp_core.graphics;
 import kelp_core.math;
-import kelp_sdl.graphics.core;
+import kelp_sdl.graphics;
 import kelp_sdl.text;
 import kelp_sdl.image;
 import bindbc.sdl;
 
-import std.array : Appender, RefAppender;
+import std.array : array, Appender, RefAppender;
+import std.algorithm : map, uniq;
 
 class GfxTextContext
 {
@@ -16,11 +17,14 @@ class GfxTextContext
 	GpuTextEngine text_engine;
 	GpuText text;
 
+	protected GpuDevice device;
+
 	this(GpuDevice device)
 	{
 		text_font = new TextFont();
 		text_engine = new GpuTextEngine(device);
 		text = new GpuText(text_engine, text_font);
+		this.device = device;
 		return;
 	}
 
@@ -69,13 +73,17 @@ class GfxTextContext
 		return this;
 	}+/
 
-	typeof(this) get_draw_data(G : GfxGeometry!(V, I), V, I)(ref GfxMesh mesh)
+	typeof(this) get_draw_data(G : GfxGeometry!(V, I), V, I)(
+		ref GfxMesh mesh,
+		out GpuRefTexture[] texture_list
+	)
 	{
 		scope TTF_GPUAtlasDrawSequence* sequence_ptr;
 
 		Appender!(G[]) temp_geometry_list;
 		Appender!(V[]) temp_vertex_list;
 		Appender!(I[]) temp_index_list;
+		Appender!(SDL_GPUTexture*[]) temp_texture_ptr_list;
 		temp_geometry_list.clear();
 		sequence_ptr = this.text.get_draw_data();
 		assert(sequence_ptr !is null);
@@ -101,8 +109,12 @@ class GfxTextContext
 			temp_geometry_list ~= G(
 				temp_vertex_list[].dup, temp_index_list[].dup,
 			);
+			temp_texture_ptr_list ~= seq.atlas_texture;
 		}
 		mesh.geometry_list = temp_geometry_list[].dup;
+		texture_list = temp_texture_ptr_list[]
+			.map!(ptr=>(new GpuRefTexture(this.device)).refer(ptr))
+			.array();
 		return this;
 	}
 
