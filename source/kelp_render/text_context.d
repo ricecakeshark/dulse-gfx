@@ -8,7 +8,7 @@ import kelp_sdl.text;
 import kelp_sdl.image;
 import bindbc.sdl;
 
-import std.array : RefAppender;
+import std.array : Appender, RefAppender;
 
 class GfxTextContext
 {
@@ -42,7 +42,7 @@ class GfxTextContext
 		return this;
 	}
 
-	typeof(this) get_draw_data(ref GfxGeometry!(VertexPT, uint) geometry)
+	/+typeof(this) get_draw_data(ref GfxGeometry!(VertexPT, uint) geometry)
 	{
 		TTF_GPUAtlasDrawSequence* sequence_ptr;
 		RefAppender!(VertexPT[]) temp_vertex_list;
@@ -50,7 +50,7 @@ class GfxTextContext
 		geometry.initialize();
 		temp_vertex_list = RefAppender!(VertexPT[])(&(geometry.vertex_list));
 		temp_index_list = RefAppender!(uint[])(&(geometry.index_list));
-		sequence_ptr = text.get_draw_data();
+		sequence_ptr = this.text.get_draw_data();
 		assert(sequence_ptr !is null);
 		for (TTF_GPUAtlasDrawSequence* seq = sequence_ptr; seq !is null; seq = seq.next)
 		{
@@ -67,6 +67,52 @@ class GfxTextContext
 			temp_index_list ~= seq.indices[0 .. seq.numIndices];
 		}
 		return this;
+	}+/
+
+	typeof(this) get_draw_data(G : GfxGeometry!(V, I), V, I)(ref GfxMesh mesh)
+	{
+		scope TTF_GPUAtlasDrawSequence* sequence_ptr;
+
+		/+Appender!(G[]) temp_geometry_list;
+		Appender!(V[]) temp_vertex_list;
+		Appender!(I[]) temp_index_list;
+		temp_geometry_list.clear();
+		temp_vertex_list.clear();
+		temp_index_list.clear();+/
+
+		G[] temp_geometry_list;
+		V[] temp_vertex_list;
+		I[] temp_index_list;
+
+		sequence_ptr = this.text.get_draw_data();
+		assert(sequence_ptr !is null);
+		for (TTF_GPUAtlasDrawSequence* seq = sequence_ptr; seq !is null; seq = seq.next)
+		{
+			assert(seq.atlas_texture !is null);
+			assert(seq.num_vertices > 0);
+			assert(seq.num_indices > 0);
+
+			//temp_vertex_list.clear();
+			//temp_index_list.clear();
+			temp_vertex_list = [];
+			temp_index_list = [];
+			foreach (count; 0 .. seq.numVertices)
+			{
+				temp_vertex_list ~= V(
+					Vec3(seq.xy[count].x, seq.xy[count].y, 0.0f,),
+					Vec2(seq.uv[count].x, seq.uv[count].y,),
+				);
+			}
+			foreach (count; 0 .. seq.numIndices)
+			{
+				temp_index_list ~= I(seq.indices[count]);
+			}
+			temp_geometry_list ~= G(
+				temp_vertex_list[], temp_index_list[],
+			);
+		}
+		mesh.geometry_list = cast(void[])(temp_geometry_list[]);
+		return this;
 	}
 
 	typeof(this) process_draw_data(
@@ -74,7 +120,7 @@ class GfxTextContext
 	)
 	{
 		TTF_GPUAtlasDrawSequence* sequence_ptr;
-		sequence_ptr = text.get_draw_data();
+		sequence_ptr = this.text.get_draw_data();
 		assert(sequence_ptr !is null);
 		assert(sequence_ptr.atlas_texture !is null);
 		assert(sequence_ptr.num_indices >= 0);
