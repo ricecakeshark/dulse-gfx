@@ -46,33 +46,6 @@ class GfxTextContext
 		return this;
 	}
 
-	/+typeof(this) get_draw_data(ref GfxGeometry!(VertexPT, uint) geometry)
-	{
-		TTF_GPUAtlasDrawSequence* sequence_ptr;
-		RefAppender!(VertexPT[]) temp_vertex_list;
-		RefAppender!(uint[]) temp_index_list;
-		geometry.initialize();
-		temp_vertex_list = RefAppender!(VertexPT[])(&(geometry.vertex_list));
-		temp_index_list = RefAppender!(uint[])(&(geometry.index_list));
-		sequence_ptr = this.text.get_draw_data();
-		assert(sequence_ptr !is null);
-		for (TTF_GPUAtlasDrawSequence* seq = sequence_ptr; seq !is null; seq = seq.next)
-		{
-			assert(seq.atlas_texture !is null);
-			assert(seq.num_vertices > 0);
-			assert(seq.num_indices > 0);
-			foreach (count; 0 .. seq.numVertices)
-			{
-				temp_vertex_list ~= VertexPT(
-					Vec3(seq.xy[count].x, seq.xy[count].y, 0.0f,),
-					Vec2(seq.uv[count].x, seq.uv[count].y,),
-				);
-			}
-			temp_index_list ~= seq.indices[0 .. seq.numIndices];
-		}
-		return this;
-	}+/
-
 	typeof(this) get_draw_data(G : GfxGeometry!(V, I), V, I)(
 		ref GfxMesh mesh,
 		out GpuRefTexture[] texture_list
@@ -111,9 +84,9 @@ class GfxTextContext
 			);
 			temp_texture_ptr_list ~= seq.atlas_texture;
 		}
-		mesh.geometry_list = temp_geometry_list[].dup;
+		mesh.set(temp_geometry_list[]);
 		texture_list = temp_texture_ptr_list[]
-			.map!(ptr=>(new GpuRefTexture(this.device)).refer(ptr))
+			.map!(ptr => (new GpuRefTexture(this.device)).refer(ptr))
 			.array();
 		return this;
 	}
