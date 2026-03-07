@@ -170,6 +170,29 @@ class GfxGraphicsContext
 		return this;
 	}
 
+	GpuComputePipeline create_compute_pipeline()
+	{
+		GpuComputePipeline temp_compute_pipeline;
+		temp_compute_pipeline = new GpuComputePipeline(this.device);
+		compute_pipeline_list ~= temp_compute_pipeline;
+		return temp_compute_pipeline;
+	}
+
+	typeof(this) release_compute_pipeline()
+	{
+		foreach (index; 0 .. compute_pipeline_list.length)
+		{
+			if (compute_pipeline_list[index] is null)
+			{
+				continue;
+			}
+			compute_pipeline_list[index].release();
+			destroy(compute_pipeline_list[index]);
+		}
+		compute_pipeline_list = [];
+		return this;
+	}
+
 	GpuVertexBuffer create_vertex_buffer()
 	{
 		GpuVertexBuffer temp_vertex_buffer;
@@ -347,7 +370,7 @@ class GfxGraphicsContext
 
 	string output_driver_list()
 	{
-		return format("supported driver: %(%s%)", this.device.get_driver_list());
+		return format("supported driver: %(%s,%)", this.device.get_driver_list());
 	}
 
 	private Class create_in_list(Class, alias List)()

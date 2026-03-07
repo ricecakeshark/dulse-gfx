@@ -81,7 +81,13 @@ class GfxComputeContext
 		return this;
 	}
 
-	typeof(this) push_uniform(Type)(ref Type data)
+	typeof(this) bind(GpuTextureSamplerBinding[] binding_list, uint first_slot = 0)
+	{
+		this.compute_pass.bind(binding_list, first_slot);
+		return this;
+	}
+
+	typeof(this) push_uniform(Type)(Type data)
 	{
 		this.command_buffer.push_uniform(data);
 		return this;
