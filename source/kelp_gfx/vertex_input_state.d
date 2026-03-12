@@ -2,41 +2,16 @@ module kelp_gfx.vertex_input_state;
 
 import kelp_sdl;
 
-GpuGraphicsPipelineCreateInfo pipeline_create_info(TypeList...)()
+GpuGraphicsPipelineCreateInfo vertex_input_state(TypeList...)()
 {
-	GpuGraphicsPipelineCreateInfo pipeline_create_info;
-	GpuVertexAttribute[] attribute_list;
-	uint offset;
-
-	foreach (count, Type; TypeList)
-	{
-		attribute_list ~= attributes!(TypeList[count])(0, count, offset);
-		offset += Type.sizeof;
-	}
-
-	with (pipeline_create_info)
-	{
-		vertex_input_state = GpuVertexInputState(
-			[
-			GpuVertexBufferDescription(
-				0,
-				float.sizeof * 7,
-				GpuVertexInputRate.vertex,
-				0
-			)
+	GpuVertexInputState vertex_input_state;
+	vertex_input_state = GpuVertexInputState(
+		[
+			vertex_buffer_description!(TypeList)()
 		],
-		attribute_list,
-		);
-		primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
-		target_info = GpuGraphicsPipelineTargetInfo(
-			[
-			GpuColorTargetDescription(
-				graphics_context.get_swapchain_texture_format()
-			)
-		]
-		);
-	}
-	return pipeline_create_info.dup;
+		vertex_attributes!(TypeList)(0),
+	);
+	return vertex_input_state.dup;
 }
 
 GpuVertexBufferDescription vertex_buffer_description(TypeList...)()
