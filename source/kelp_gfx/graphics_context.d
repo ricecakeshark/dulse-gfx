@@ -100,6 +100,15 @@ class GfxGraphicsContext
 		this.compute_pipeline_list ~= pipeline;
 		return this;
 	}
+	// variable creation
+	typeof(this) create(TypeList...)(out TypeList arg_list)
+	{
+		static foreach (arg; arg_list)
+		{
+			this.create(arg);
+		}
+		return this;
+	}
 
 	typeof(this) create(out GpuCommandBuffer command_buffer)
 	{
@@ -113,12 +122,11 @@ class GfxGraphicsContext
 		return this;
 	}
 
-	GpuVertexShader create_vertex_shader()
+	typeof(this) create(out GpuVertexShader vertex_shader)
 	{
-		GpuVertexShader temp;
-		temp = new GpuVertexShader(this.device);
-		this.vertex_shader_list ~= temp;
-		return temp;
+		vertex_shader = new GpuVertexShader(this.device);
+		this.vertex_shader_list ~= vertex_shader;
+		return this;
 	}
 
 	typeof(this) release_vertex_shader()
@@ -136,12 +144,11 @@ class GfxGraphicsContext
 		return this;
 	}
 
-	GpuFragmentShader create_fragment_shader()
+	typeof(this) create(out GpuFragmentShader fragment_shader)
 	{
-		GpuFragmentShader temp;
-		temp = new GpuFragmentShader(this.device);
-		this.fragment_shader_list ~= temp;
-		return temp;
+		fragment_shader = new GpuFragmentShader(this.device);
+		this.fragment_shader_list ~= fragment_shader;
+		return this;
 	}
 
 	typeof(this) release_fragment_shader()
@@ -159,12 +166,12 @@ class GfxGraphicsContext
 		return this;
 	}
 
-	GpuGraphicsPipeline create_graphics_pipeline()
+	typeof(this) create(out GpuGraphicsPipeline pipeline)
 	{
-		GpuGraphicsPipeline temp_graphics_pipeline;
-		temp_graphics_pipeline = new GpuGraphicsPipeline(this.device);
-		graphics_pipeline_list ~= temp_graphics_pipeline;
-		return temp_graphics_pipeline;
+
+		pipeline = new GpuGraphicsPipeline(this.device);
+		graphics_pipeline_list ~= pipeline;
+		return this;
 	}
 
 	typeof(this) release_graphics_pipeline()
@@ -182,12 +189,11 @@ class GfxGraphicsContext
 		return this;
 	}
 
-	GpuComputePipeline create_compute_pipeline()
+	typeof(this) create(out GpuComputePipeline pipeline)
 	{
-		GpuComputePipeline temp_compute_pipeline;
-		temp_compute_pipeline = new GpuComputePipeline(this.device);
-		compute_pipeline_list ~= temp_compute_pipeline;
-		return temp_compute_pipeline;
+		pipeline = new GpuComputePipeline(this.device);
+		compute_pipeline_list ~= pipeline;
+		return this;
 	}
 
 	typeof(this) release_compute_pipeline()
@@ -205,12 +211,11 @@ class GfxGraphicsContext
 		return this;
 	}
 
-	GpuVertexBuffer create_vertex_buffer()
+	typeof(this) create(out GpuVertexBuffer buffer)
 	{
-		GpuVertexBuffer temp_vertex_buffer;
-		temp_vertex_buffer = new GpuVertexBuffer(this.device);
-		vertex_buffer_list ~= temp_vertex_buffer;
-		return temp_vertex_buffer;
+		buffer = new GpuVertexBuffer(this.device);
+		vertex_buffer_list ~= buffer;
+		return this;
 	}
 
 	typeof(this) release_vertex_buffer()
@@ -228,12 +233,11 @@ class GfxGraphicsContext
 		return this;
 	}
 
-	GpuIndexBuffer create_index_buffer()
+	typeof(this) create(out GpuIndexBuffer buffer)
 	{
-		GpuIndexBuffer temp_index_buffer;
-		temp_index_buffer = new GpuIndexBuffer(this.device);
-		index_buffer_list ~= temp_index_buffer;
-		return temp_index_buffer;
+		buffer = new GpuIndexBuffer(this.device);
+		index_buffer_list ~= buffer;
+		return this;
 	}
 
 	typeof(this) release_index_buffer()
@@ -251,12 +255,11 @@ class GfxGraphicsContext
 		return this;
 	}
 
-	GpuDrawBuffer create_draw_buffer()
+	typeof(this) create(out GpuDrawBuffer buffer)
 	{
-		GpuDrawBuffer temp_draw_buffer;
-		temp_draw_buffer = new GpuDrawBuffer(this.device);
-		draw_buffer_list ~= temp_draw_buffer;
-		return temp_draw_buffer;
+		buffer = new GpuDrawBuffer(this.device);
+		draw_buffer_list ~= buffer;
+		return this;
 	}
 
 	typeof(this) release_draw_buffer()
@@ -273,13 +276,12 @@ class GfxGraphicsContext
 		draw_buffer_list = [];
 		return this;
 	}
-
-	GpuTexture create_texture()
+	// texture
+	typeof(this) create(out GpuTexture texture)
 	{
-		GpuTexture temp_texture;
-		temp_texture = new GpuTexture(this.device);
-		texture_list ~= temp_texture;
-		return temp_texture;
+		texture = new GpuTexture(this.device);
+		texture_list ~= texture;
+		return this;
 	}
 
 	typeof(this) release_texture()
@@ -297,12 +299,11 @@ class GfxGraphicsContext
 		return this;
 	}
 
-	GpuSampler create_sampler()
+	typeof(this) create(out GpuSampler sampler)
 	{
-		GpuSampler temp_sampler;
-		temp_sampler = new GpuSampler(this.device);
-		sampler_list ~= temp_sampler;
-		return temp_sampler;
+		sampler = new GpuSampler(this.device);
+		sampler_list ~= sampler;
+		return this;
 	}
 
 	typeof(this) release_sampler()
@@ -319,25 +320,29 @@ class GfxGraphicsContext
 		sampler_list = [];
 		return this;
 	}
-
-	GfxUploadContext create_upload_context()
+	// upload context
+	typeof(this) create(out GfxUploadContext context)
 	{
-		return new GfxUploadContext(this.device);
+		context = new GfxUploadContext(this.device);
+		return this;
 	}
-
-	GfxRenderContext create_render_context()
+	// render context
+	typeof(this) create(out GfxRenderContext context)
 	{
-		return new GfxRenderContext(this.device, this.window);
+		context = new GfxRenderContext(this.device, this.window);
+		return this;
 	}
-
-	GfxComputeContext create_compute_context()
+	// compute context
+	typeof(this) create(out GfxComputeContext context)
 	{
-		return new GfxComputeContext(this.device, this.window);
+		context = new GfxComputeContext(this.device, this.window);
+		return this;
 	}
-
-	GfxTextContext create_text_context()
+	// text context
+	typeof(this) create(out GfxTextContext context)
 	{
-		return new GfxTextContext(this.device);
+		context = new GfxTextContext(this.device);
+		return this;
 	}
 
 	bool support_format(
