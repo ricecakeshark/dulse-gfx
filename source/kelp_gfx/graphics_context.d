@@ -211,6 +211,18 @@ class GfxGraphicsContext
 		return this;
 	}
 
+	typeof(this) create(out GpuBufferTransferBuffer transfer_buffer)
+	{
+		transfer_buffer = new GpuBufferTransferBuffer(this.device);
+		return this;
+	}
+
+	typeof(this) create(out GpuTextureTransferBuffer transfer_buffer)
+	{
+		transfer_buffer = new GpuTextureTransferBuffer(this.device);
+		return this;
+	}
+
 	typeof(this) create(out GpuVertexBuffer buffer)
 	{
 		buffer = new GpuVertexBuffer(this.device);
@@ -412,36 +424,4 @@ class GfxGraphicsContext
 		List = [];
 		return this;
 	}
-}
-
-GpuComputePipeline initialize(
-	ref GpuComputePipeline pipeline,
-	ref GfxGraphicsContext graphics_context,
-)
-{
-	if (pipeline !is null)
-	{
-		return pipeline;
-	}
-	pipeline = new GpuComputePipeline(graphics_context.device);
-	graphics_context.register(pipeline);
-	return pipeline;
-}
-
-GpuComputePipeline initialize(
-	ref GpuComputePipeline pipeline,
-	ref GfxGraphicsContext graphics_context,
-	GpuComputePipelineCreateInfo pipeline_create_info,
-)
-{
-	if (pipeline is null)
-	{
-		pipeline = new GpuComputePipeline(graphics_context.device);
-		graphics_context.register(pipeline);
-	}
-	if (pipeline.handle is null)
-	{
-		pipeline.create(pipeline_create_info);
-	}
-	return pipeline;
 }
