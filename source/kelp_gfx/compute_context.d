@@ -11,15 +11,14 @@ class GfxComputeContext
 	this(GpuDevice device, GpuWindow window)
 	{
 		this.command_buffer = new GpuCommandBuffer(device, window);
-		this.compute_pass = new GpuComputePass();
 		this.swapchain_texture = new GpuSwapchainTexture(device, window);
+		this.compute_pass = GpuComputePass(this.command_buffer);
 		return;
 	}
 
 	typeof(this) release()
 	{
 		this.command_buffer = null;
-		this.compute_pass = null;
 		this.swapchain_texture = null;
 		return this;
 	}
@@ -50,7 +49,6 @@ class GfxComputeContext
 	)
 	{
 		this.compute_pass.begin(
-			this.command_buffer,
 			texture_binding_list,
 		);
 		return this;
@@ -62,7 +60,6 @@ class GfxComputeContext
 	)
 	{
 		this.compute_pass.begin(
-			this.command_buffer,
 			texture_binding_list,
 			buffer_binding_list,
 		);

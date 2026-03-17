@@ -13,8 +13,7 @@ class GfxUploadContext
 	this(GpuDevice device)
 	{
 		this.command_buffer = new GpuCommandBuffer(device);
-		this.copy_pass = new GpuCopyPass();
-
+		this.copy_pass = GpuCopyPass(this.command_buffer);
 		return;
 	}
 
@@ -27,14 +26,13 @@ class GfxUploadContext
 	typeof(this) release()
 	{
 		this.command_buffer = null;
-		this.copy_pass = null;
 		return this;
 	}
 
 	typeof(this) begin()
 	{
 		this.command_buffer.acquire_buffer();
-		this.copy_pass.begin(this.command_buffer);
+		this.copy_pass.begin();
 		return this;
 	}
 

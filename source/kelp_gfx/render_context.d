@@ -5,14 +5,14 @@ import kelp_sdl;
 class GfxRenderContext
 {
 	GpuCommandBuffer command_buffer;
-	GpuRenderPass render_pass;
 	GpuSwapchainTexture swapchain_texture;
+	GpuRenderPass render_pass;
 
 	this(GpuDevice device, GpuWindow window)
 	{
-		this.command_buffer = new GpuCommandBuffer(device);
-		this.render_pass = new GpuRenderPass();
+		this.command_buffer = new GpuCommandBuffer(device, window);
 		this.swapchain_texture = new GpuSwapchainTexture(device, window);
+		this.render_pass = GpuRenderPass(this.command_buffer);
 		return;
 	}
 
@@ -46,7 +46,6 @@ public:
 	typeof(this) release()
 	{
 		this.command_buffer = null;
-		this.render_pass = null;
 		this.swapchain_texture = null;
 		return this;
 	}
@@ -64,7 +63,7 @@ public:
 		{
 			return this;
 		}
-		this.render_pass.begin(this.command_buffer, color_target_info_list);
+		this.render_pass.begin(color_target_info_list);
 		return this;
 	}
 
@@ -79,7 +78,6 @@ public:
 			return this;
 		}
 		this.render_pass.begin(
-			this.command_buffer,
 			color_target_info_list,
 			depth_stencil_target_info
 		);

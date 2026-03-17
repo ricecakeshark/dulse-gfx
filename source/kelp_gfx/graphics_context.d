@@ -101,6 +101,18 @@ class GfxGraphicsContext
 		return this;
 	}
 
+	typeof(this) create(out GpuCommandBuffer command_buffer)
+	{
+		command_buffer = new GpuCommandBuffer(this.device, this.window);
+		return this;
+	}
+
+	typeof(this) create(out GpuSwapchainTexture swapchain_texture)
+	{
+		swapchain_texture = new GpuSwapchainTexture(this.device, this.window);
+		return this;
+	}
+
 	GpuVertexShader create_vertex_shader()
 	{
 		GpuVertexShader temp;
