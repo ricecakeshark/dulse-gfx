@@ -14,6 +14,8 @@ class GfxGraphicsContext
 	protected GpuComputePipeline[] compute_pipeline_list;
 	protected GpuVertexShader[] vertex_shader_list;
 	protected GpuFragmentShader[] fragment_shader_list;
+	protected GpuBufferTransferBuffer[] buffer_transfer_buffer_list;
+	protected GpuTextureTransferBuffer[] texture_transfer_buffer_list;
 	protected GpuVertexBuffer[] vertex_buffer_list;
 	protected GpuIndexBuffer[] index_buffer_list;
 	protected GpuDrawBuffer[] draw_buffer_list;
@@ -50,6 +52,13 @@ class GfxGraphicsContext
 		return this;
 	}
 
+	typeof(this) finalize()
+	{
+		this.release_all();
+		this.release();
+		return this;
+	}
+
 	typeof(this) release()
 	{
 		if (this.window !is null && this.device !is null)
@@ -71,33 +80,50 @@ class GfxGraphicsContext
 
 	typeof(this) release_all()
 	{
-		this.release_vertex_shader();
-		this.release_fragment_shader();
-		this.release_graphics_pipeline();
-		this.release_vertex_buffer();
-		this.release_index_buffer();
-		this.release_texture();
-		this.release_sampler();
+		release_all_them(
+			graphics_pipeline_list,
+			compute_pipeline_list,
+			vertex_shader_list,
+			fragment_shader_list,
+
+			buffer_transfer_buffer_list,
+			texture_transfer_buffer_list,
+
+			vertex_buffer_list,
+			index_buffer_list,
+			draw_buffer_list,
+
+			texture_list,
+			sampler_list,
+		);
 		return this;
 	}
 
 	typeof(this) release_all_shader()
 	{
-		this.release_vertex_shader();
-		this.release_fragment_shader();
+		release_all_them(
+			vertex_shader_list,
+			fragment_shader_list,
+		);
 		return this;
 	}
 
-	typeof(this) release_all_buffer()
+	typeof(this) release_transfer_buffer()
 	{
-		this.release_vertex_buffer();
-		this.release_index_buffer();
+		release_all_them(
+			buffer_transfer_buffer_list,
+			texture_transfer_buffer_list,
+		);
 		return this;
 	}
 
-	typeof(this) register(GpuComputePipeline pipeline)
+	typeof(this) release_buffer()
 	{
-		this.compute_pipeline_list ~= pipeline;
+		release_all_them(
+			this.vertex_buffer_list,
+			this.index_buffer_list,
+			this.draw_buffer_list,
+		);
 		return this;
 	}
 	// variable creation
@@ -121,7 +147,7 @@ class GfxGraphicsContext
 		swapchain_texture = new GpuSwapchainTexture(this.device, this.window);
 		return this;
 	}
-
+	// vertex shader
 	typeof(this) create(out GpuVertexShader vertex_shader)
 	{
 		vertex_shader = new GpuVertexShader(this.device);
@@ -131,19 +157,10 @@ class GfxGraphicsContext
 
 	typeof(this) release_vertex_shader()
 	{
-		foreach (index; 0 .. vertex_shader_list.length)
-		{
-			if (vertex_shader_list[index] is null)
-			{
-				continue;
-			}
-			vertex_shader_list[index].release();
-			destroy(vertex_shader_list[index]);
-		}
-		vertex_shader_list = [];
+		release_all_them(this.vertex_shader_list);
 		return this;
 	}
-
+	// fragment shader
 	typeof(this) create(out GpuFragmentShader fragment_shader)
 	{
 		fragment_shader = new GpuFragmentShader(this.device);
@@ -153,22 +170,12 @@ class GfxGraphicsContext
 
 	typeof(this) release_fragment_shader()
 	{
-		foreach (index; 0 .. fragment_shader_list.length)
-		{
-			if (fragment_shader_list[index] is null)
-			{
-				continue;
-			}
-			fragment_shader_list[index].release();
-			destroy(fragment_shader_list[index]);
-		}
-		fragment_shader_list = [];
+		release_all_them(this.fragment_shader_list);
 		return this;
 	}
-
+	// graphics pipeline
 	typeof(this) create(out GpuGraphicsPipeline pipeline)
 	{
-
 		pipeline = new GpuGraphicsPipeline(this.device);
 		graphics_pipeline_list ~= pipeline;
 		return this;
@@ -176,19 +183,10 @@ class GfxGraphicsContext
 
 	typeof(this) release_graphics_pipeline()
 	{
-		foreach (index; 0 .. graphics_pipeline_list.length)
-		{
-			if (graphics_pipeline_list[index] is null)
-			{
-				continue;
-			}
-			graphics_pipeline_list[index].release();
-			destroy(graphics_pipeline_list[index]);
-		}
-		graphics_pipeline_list = [];
+		release_all_them(this.graphics_pipeline_list);
 		return this;
 	}
-
+	// compute pipeline
 	typeof(this) create(out GpuComputePipeline pipeline)
 	{
 		pipeline = new GpuComputePipeline(this.device);
@@ -198,31 +196,36 @@ class GfxGraphicsContext
 
 	typeof(this) release_compute_pipeline()
 	{
-		foreach (index; 0 .. compute_pipeline_list.length)
-		{
-			if (compute_pipeline_list[index] is null)
-			{
-				continue;
-			}
-			compute_pipeline_list[index].release();
-			destroy(compute_pipeline_list[index]);
-		}
-		compute_pipeline_list = [];
+		release_all_them(this.compute_pipeline_list);
 		return this;
 	}
-
+	// buffer transfer buffer
 	typeof(this) create(out GpuBufferTransferBuffer transfer_buffer)
 	{
 		transfer_buffer = new GpuBufferTransferBuffer(this.device);
+		buffer_transfer_buffer_list ~= transfer_buffer;
 		return this;
 	}
 
+	typeof(this) release_buffer_transfer_buffer()
+	{
+		release_all_them(buffer_transfer_buffer_list);
+		return this;
+	}
+	// texture transfer buffer
 	typeof(this) create(out GpuTextureTransferBuffer transfer_buffer)
 	{
 		transfer_buffer = new GpuTextureTransferBuffer(this.device);
+		texture_transfer_buffer_list ~= transfer_buffer;
 		return this;
 	}
 
+	typeof(this) release_texture_transfer_buffer()
+	{
+		release_all_them(texture_transfer_buffer_list);
+		return this;
+	}
+	// vertex buffer
 	typeof(this) create(out GpuVertexBuffer buffer)
 	{
 		buffer = new GpuVertexBuffer(this.device);
@@ -232,19 +235,10 @@ class GfxGraphicsContext
 
 	typeof(this) release_vertex_buffer()
 	{
-		foreach (index; 0 .. vertex_buffer_list.length)
-		{
-			if (vertex_buffer_list[index] is null)
-			{
-				continue;
-			}
-			vertex_buffer_list[index].release();
-			destroy(vertex_buffer_list[index]);
-		}
-		vertex_buffer_list = [];
+		release_all_them(this.vertex_buffer_list);
 		return this;
 	}
-
+	// index buffer
 	typeof(this) create(out GpuIndexBuffer buffer)
 	{
 		buffer = new GpuIndexBuffer(this.device);
@@ -254,19 +248,10 @@ class GfxGraphicsContext
 
 	typeof(this) release_index_buffer()
 	{
-		foreach (index; 0 .. index_buffer_list.length)
-		{
-			if (index_buffer_list[index] is null)
-			{
-				continue;
-			}
-			index_buffer_list[index].release();
-			destroy(index_buffer_list[index]);
-		}
-		index_buffer_list = [];
+		release_all_them(this.index_buffer_list);
 		return this;
 	}
-
+	// draw buffer
 	typeof(this) create(out GpuDrawBuffer buffer)
 	{
 		buffer = new GpuDrawBuffer(this.device);
@@ -276,16 +261,7 @@ class GfxGraphicsContext
 
 	typeof(this) release_draw_buffer()
 	{
-		foreach (index; 0 .. draw_buffer_list.length)
-		{
-			if (draw_buffer_list[index] is null)
-			{
-				continue;
-			}
-			draw_buffer_list[index].release();
-			destroy(draw_buffer_list[index]);
-		}
-		draw_buffer_list = [];
+		release_all_them(this.draw_buffer_list);
 		return this;
 	}
 	// texture
@@ -298,19 +274,10 @@ class GfxGraphicsContext
 
 	typeof(this) release_texture()
 	{
-		foreach (index; 0 .. texture_list.length)
-		{
-			if (texture_list[index] is null)
-			{
-				continue;
-			}
-			texture_list[index].release();
-			destroy(texture_list[index]);
-		}
-		texture_list = [];
+		release_all_them(this.texture_list);
 		return this;
 	}
-
+	// sampler
 	typeof(this) create(out GpuSampler sampler)
 	{
 		sampler = new GpuSampler(this.device);
@@ -320,16 +287,7 @@ class GfxGraphicsContext
 
 	typeof(this) release_sampler()
 	{
-		foreach (index; 0 .. sampler_list.length)
-		{
-			if (sampler_list[index] is null)
-			{
-				continue;
-			}
-			sampler_list[index].release();
-			destroy(sampler_list[index]);
-		}
-		sampler_list = [];
+		release_all_them(this.sampler_list);
 		return this;
 	}
 	// upload context
@@ -424,4 +382,24 @@ class GfxGraphicsContext
 		List = [];
 		return this;
 	}
+}
+
+void release_all_them(TypeList...)(ref TypeList releasable_list_list)
+{
+	foreach (ref releasable_list; releasable_list_list)
+	{
+		release(releasable_list);
+	}
+	return;
+}
+
+void release(Type)(ref Type[] releasable_list)
+{
+	foreach (ref releasable; releasable_list)
+	{
+		releasable.release();
+		destroy(releasable);
+	}
+	releasable_list = null;
+	return;
 }
