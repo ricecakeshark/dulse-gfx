@@ -19,6 +19,7 @@ class GfxGraphicsContext
 	protected GpuVertexBuffer[] vertex_buffer_list;
 	protected GpuIndexBuffer[] index_buffer_list;
 	protected GpuDrawBuffer[] draw_buffer_list;
+	protected GpuStorageBuffer[] storage_buffer_list;
 	protected GpuTexture[] texture_list;
 	protected GpuSampler[] sampler_list;
 
@@ -92,6 +93,7 @@ class GfxGraphicsContext
 			vertex_buffer_list,
 			index_buffer_list,
 			draw_buffer_list,
+			storage_buffer_list,
 
 			texture_list,
 			sampler_list,
@@ -123,6 +125,7 @@ class GfxGraphicsContext
 			this.vertex_buffer_list,
 			this.index_buffer_list,
 			this.draw_buffer_list,
+			this.storage_buffer_list,
 		);
 		return this;
 	}
@@ -262,6 +265,19 @@ class GfxGraphicsContext
 	typeof(this) release_draw_buffer()
 	{
 		release_all_them(this.draw_buffer_list);
+		return this;
+	}
+	// storage buffer
+	typeof(this) create(out GpuStorageBuffer buffer)
+	{
+		buffer = new GpuStorageBuffer(this.device);
+		storage_buffer_list ~= buffer;
+		return this;
+	}
+
+	typeof(this) release_storage_buffer()
+	{
+		release_all_them(this.storage_buffer_list);
 		return this;
 	}
 	// texture
