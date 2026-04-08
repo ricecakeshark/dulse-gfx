@@ -10,6 +10,8 @@ class GfxGraphicsContext
 	public GpuDevice device;
 	public GpuWindow window;
 
+	public int client_width, client_height;
+
 	protected GpuGraphicsPipeline[] graphics_pipeline_list;
 	protected GpuComputePipeline[] compute_pipeline_list;
 	protected GpuVertexShader[] vertex_shader_list;
@@ -36,12 +38,17 @@ class GfxGraphicsContext
 		return;
 	}
 
-	typeof(this) initialize(in GpuBackend backend = GpuBackend.none)
+	typeof(this) initialize(
+		in int client_width,
+		in int client_height,
+		in GpuBackend backend = GpuBackend.none)
 	{
 		this.device = new GpuDevice();
 		this.device.create(backend);
 		this.window = new GpuWindow();
-		this.window.create(960, 540, "");
+		this.window.create(client_width, client_height, "");
+		this.client_width = client_width;
+		this.client_height = client_height;
 		this.device.claim(this.window);
 		debug
 		{
