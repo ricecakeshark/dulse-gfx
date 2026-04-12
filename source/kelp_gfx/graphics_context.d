@@ -25,6 +25,8 @@ class GfxGraphicsContext
 	protected GpuTexture[] texture_list;
 	protected GpuSampler[] sampler_list;
 
+	protected GfxTextContext[] text_context_list;
+
 	this()
 	{
 
@@ -104,6 +106,8 @@ class GfxGraphicsContext
 
 			texture_list,
 			sampler_list,
+
+			text_context_list,
 		);
 		return this;
 	}
@@ -335,6 +339,7 @@ class GfxGraphicsContext
 	typeof(this) create(out GfxTextContext context)
 	{
 		context = new GfxTextContext(this.device);
+		this.text_context_list ~= context;
 		return this;
 	}
 

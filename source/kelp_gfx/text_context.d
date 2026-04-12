@@ -46,6 +46,14 @@ class GfxTextContext
 		return this;
 	}
 
+	typeof(this) release()
+	{
+		this.text.release();
+		this.text_engine.release();
+		this.text_font.release();
+		return this;
+	}
+
 	typeof(this) get_draw_data(G : GfxGeometry!(V, I), V, I)(
 		ref GfxMesh mesh,
 		out GpuRefTexture[] texture_list
@@ -53,10 +61,10 @@ class GfxTextContext
 	{
 		scope TTF_GPUAtlasDrawSequence* sequence_ptr;
 
-		Appender!(G[]) temp_geometry_list;
-		Appender!(V[]) temp_vertex_list;
-		Appender!(I[]) temp_index_list;
-		Appender!(SDL_GPUTexture*[]) temp_texture_ptr_list;
+		scope Appender!(G[]) temp_geometry_list;
+		scope Appender!(V[]) temp_vertex_list;
+		scope Appender!(I[]) temp_index_list;
+		scope Appender!(SDL_GPUTexture*[]) temp_texture_ptr_list;
 		temp_geometry_list.clear();
 		sequence_ptr = this.text.get_draw_data();
 		assert(sequence_ptr !is null);
