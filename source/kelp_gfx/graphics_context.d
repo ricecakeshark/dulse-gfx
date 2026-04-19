@@ -4,6 +4,7 @@ import bindbc.sdl;
 import kelp_sdl;
 import kelp_gfx;
 import std.format : format;
+import std.sumtype;
 
 class GfxGraphicsContext
 {
@@ -12,11 +13,28 @@ class GfxGraphicsContext
 
 	public int client_width, client_height;
 
-	public GfxResourceStore resource_store;
+	public GfxResourceStore!ResourceType resource_store;
+
+	alias ResourceType = SumType!(
+		// pipeline
+		GpuGraphicsPipeline,
+		GpuComputePipeline, // shader
+		GpuVertexShader,
+		GpuFragmentShader, // buffer
+		GpuBufferTransferBuffer,
+		GpuTextureTransferBuffer,
+		GpuVertexBuffer,
+		GpuIndexBuffer,
+		GpuDrawBuffer,
+		GpuStorageBuffer, // texture
+		GpuTexture,
+		GpuSampler, // context
+		GfxTextContext,
+	);
 
 	this()
 	{
-		this.resource_store = new GfxResourceStore();
+		this.resource_store = new GfxResourceStore!ResourceType();
 		return;
 	}
 

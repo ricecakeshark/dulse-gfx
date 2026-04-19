@@ -5,7 +5,7 @@ import kelp_sdl.graphics.core.gpu_device;
 import kelp_sdl.graphics.desc;
 import kelp_sdl.graphics.resource.buffer;
 
-class GfxUploadContext
+deprecated class GfxUploadContext
 {
 	GpuCommandBuffer command_buffer;
 	GpuCopyPass copy_pass;

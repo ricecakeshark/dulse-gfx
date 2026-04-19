@@ -4,24 +4,7 @@ import std.sumtype;
 import kelp_sdl;
 import kelp_gfx;
 
-alias ResourceType = SumType!(
-	// pipeline
-	GpuGraphicsPipeline,
-	GpuComputePipeline, // shader
-	GpuVertexShader,
-	GpuFragmentShader, // buffer
-	GpuBufferTransferBuffer,
-	GpuTextureTransferBuffer,
-	GpuVertexBuffer,
-	GpuIndexBuffer,
-	GpuDrawBuffer,
-	GpuStorageBuffer, // texture
-	GpuTexture,
-	GpuSampler, // context
-	GfxTextContext,
-);
-
-class GfxResourceStore
+class GfxResourceStore(ResourceType)
 {
 	protected ResourceType[][TypeInfo] resource_pool;
 
