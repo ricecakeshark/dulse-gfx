@@ -2,6 +2,7 @@ module kelp_gfx.graphics_subsystem;
 
 import kelp_gfx;
 
+import kelp_core.core.core;
 import kelp_core.core.subsystem;
 import kelp_core.core.container.resource_store;
 
@@ -11,30 +12,25 @@ class GfxGraphicsSubsystem : Subsystem
 {
 	GfxGraphicsContext _context;
 
-	this()
+	this(Core core)
 	{
-		
+		super(core);
 	}
 
-	invariant
-	{
-		assert(this !is null);
-	}
-
-	void initialize()
+	typeof(this) initialize()
 	{
 		this._context = new GfxGraphicsContext();
-		return;
+		return this;
 	}
 
-	void finalize()
+	typeof(this) finalize()
 	{
-		return;
+		return this;
 	}
 
-	void process()
+	typeof(this) process()
 	{
-		return;
+		return this;
 	}
 
 	@property ref GfxGraphicsContext context()
