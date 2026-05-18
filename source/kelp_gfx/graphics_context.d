@@ -1,6 +1,7 @@
 module kelp_gfx.graphics_context;
 
 import bindbc.sdl;
+import kelp_core.core.container;
 import kelp_sdl;
 import kelp_gfx;
 import std.format : format;
@@ -13,7 +14,7 @@ class GfxGraphicsContext
 
 	public int client_width, client_height;
 
-	public GfxResourceStore!ResourceType resource_store;
+	public ResourceStore!ResourceType resource_store;
 
 	alias ResourceType = SumType!(
 		// pipeline
@@ -34,7 +35,7 @@ class GfxGraphicsContext
 
 	this()
 	{
-		this.resource_store = new GfxResourceStore!ResourceType();
+		this.resource_store = new ResourceStore!ResourceType();
 		return;
 	}
 
@@ -218,24 +219,6 @@ class GfxGraphicsContext
 		this.resource_store.register(sampler);
 		return this;
 	}
-	// upload context
-	typeof(this) create(out GfxUploadContext context)
-	{
-		context = new GfxUploadContext(this.device);
-		return this;
-	}
-	// render context
-	typeof(this) create(out GfxRenderContext context)
-	{
-		context = new GfxRenderContext(this.device, this.window);
-		return this;
-	}
-	// compute context
-	typeof(this) create(out GfxComputeContext context)
-	{
-		context = new GfxComputeContext(this.device, this.window);
-		return this;
-	}
 	// text context
 	typeof(this) create(out GfxTextContext context)
 	{
@@ -255,7 +238,7 @@ class GfxGraphicsContext
 		return this.device.support_format(format, type, usage);
 	}
 
-	GpuTextureFormat get_swapchain_texture_format()
+	deprecated GpuTextureFormat get_swapchain_texture_format()
 	in (this.device !is null)
 	in (this.device.handle !is null)
 	in (this.window !is null)
