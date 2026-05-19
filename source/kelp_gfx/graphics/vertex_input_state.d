@@ -1,4 +1,4 @@
-module kelp_gfx.vertex_input_state;
+module kelp_gfx.graphics.vertex_input_state;
 
 import kelp_sdl;
 

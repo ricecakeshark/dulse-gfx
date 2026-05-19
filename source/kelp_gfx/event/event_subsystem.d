@@ -1,4 +1,4 @@
-module kelp_gfx.subsystem.event_subsystem;
+module kelp_gfx.event.event_subsystem;
 
 import kelp_core.core;
 import kelp_core.event;

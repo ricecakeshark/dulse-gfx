@@ -1,4 +1,4 @@
-module source.kelp_gfx.frame_context;
+module kelp_gfx.graphics.frame_context;
 
 import kelp_sdl.graphics.command.command_buffer;
 import kelp_sdl.graphics.resource.texture.swapchain_texture;

@@ -1,4 +1,4 @@
-module kelp_gfx.graphics_context;
+module kelp_gfx.graphics.graphics_context;
 
 import bindbc.sdl;
 import kelp_core.core.container;

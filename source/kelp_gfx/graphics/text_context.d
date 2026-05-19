@@ -1,4 +1,4 @@
-module kelp_gfx.text_context;
+module kelp_gfx.graphics.text_context;
 
 import kelp_core.core;
 import kelp_core.graphics;

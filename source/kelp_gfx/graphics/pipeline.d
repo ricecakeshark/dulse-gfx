@@ -1,4 +1,4 @@
-module kelp_gfx.pipeline;
+module kelp_gfx.graphics.pipeline;
 
 import kelp_sdl.graphics;
 

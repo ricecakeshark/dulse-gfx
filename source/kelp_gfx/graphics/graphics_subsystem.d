@@ -1,4 +1,4 @@
-module kelp_gfx.subsystem.graphics_subsystem;
+module kelp_gfx.graphics.graphics_subsystem;
 
 import kelp_gfx;
 

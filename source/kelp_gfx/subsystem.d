@@ -1,7 +1,7 @@
-module kelp_gfx.subsystem.subsystem;
+module kelp_gfx.subsystem;
 
 import kelp_core.core;
-import kelp_gfx.subsystem;
+import kelp_gfx;
 
 Core append_sdl_subsystem(ref Core core)
 {

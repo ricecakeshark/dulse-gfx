@@ -1,4 +1,4 @@
-module kelp_gfx.subsystem.sdl_subsystem;
+module kelp_gfx.sdl_subsystem;
 
 import kelp_core.core;
 import kelp_core.logger;

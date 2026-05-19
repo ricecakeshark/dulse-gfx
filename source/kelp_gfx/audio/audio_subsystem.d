@@ -1,4 +1,4 @@
-module kelp_gfx.subsystem.audio_subsystem;
+module kelp_gfx.audio.audio_subsystem;
 
 import kelp_sdl.audio;
 import kelp_core.core.core;

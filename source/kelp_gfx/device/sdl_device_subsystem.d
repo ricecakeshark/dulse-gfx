@@ -1,4 +1,4 @@
-module kelp_gfx.subsystem.sdl_device_subsystem;
+module kelp_gfx.device.sdl_device_subsystem;
 
 import kelp_core.core;
 import kelp_core.device;
