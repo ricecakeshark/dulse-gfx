@@ -4,10 +4,10 @@ import kelp_core.core;
 import kelp_core.device;
 import kelp_sdl.device;
 import bindbc.sdl;
+import kelp_core.logger;
 
 class SDLDeviceSubsystem : Subsystem
 {
-	DeviceSubsystem device;
 	SDLKeyboard keyboard;
 	SDLMouse mouse;
 	SDLGamepad gamepad;
@@ -15,17 +15,17 @@ class SDLDeviceSubsystem : Subsystem
 	this(Core core)
 	{
 		super(core);
-		this.keyboard = new SDLKeyboard();
-		this.mouse = new SDLMouse();
-		this.gamepad = new SDLGamepad();
+		scope DeviceSubsystem device_subsystem;
+		device_subsystem = core.subsystem.query!DeviceSubsystem();
+		this.keyboard = new SDLKeyboard(device_subsystem);
+		this.mouse = new SDLMouse(device_subsystem);
+		this.gamepad = new SDLGamepad(device_subsystem);
 		return;
 	}
 
 	typeof(this) initialize()
 	{
-		this.device = core.subsystem.pool.query!(DeviceSubsystem);
-		this.keyboard.device_subsystem = this.device;
-		this.mouse.device = this.device;
+
 		this.keyboard.initialize();
 		this.mouse.initialize();
 		this.gamepad.initialize();
