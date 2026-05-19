@@ -11,6 +11,7 @@ class SDLSubsystem : Subsystem
 	protected LibrarySDL sdl;
 	protected LibrarySDLImage sdl_image;
 	protected LibrarySDLTTF sdl_ttf;
+	//protected LibrarySDLMixer sdl_mixer;
 	protected LoggerSubsystem logger;
 	public bool initialized = false;
 
@@ -20,6 +21,7 @@ class SDLSubsystem : Subsystem
 		sdl = new LibrarySDL();
 		sdl_image = new LibrarySDLImage();
 		sdl_ttf = new LibrarySDLTTF();
+		//sdl_mixer = new LibrarySDLMixer();
 		return;
 	}
 
@@ -34,6 +36,7 @@ class SDLSubsystem : Subsystem
 		sdl.initialize();
 		sdl_image.initialize();
 		sdl_ttf.initialize();
+		//sdl_mixer.initialize();
 		logger.log(
 			format(
 				"SDL3 (linked:%s compiled:%s)",
@@ -55,11 +58,19 @@ class SDLSubsystem : Subsystem
 				cast(string)(sdl_ttf.linked_version)
 		)
 		);
+		/+logger.log(
+			format(
+				"SDL3_mixer (linked:%s compiled:%s)",
+				cast(string)(sdl_mixer.compiled_version),
+				cast(string)(sdl_mixer.linked_version)
+		)
+		);+/
 		return this;
 	}
 
 	typeof(this) finalize()
 	{
+		//sdl_mixer.finalize();
 		sdl_ttf.finalize();
 		sdl_image.finalize();
 		sdl.finalize();

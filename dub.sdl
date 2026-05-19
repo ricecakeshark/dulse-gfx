@@ -16,5 +16,5 @@ importPaths "source"
 //dflags "-H" "-Hd=include"
 dflags "-preview=in"
 
-versions "SDL_3_4_0" "SDL_Image_3_2" "SDL_TTF_3_2_2"
-libs "SDL3" "SDL3_image" "SDL3_ttf"
+versions "SDL_3_4_4" "SDL_Image_3_2" "SDL_Mixer_3_0" "SDL_TTF_3_2_2"
+libs "SDL3" "SDL3_image" "SDL3_mixer" "SDL3_ttf"
