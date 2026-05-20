@@ -4,7 +4,7 @@ import kelp_sdl.audio;
 import kelp_core.core.core;
 import kelp_core.core.subsystem;
 
-class AudioSubsystem : Subsystem
+class GfxAudioSubsystem : Subsystem
 {
 	this(Core core)
 	{

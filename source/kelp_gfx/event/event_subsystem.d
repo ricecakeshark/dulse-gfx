@@ -6,7 +6,7 @@ import bindbc.sdl;
 
 import std.array, std.algorithm;
 
-class SDLEventSubsystem : Subsystem
+class GfxEventSubsystem : Subsystem
 {
 	EventSubsystem event;
 

@@ -6,7 +6,7 @@ import kelp_sdl.device;
 import bindbc.sdl;
 import kelp_core.logger;
 
-class SDLDeviceSubsystem : Subsystem
+class GfxDeviceSubsystem : Subsystem
 {
 	SDLKeyboard keyboard;
 	SDLMouse mouse;
