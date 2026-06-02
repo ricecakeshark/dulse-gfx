@@ -6,7 +6,7 @@ license "proprietary"
 
 dependency "kelp-core" path="..\\kelp_core"
 dependency "kelp-sdl" path="..\\kelp_sdl"
-dependency "bindbc-sdl" version="~>2.4.0"
+//dependency "bindbc-sdl" version="~>2.4.2"
 
 targetType "sourceLibrary"
 targetName "kelp_gfx"
@@ -16,5 +16,3 @@ importPaths "source"
 //dflags "-H" "-Hd=include"
 dflags "-preview=in"
 
-versions "SDL_3_4_4" "SDL_Image_3_2" "SDL_Mixer_3_2_2" "SDL_TTF_3_2_2"
-libs "SDL3" "SDL3_image" "SDL3_mixer" "SDL3_ttf"
