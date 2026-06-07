@@ -1,14 +1,14 @@
 module kelp_gfx.event.event_subsystem;
 
 import kelp_core.core;
-import kelp_core.event;
+import kelp_core.input;
 import bindbc.sdl;
 
 import std.array, std.algorithm;
 
 class GfxEventSubsystem : Subsystem
 {
-	EventSubsystem event;
+	InputSubsystem input;
 
 	this(Core core)
 	{
@@ -18,7 +18,7 @@ class GfxEventSubsystem : Subsystem
 
 	typeof(this) initialize()
 	{
-		event = this.core.subsystem.pool.query!(EventSubsystem);
+		input = this.core.subsystem.query!(InputSubsystem);
 		return this;
 	}
 
@@ -29,7 +29,7 @@ class GfxEventSubsystem : Subsystem
 
 	typeof(this) process()
 	{
-		event.pool.append(poll_event());
+		input.pool.append(poll_event());
 		return this;
 	}
 }
