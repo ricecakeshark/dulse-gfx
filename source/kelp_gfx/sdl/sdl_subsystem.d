@@ -1,4 +1,4 @@
-module kelp_gfx.sdl_subsystem;
+module kelp_gfx.sdl.sdl_subsystem;
 
 import kelp_core.core;
 import kelp_core.logger;
@@ -11,7 +11,7 @@ class SDLSubsystem : Subsystem
 	protected LibrarySDL sdl;
 	protected LibrarySDLImage sdl_image;
 	protected LibrarySDLTTF sdl_ttf;
-	//protected LibrarySDLMixer sdl_mixer;
+	protected LibrarySDLMixer sdl_mixer;
 	protected LoggerSubsystem logger;
 	public bool initialized = false;
 
@@ -21,7 +21,7 @@ class SDLSubsystem : Subsystem
 		sdl = new LibrarySDL();
 		sdl_image = new LibrarySDLImage();
 		sdl_ttf = new LibrarySDLTTF();
-		//sdl_mixer = new LibrarySDLMixer();
+		sdl_mixer = new LibrarySDLMixer();
 		return;
 	}
 
@@ -34,9 +34,6 @@ class SDLSubsystem : Subsystem
 		initialized = true;
 		this.core.subsystem.query(this.logger);
 		sdl.initialize();
-		sdl_image.initialize();
-		sdl_ttf.initialize();
-		//sdl_mixer.initialize();
 		logger.log(
 			format(
 				"SDL3 (linked:%s compiled:%s)",
@@ -44,6 +41,7 @@ class SDLSubsystem : Subsystem
 				cast(string)(sdl.compiled_version)
 		)
 		);
+		sdl_image.initialize();
 		logger.log(
 			format(
 				"SDL3_image (linked:%s compiled:%s)",
@@ -51,6 +49,7 @@ class SDLSubsystem : Subsystem
 				cast(string)(sdl_image.linked_version)
 		)
 		);
+		sdl_ttf.initialize();
 		logger.log(
 			format(
 				"SDL3_ttf (linked:%s compiled:%s)",
@@ -58,13 +57,14 @@ class SDLSubsystem : Subsystem
 				cast(string)(sdl_ttf.linked_version)
 		)
 		);
-		/+logger.log(
+		sdl_mixer.initialize();
+		logger.log(
 			format(
 				"SDL3_mixer (linked:%s compiled:%s)",
 				cast(string)(sdl_mixer.compiled_version),
 				cast(string)(sdl_mixer.linked_version)
 		)
-		);+/
+		);
 		return this;
 	}
 
