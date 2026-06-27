@@ -4,7 +4,8 @@ import kelp_core.core;
 import kelp_core.input;
 import bindbc.sdl;
 
-import std.array, std.algorithm;
+import std.array : array;
+import std.algorithm : map;
 
 class GfxEventSubsystem : Subsystem
 {

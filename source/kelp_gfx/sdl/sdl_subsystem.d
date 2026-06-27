@@ -4,7 +4,7 @@ import kelp_core.core;
 import kelp_core.logger;
 import kelp_sdl.core;
 
-import std.format;
+import std.format : format;
 
 class SDLSubsystem : Subsystem
 {
@@ -37,32 +37,32 @@ class SDLSubsystem : Subsystem
 		logger.log(
 			format(
 				"SDL3 (linked:%s compiled:%s)",
-				cast(string)(sdl.linked_version),
-				cast(string)(sdl.compiled_version)
+				sdl.linked_version.to_string(),
+				sdl.compiled_version.to_string()
 		)
 		);
 		sdl_image.initialize();
 		logger.log(
 			format(
 				"SDL3_image (linked:%s compiled:%s)",
-				cast(string)(sdl_image.compiled_version),
-				cast(string)(sdl_image.linked_version)
+				sdl_image.compiled_version.to_string(),
+				sdl_image.linked_version.to_string()
 		)
 		);
 		sdl_ttf.initialize();
 		logger.log(
 			format(
 				"SDL3_ttf (linked:%s compiled:%s)",
-				cast(string)(sdl_ttf.compiled_version),
-				cast(string)(sdl_ttf.linked_version)
+				sdl_ttf.compiled_version.to_string(),
+				sdl_ttf.linked_version.to_string()
 		)
 		);
 		sdl_mixer.initialize();
 		logger.log(
 			format(
 				"SDL3_mixer (linked:%s compiled:%s)",
-				cast(string)(sdl_mixer.compiled_version),
-				cast(string)(sdl_mixer.linked_version)
+				sdl_mixer.compiled_version.to_string(),
+				sdl_mixer.linked_version.to_string()
 		)
 		);
 		return this;
@@ -70,7 +70,7 @@ class SDLSubsystem : Subsystem
 
 	typeof(this) finalize()
 	{
-		//sdl_mixer.finalize();
+		sdl_mixer.finalize();
 		sdl_ttf.finalize();
 		sdl_image.finalize();
 		sdl.finalize();

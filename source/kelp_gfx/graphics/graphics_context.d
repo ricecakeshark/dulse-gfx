@@ -17,19 +17,19 @@ class GfxGraphicsContext
 	public ResourceStore!ResourceType resource_store;
 
 	alias ResourceType = SumType!(
-		// pipeline
+
 		GpuGraphicsPipeline,
-		GpuComputePipeline, // shader
+		GpuComputePipeline,
 		GpuVertexShader,
-		GpuFragmentShader, // buffer
+		GpuFragmentShader,
 		GpuBufferTransferBuffer,
 		GpuTextureTransferBuffer,
 		GpuVertexBuffer,
 		GpuIndexBuffer,
 		GpuDrawBuffer,
-		GpuStorageBuffer, // texture
+		GpuStorageBuffer,
 		GpuTexture,
-		GpuSampler, // context
+		GpuSampler,//GfxRenderContext,
 		GfxTextContext,
 	);
 
@@ -42,22 +42,17 @@ class GfxGraphicsContext
 	typeof(this) initialize(
 		in int client_width,
 		in int client_height,
-		in GpuBackend backend = GpuBackend.none)
+		in string clinet_title,
+		in GpuBackend backend = GpuBackend.none,
+	)
 	{
 		this.device = new GpuDevice();
 		this.device.create(backend);
 		this.window = new GpuWindow();
-		this.window.create(client_width, client_height, "");
+		this.window.create(client_width, client_height, clinet_title);
 		this.client_width = client_width;
 		this.client_height = client_height;
 		this.device.claim(this.window);
-		debug
-		{
-			import std.stdio;
-
-			this.output_driver_list().writeln();
-			this.output_shader_format().writeln();
-		}
 		return this;
 	}
 
@@ -219,6 +214,18 @@ class GfxGraphicsContext
 		this.resource_store.register(sampler);
 		return this;
 	}
+	// render context
+	/+typeof(this) create(out GfxRenderContext context)
+	{
+		context = new GfxRenderContext(this);
+		return this;
+	}
+	// compute context
+	typeof(this) create(out GfxComputeContext context)
+	{
+		context = new GfxComputeContext(this);
+		return this;
+	}+/
 	// text context
 	typeof(this) create(out GfxTextContext context)
 	{

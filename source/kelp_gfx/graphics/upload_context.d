@@ -1,4 +1,4 @@
-module kelp_gfx.upload_context;
+module source.kelp_gfx.graphics.upload_context;
 
 import kelp_sdl.graphics.command;
 import kelp_sdl.graphics.core.gpu_device;

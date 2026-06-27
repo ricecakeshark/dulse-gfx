@@ -6,7 +6,7 @@ import kelp_core.core.core;
 import kelp_core.core.subsystem;
 import kelp_core.core.container.resource_store;
 
-import std.exception;
+import std.exception : enforce;
 
 class GfxGraphicsSubsystem : Subsystem
 {
