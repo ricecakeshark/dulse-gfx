@@ -25,7 +25,6 @@ class GfxDeviceSubsystem : Subsystem
 
 	typeof(this) initialize()
 	{
-
 		this.keyboard.initialize();
 		this.mouse.initialize();
 		this.gamepad.initialize();
