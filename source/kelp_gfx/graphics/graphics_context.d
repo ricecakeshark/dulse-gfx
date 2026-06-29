@@ -29,7 +29,8 @@ class GfxGraphicsContext
 		GpuDrawBuffer,
 		GpuStorageBuffer,
 		GpuTexture,
-		GpuSampler,//GfxRenderContext,
+		GpuSampler,
+		GpuFence,
 		GfxTextContext,
 	);
 
@@ -212,6 +213,13 @@ class GfxGraphicsContext
 	{
 		sampler = new GpuSampler(this.device);
 		this.resource_store.register(sampler);
+		return this;
+	}
+	// fence
+	typeof(this) create(out GpuFence fence)
+	{
+		fence = new GpuFence(this.device);
+		this.resource_store.register(fence);
 		return this;
 	}
 	// render context
