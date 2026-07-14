@@ -11,8 +11,7 @@ class GfxGraphicsContext
 {
 	public GpuDevice device;
 	public GpuWindow window;
-
-	public int client_width, client_height;
+	protected int[3] _client_size;
 
 	public ResourceStore!ResourceType resource_store;
 
@@ -40,6 +39,21 @@ class GfxGraphicsContext
 		return;
 	}
 
+	@property int client_width() const pure nothrow @nogc @safe
+	{
+		return this._client_size[0];
+	}
+
+	@property int client_height() const pure nothrow @nogc @safe
+	{
+		return this._client_size[1];
+	}
+
+	@property int[3] client_size() const pure nothrow @nogc @safe
+	{
+		return this._client_size;
+	}
+
 	typeof(this) initialize(
 		in int client_width,
 		in int client_height,
@@ -51,8 +65,7 @@ class GfxGraphicsContext
 		this.device.create(backend);
 		this.window = new GpuWindow();
 		this.window.create(client_width, client_height, clinet_title);
-		this.client_width = client_width;
-		this.client_height = client_height;
+		this._client_size = [client_width, client_height, 1];
 		this.device.claim(this.window);
 		return this;
 	}
