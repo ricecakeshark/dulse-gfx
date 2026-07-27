@@ -254,6 +254,12 @@ class GfxGraphicsContext
 		this.resource_store.register(context);
 		return this;
 	}
+	// texture alternate
+	typeof(this) create(out GfxTextureAlternate texture_alternate)
+	{
+		texture_alternate = GfxTextureAlternate(this);
+		return this;
+	}
 
 	bool support_format(
 		SDL_GPUTextureFormat format,
