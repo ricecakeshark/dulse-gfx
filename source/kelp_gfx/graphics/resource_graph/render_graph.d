@@ -1,4 +1,4 @@
-module kelp_gfx.graphics.render_graph;
+module kelp_gfx.graphics.resource_graph.render_graph;
 
 import kelp_sdl.graphics;
 import kelp_gfx.graphics;
