@@ -2,9 +2,10 @@ module kelp_gfx.event.event_subsystem;
 
 import kelp_core.core;
 import kelp_core.input;
+import kelp_sdl.input;
 import bindbc.sdl;
 
-import std.array : array;
+import std.array : Appender, array;
 import std.algorithm : map;
 
 class GfxEventSubsystem : Subsystem
@@ -30,39 +31,21 @@ class GfxEventSubsystem : Subsystem
 
 	typeof(this) process()
 	{
-		input.pool.append(poll_event());
+		input.pool.append(
+			poll_sdl_event().convert()
+		);
 		return this;
-	}
-}
-
-Event[] poll_event()
-{
-	return poll_sdl_event()
-		.map!(event => event.normalize())
-		.array();
-}
-
-Event normalize(in SDL_Event event) pure nothrow @nogc @safe
-{
-	switch (event.type)
-	{
-	case SDL_EVENT_QUIT:
-		return Event(EventType.quit);
-	default:
-		return Event(EventType.none);
 	}
 }
 
 SDL_Event[] poll_sdl_event()
 {
-	import std.array : Appender;
-
-	Appender!(SDL_Event[]) event_list;
-	SDL_Event event;
+	scope Appender!(SDL_Event[]) event_list;
+	scope SDL_Event event;
 
 	while (SDL_PollEvent(&event))
 	{
-		event_list.put(event);
+		event_list ~= event;
 	}
 	return event_list[];
 }
