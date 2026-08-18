@@ -1,11 +1,24 @@
 module kelp_gfx.input.input;
 
-import kelp_core.device;
 import kelp_core.input;
+import kelp_core.math.linalg.vector;
 import bindbc.sdl;
 import std.array : Appender;
 import core.time : MonoTime;
 import std.sumtype;
+
+Event[] convert(
+	SDL_Event[] in_event_list,
+)
+{
+	scope Appender!(Event[]) out_event_list;
+
+	foreach (in_event; in_event_list)
+	{
+		out_event_list ~= convert(in_event);
+	}
+	return out_event_list[];
+}
 
 Event convert(SDL_Event in_event)
 {
@@ -16,6 +29,7 @@ Event convert(SDL_Event in_event)
 			in_event.quit.timestamp,
 			QuitEvent(),
 		);
+		assert(0);
 		/+case EventTypeMajor.window:
 		switch (event_type_minor(cast(SDL_EventType) in_event.type))
 		{
@@ -29,6 +43,7 @@ Event convert(SDL_Event in_event)
 		}+/
 
 	case EventTypeMajor.keyboard:
+
 		return event(
 			in_event.key.timestamp,
 			KeyboardKeyEvent(
@@ -38,27 +53,34 @@ Event convert(SDL_Event in_event)
 				in_event.key.repeat,
 		),
 		);
-		/+case EventTypeMajor.mouse:
-		switch (event_type_minor(in_event))
+	case EventTypeMajor.mouse:
+
+		switch (event_type_minor(cast(SDL_EventType) in_event.type))
 		{
 		case EventTypeMinor.mouse_motion:
-			return Event(
-				cast(MonoTime)in_event.motion.timestamp,
-				MouseMotionEvent( /+ TO DO +/ ),
+			return event(
+				in_event.motion.timestamp,
+				MouseMotionEvent(
+					Vec2(in_event.motion.x, in_event.motion.y),
+					Vec2(in_event.motion.xrel, in_event.motion.yrel),
+			),
 			);
 		case EventTypeMinor.mouse_button:
-			return Event(
+			return event(
 				in_event.button.timestamp,
-				MouseButtonEvent( /+ TO DO +/ ),
+				MouseButtonEvent(
+					mouse_button_type(in_event.button.button),
+					in_event.button.down,
+			),
 			);
 		case EventTypeMinor.mouse_wheel:
-			return Event(
+			return event(
 				in_event.wheel.timestamp,
-				MouseWheelEvent( /+ TO DO +/ ),
+				MouseWheelEvent(Vec2(in_event.wheel.x, in_event.wheel.y)),
 			);
 		default:
 			assert(false);
-		}+/
+		}
 		/+case EventTypeMajor.gamepad:
 		return Event(
 			in_event.gamepad.timestamp,
@@ -69,17 +91,6 @@ Event convert(SDL_Event in_event)
 	}
 }
 
-Event[] convert(
-	SDL_Event[] in_event_list,
-)
-{
-	scope Appender!(Event[]) out_event_list;
-	foreach (in_event; in_event_list)
-	{
-		out_event_list ~= convert(in_event);
-	}
-	return out_event_list[];
-}
 /+
 Event convert(SDL_Event in_event)
 {
@@ -104,19 +115,20 @@ EventTypeMajor event_type_major(
 	{
 	case SDL_EventType.quit:
 		return EventTypeMajor.quit;
-	case SDL_EventType.windowMinimized,
-		SDL_EventType.windowMaximized:
+	case SDL_EventType.windowMinimized:
+	case SDL_EventType.windowMaximized:
 		return EventTypeMajor.window;
-	case SDL_EventType.keyDown,
-		SDL_EventType.keyUp:
+	case SDL_EventType.keyDown:
 		return EventTypeMajor.keyboard;
-	case SDL_EventType.mouseMotion,
-		SDL_EventType.mouseWheel,
-		SDL_EventType.mouseButtonDown,
-		SDL_EventType.mouseButtonUp:
+	case SDL_EventType.keyUp:
+		return EventTypeMajor.keyboard;
+	case SDL_EventType.mouseMotion:
+	case SDL_EventType.mouseWheel:
+	case SDL_EventType.mouseButtonDown:
+	case SDL_EventType.mouseButtonUp:
 		return EventTypeMajor.mouse;
-	case SDL_EventType.gamepadButtonDown,
-		SDL_EventType.gamepadButtonUp:
+	case SDL_EventType.gamepadButtonDown:
+	case SDL_EventType.gamepadButtonUp:
 		return EventTypeMajor.gamepad;
 	default:
 		return EventTypeMajor.other;
@@ -176,14 +188,31 @@ EventTypeMinor event_type_minor(
 }
 +/
 
-SDL_Event[] poll_sdl_event()
+MouseButtonType mouse_button_type(ubyte flags) pure nothrow @nogc @safe
 {
-	scope Appender!(SDL_Event[]) event_list;
+	final switch (flags)
+	{
+	case 1u << MouseButtonType.left:
+		return MouseButtonType.left;
+	case 1u << MouseButtonType.middle:
+		return MouseButtonType.middle;
+	case 1u << MouseButtonType.right:
+		return MouseButtonType.right;
+	case 1u << MouseButtonType.x1:
+		return MouseButtonType.x1;
+	case 1u << MouseButtonType.x2:
+		return MouseButtonType.x2;
+	}
+}
+
+Event[] poll_sdl_event()
+{
+	scope Appender!(Event[]) event_list;
 	scope SDL_Event event;
 
 	while (SDL_PollEvent(&event))
 	{
-		event_list ~= event;
+		event_list ~= event.convert();
 	}
 	return event_list[];
 }
