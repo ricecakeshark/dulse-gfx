@@ -1,11 +1,51 @@
 module kelp_gfx.input.input;
 
+import kelp_core.core;
 import kelp_core.input;
 import kelp_core.math.linalg.vector;
 import bindbc.sdl;
 import std.array : Appender;
 import core.time : MonoTime;
 import std.sumtype;
+import kelp_gfx.input;
+import kelp_sdl.input;
+
+import kelp_core.core.subsystem;
+
+class GfxInputSubsystem : Subsystem
+{
+	GamepadManager gamepad;
+
+	this(Core core)
+	{
+		super(core);
+		this.gamepad = new GamepadManager();
+		return;
+	}
+
+	~this()
+	{
+		return;
+	}
+
+	typeof(this) initialize()
+	{
+		this.gamepad.initialize();
+		return this;
+	}
+
+	typeof(this) finalize()
+	{
+		this.gamepad.finalize();
+		return this;
+	}
+
+	typeof(this) process()
+	{
+		this.gamepad.process();
+		return this;
+	}
+}
 
 Event[] convert(
 	SDL_Event[] in_event_list,
@@ -43,7 +83,6 @@ Event convert(SDL_Event in_event)
 		}+/
 
 	case EventTypeMajor.keyboard:
-
 		return event(
 			in_event.key.timestamp,
 			KeyboardKeyEvent(
@@ -79,13 +118,36 @@ Event convert(SDL_Event in_event)
 				MouseWheelEvent(Vec2(in_event.wheel.x, in_event.wheel.y)),
 			);
 		default:
-			assert(false);
+			assert(false, "invalid event_type_minor in mouse");
 		}
-		/+case EventTypeMajor.gamepad:
-		return Event(
-			in_event.gamepad.timestamp,
-			GamepadButtonEvent(),
-		);+/
+	case EventTypeMajor.gamepad:
+		switch (event_type_minor(cast(SDL_EventType) in_event.type))
+		{
+		case EventTypeMinor.gamepad_button:
+			debug
+			{
+				import std.stdio;
+
+				writeln("gfx gamepad button: gamepad_button");
+			}
+			return event(
+				in_event.motion.timestamp,
+				GamepadButtonEvent(
+					gamepad_button(in_event.gbutton.button),
+					in_event.gbutton.down,
+			),
+			);
+		case EventTypeMinor.gamepad_axis:
+			return event(
+				in_event.button.timestamp,
+				GamepadAxisEvent(
+					gamepad_axis(in_event.gaxis.axis),
+					gamepad_axis_value(in_event.gaxis.value),
+			),
+			);
+		default:
+			assert(false, "invalid event_type_minor in gamepad");
+		}
 	default:
 		return Event(MonoTime.currTime);
 	}
@@ -156,8 +218,8 @@ EventTypeMinor event_type_minor(
 	case SDL_EventType.mouseButtonDown,
 		SDL_EventType.mouseButtonUp:
 		return EventTypeMinor.mouse_button;
-	case SDL_EventType.gamepadButtonDown,
-		SDL_EventType.gamepadButtonUp:
+	case SDL_EventType.gamepadButtonDown:
+	case SDL_EventType.gamepadButtonUp:
 		return EventTypeMinor.gamepad_button;
 	case SDL_EventType.gamepadAxisMotion:
 		return EventTypeMinor.gamepad_axis;
@@ -188,21 +250,31 @@ EventTypeMinor event_type_minor(
 }
 +/
 
-MouseButtonType mouse_button_type(ubyte flags) pure nothrow @nogc @safe
+MouseButton mouse_button_type(ubyte flags) pure nothrow @nogc @safe
 {
 	final switch (flags)
 	{
-	case 1u << MouseButtonType.left:
-		return MouseButtonType.left;
-	case 1u << MouseButtonType.middle:
-		return MouseButtonType.middle;
-	case 1u << MouseButtonType.right:
-		return MouseButtonType.right;
-	case 1u << MouseButtonType.x1:
-		return MouseButtonType.x1;
-	case 1u << MouseButtonType.x2:
-		return MouseButtonType.x2;
+	case 1u << MouseButton.left:
+		return MouseButton.left;
+	case 1u << MouseButton.middle:
+		return MouseButton.middle;
+	case 1u << MouseButton.right:
+		return MouseButton.right;
+	case 1u << MouseButton.x1:
+		return MouseButton.x1;
+	case 1u << MouseButton.x2:
+		return MouseButton.x2;
 	}
+}
+
+GamepadButton gamepad_button(ubyte button) pure nothrow @nogc @safe
+{
+	return cast(GamepadButton) button;
+}
+
+GamepadAxis gamepad_axis(ubyte axis) pure nothrow @nogc @safe
+{
+	return cast(GamepadAxis) axis;
 }
 
 Event[] poll_sdl_event()
