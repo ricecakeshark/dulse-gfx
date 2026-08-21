@@ -1,7 +1,6 @@
 module kelp_gfx.subsystem;
 
 import kelp_core.core;
-import kelp_core.input.input_subsystem;
 import kelp_gfx;
 
 //import kelp_gfx.event.event_subsystem;
@@ -15,7 +14,7 @@ Core append_gio_subsystem(ref Core core)
 		new GfxAudioSubsystem(core),
 		new GfxInputSubsystem(core),
 	);
-	if (core.subsystem.query!InputSubsystem() !is null)
+	/+if (core.subsystem.query!InputSubsystem() !is null)
 	{
 		core.subsystem.query!InputSubsystem().register_poller(
 			() { return poll_sdl_event(); }
@@ -24,6 +23,6 @@ Core append_gio_subsystem(ref Core core)
 	else
 	{
 		assert(0);
-	}
+	}+/
 	return core;
 }

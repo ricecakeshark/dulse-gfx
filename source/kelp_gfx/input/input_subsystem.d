@@ -1,24 +1,27 @@
-module kelp_gfx.input.input;
+module kelp_gfx.input.input_subsystem;
 
-import kelp_core.core;
+import kelp_core.core.core;
+import kelp_core.core.subsystem;
+import kelp_core.core.message_bus;
 import kelp_core.input;
 import kelp_core.math.linalg.vector;
-import bindbc.sdl;
-import std.array : Appender;
-import core.time : MonoTime;
-import std.sumtype;
-import kelp_gfx.input;
 import kelp_sdl.input;
-
-import kelp_core.core.subsystem;
+import kelp_gfx.input.manager;
+import bindbc.sdl;
+import std.array : appender, Appender, RefAppender;
+import core.time : MonoTime;
 
 class GfxInputSubsystem : Subsystem
 {
-	GamepadManager gamepad;
+	public KeyboardManager keyboard;
+	public MouseManager mouse;
+	public GamepadManager gamepad;
 
 	this(Core core)
 	{
 		super(core);
+		this.keyboard = new KeyboardManager();
+		this.mouse = new MouseManager();
 		this.gamepad = new GamepadManager();
 		return;
 	}
@@ -30,19 +33,41 @@ class GfxInputSubsystem : Subsystem
 
 	typeof(this) initialize()
 	{
+		this.keyboard.initialize();
+		this.mouse.initialize();
 		this.gamepad.initialize();
 		return this;
 	}
 
 	typeof(this) finalize()
 	{
+		this.keyboard.finalize();
+		this.mouse.finalize();
 		this.gamepad.finalize();
 		return this;
 	}
 
 	typeof(this) process()
 	{
+		scope Event[] event_pool;
+		poll_event(event_pool);
+		foreach (event; event_pool)
+		{
+			if (event.type.major == EventTypeMajor.quit)
+			{
+				this.core.bus.send(new QuitMessage());
+			}
+		}
+		this.keyboard.process();
+		this.keyboard.update();
+		this.keyboard.apply(event_pool);
+		this.mouse.process();
+		this.mouse.update();
+		this.mouse.apply(event_pool);
 		this.gamepad.process();
+		this.gamepad.update();
+		this.gamepad.apply(event_pool);
+
 		return this;
 	}
 }
@@ -152,22 +177,6 @@ Event convert(SDL_Event in_event)
 		return Event(MonoTime.currTime);
 	}
 }
-
-/+
-Event convert(SDL_Event in_event)
-{
-	switch (in_event.type)
-	{
-	case SDL_EventType.quit:
-		return event(EventTypeMinor.quit);
-	case SDL_EventType.keyboard:
-		return event(EventTypeMinor.keyboard);
-	case SDL_EventType.mouse:
-		return event(EventTypeMinor.mouse);
-	default:
-		return event(EventTypeMinor.invalid);
-	}
-}+/
 
 EventTypeMajor event_type_major(
 	SDL_EventType type,
@@ -287,4 +296,16 @@ Event[] poll_sdl_event()
 		event_list ~= event.convert();
 	}
 	return event_list[];
+}
+
+void poll_event(out Event[] out_event_list)
+{
+	scope RefAppender!(Event[]) event_list;
+	scope SDL_Event event;
+	event_list = appender(&out_event_list);
+	while (SDL_PollEvent(&event))
+	{
+		event_list ~= event.convert();
+	}
+	return;
 }
