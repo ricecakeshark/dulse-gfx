@@ -94,7 +94,6 @@ Event convert(SDL_Event in_event)
 			in_event.quit.timestamp,
 			QuitEvent(),
 		);
-		assert(0);
 		/+case EventTypeMajor.window:
 		switch (event_type_minor(cast(SDL_EventType) in_event.type))
 		{
@@ -106,7 +105,6 @@ Event convert(SDL_Event in_event)
 		default:
 			assert(false);
 		}+/
-
 	case EventTypeMajor.keyboard:
 		return event(
 			in_event.key.timestamp,
@@ -149,12 +147,6 @@ Event convert(SDL_Event in_event)
 		switch (event_type_minor(cast(SDL_EventType) in_event.type))
 		{
 		case EventTypeMinor.gamepad_button:
-			debug
-			{
-				import std.stdio;
-
-				writeln("gfx gamepad button: gamepad_button");
-			}
 			return event(
 				in_event.motion.timestamp,
 				GamepadButtonEvent(
