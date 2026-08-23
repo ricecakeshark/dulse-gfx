@@ -7,9 +7,13 @@ import kelp_core.input;
 import kelp_core.math.linalg.vector;
 import kelp_sdl.input;
 import kelp_gfx.input.manager;
+import TextConv = kelp_gfx.input.converter.text;
 import bindbc.sdl;
 import std.array : appender, Appender, RefAppender;
 import core.time : MonoTime;
+import std.string : fromStringz;
+import std.algorithm : map;
+import std.array : array;
 
 class GfxInputSubsystem : Subsystem
 {
@@ -87,7 +91,7 @@ Event[] convert(
 
 Event convert(SDL_Event in_event)
 {
-	switch (event_type_major(cast(SDL_EventType) in_event.type))
+	switch (event_type(cast(SDL_EventType) in_event.type).major)
 	{
 	case EventTypeMajor.quit:
 		return event(
@@ -115,9 +119,26 @@ Event convert(SDL_Event in_event)
 				in_event.key.repeat,
 		),
 		);
+	case EventTypeMajor.text:
+		switch (event_type(cast(SDL_EventType) in_event.type).minor)
+		{
+		case EventTypeMinor.text_editing:
+			return event(
+				in_event.edit.timestamp,
+				TextConv.convert(in_event.edit)
+			);
+		case EventTypeMinor.text_candidate:
+			return event(in_event.edit_candidates.timestamp, TextConv.convert(
+					in_event.edit_candidates));
+		case EventTypeMinor.text_input:
+			return event(in_event.text.timestamp, TextConv.convert(in_event.text));
+		default:
+			assert(false, "not supported text event");
+		}
+
 	case EventTypeMajor.mouse:
 
-		switch (event_type_minor(cast(SDL_EventType) in_event.type))
+		switch (event_type(cast(SDL_EventType) in_event.type).minor)
 		{
 		case EventTypeMinor.mouse_motion:
 			return event(
@@ -144,7 +165,7 @@ Event convert(SDL_Event in_event)
 			assert(false, "invalid event_type_minor in mouse");
 		}
 	case EventTypeMajor.gamepad:
-		switch (event_type_minor(cast(SDL_EventType) in_event.type))
+		switch (event_type(cast(SDL_EventType) in_event.type).minor)
 		{
 		case EventTypeMinor.gamepad_button:
 			return event(
@@ -170,86 +191,42 @@ Event convert(SDL_Event in_event)
 	}
 }
 
-EventTypeMajor event_type_major(
-	SDL_EventType type,
-)
-{
-	switch (type)
-	{
-	case SDL_EventType.quit:
-		return EventTypeMajor.quit;
-	case SDL_EventType.windowMinimized:
-	case SDL_EventType.windowMaximized:
-		return EventTypeMajor.window;
-	case SDL_EventType.keyDown:
-		return EventTypeMajor.keyboard;
-	case SDL_EventType.keyUp:
-		return EventTypeMajor.keyboard;
-	case SDL_EventType.mouseMotion:
-	case SDL_EventType.mouseWheel:
-	case SDL_EventType.mouseButtonDown:
-	case SDL_EventType.mouseButtonUp:
-		return EventTypeMajor.mouse;
-	case SDL_EventType.gamepadButtonDown:
-	case SDL_EventType.gamepadButtonUp:
-		return EventTypeMajor.gamepad;
-	default:
-		return EventTypeMajor.other;
-	}
-}
-
-EventTypeMinor event_type_minor(
+EventType event_type(
 	SDL_EventType event_type,
-)
+) pure nothrow @nogc @safe
 {
 	switch (event_type)
 	{
 	case SDL_EventType.quit:
-		return EventTypeMinor.quit;
+		return EventType(EventTypeMajor.quit, EventTypeMinor.quit);
 	case SDL_EventType.windowMinimized:
-		return EventTypeMinor.window_minimized;
+		return EventType(EventTypeMajor.window, EventTypeMinor.window_minimized);
 	case SDL_EventType.windowMaximized:
-		return EventTypeMinor.window_maximized;
+		return EventType(EventTypeMajor.window, EventTypeMinor.window_maximized);
 	case SDL_EventType.keyDown, SDL_EventType.keyUp:
-		return EventTypeMinor.keyboard_key;
+		return EventType(EventTypeMajor.keyboard, EventTypeMinor.keyboard_key);
+	case SDL_EventType.textEditing:
+		return EventType(EventTypeMajor.text, EventTypeMinor.text_editing);
+	case SDL_EventType.textInput:
+		return EventType(EventTypeMajor.text, EventTypeMinor.text_input);
+	case SDL_EventType.textEditingCandidates:
+		return EventType(EventTypeMajor.text, EventTypeMinor.text_candidate);
 	case SDL_EventType.mouseMotion:
-		return EventTypeMinor.mouse_motion;
+		return EventType(EventTypeMajor.mouse, EventTypeMinor.mouse_motion);
 	case SDL_EventType.mouseWheel:
-		return EventTypeMinor.mouse_wheel;
+		return EventType(EventTypeMajor.mouse, EventTypeMinor.mouse_wheel);
 	case SDL_EventType.mouseButtonDown,
 		SDL_EventType.mouseButtonUp:
-		return EventTypeMinor.mouse_button;
+		return EventType(EventTypeMajor.mouse, EventTypeMinor.mouse_button);
 	case SDL_EventType.gamepadButtonDown:
 	case SDL_EventType.gamepadButtonUp:
-		return EventTypeMinor.gamepad_button;
+		return EventType(EventTypeMajor.gamepad, EventTypeMinor.gamepad_button);
 	case SDL_EventType.gamepadAxisMotion:
-		return EventTypeMinor.gamepad_axis;
+		return EventType(EventTypeMajor.gamepad, EventTypeMinor.gamepad_axis);
 	default:
-		return EventTypeMinor.other;
+		return EventType(EventTypeMajor.other, EventTypeMinor.other);
 	}
 }
-
-/+EventType event_data(
-	SDL_Event event,
-)
-{
-	switch (event_type(event.type))
-	{
-	case EventTypeMinor.quit:
-		return Event(event.quit.timestamp, QuitEvent());
-	case EventTypeMinor.window:
-		return EventTypeMinor.window;
-	case EventTypeMinor.keyboard:
-		return EventTypeMinor.keyboard;
-	case EventTypeMinor.mouseMotion, SDL_EventType:
-		return EventTypeMinor.mouse;
-	case EventTypeMinor.gamepad:
-		return EventTypeMinor.gamepad;
-	default:
-		return EventTypeMinor.other;
-	}
-}
-+/
 
 MouseButton mouse_button_type(ubyte flags) pure nothrow @nogc @safe
 {
