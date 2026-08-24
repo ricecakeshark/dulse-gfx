@@ -1,7 +1,7 @@
 module kelp_gfx.input.converter.text;
 
 import kelp_core.input.event.text;
-import bindbc.sdl : SDL_TextEditingEvent, SDL_TextEditingCandidatesEvent, SDL_TextInputEvent;
+import sdl.events : SDL_TextEditingEvent, SDL_TextEditingCandidatesEvent, SDL_TextInputEvent;
 import std.string : fromStringz;
 import std.algorithm : map;
 import std.array : array;

@@ -6,7 +6,7 @@ import kelp_core.input.device.gamepad;
 import kelp_core.input.state.gamepad;
 import kelp_core.math.linalg.vector;
 import kelp_sdl.input.gamepad;
-import sdl.joystick,sdl.gamepad;
+import sdl.joystick, sdl.gamepad;
 
 class GamepadManager
 {

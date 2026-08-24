@@ -3,7 +3,6 @@ module kelp_gfx.sdl.sdl_subsystem;
 import kelp_core.core;
 import kelp_core.logger;
 import kelp_sdl.core;
-
 import std.format : format;
 
 class SDLSubsystem : Subsystem

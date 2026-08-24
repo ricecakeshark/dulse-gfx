@@ -64,7 +64,7 @@ struct Mouse
 
 	typeof(this) update()
 	{
-		get_mouse_state(this.state_list.tail);
+		apply_mouse_state(this.state_list.tail);
 		return this;
 	}
 
