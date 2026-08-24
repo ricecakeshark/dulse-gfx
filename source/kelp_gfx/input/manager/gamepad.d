@@ -6,15 +6,15 @@ import kelp_core.input.device.gamepad;
 import kelp_core.input.state.gamepad;
 import kelp_core.math.linalg.vector;
 import kelp_sdl.input.gamepad;
-import bindbc.sdl;
+import sdl.joystick,sdl.gamepad;
 
 class GamepadManager
 {
 	Gamepad[4] gamepad_list;
 
-	Gamepad opIndex(size_t index) pure @nogc @safe
+	Gamepad opIndex(size_t index) pure nothrow @nogc @safe
+	in (index < gamepad_list.length)
 	{
-		assert(index < 4);
 		return this.gamepad_list[index];
 	}
 

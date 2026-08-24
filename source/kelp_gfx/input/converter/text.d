@@ -6,21 +6,23 @@ import std.string : fromStringz;
 import std.algorithm : map;
 import std.array : array;
 
-public:
-TextEditingEvent convert(SDL_TextEditingEvent event) pure nothrow
+
+TextEditingEvent text_editing_event(SDL_TextEditingEvent event) pure nothrow @trusted
 {
-	return TextEditingEvent(event.text.fromStringz().idup);
+	return TextEditingEvent(
+		event.text.fromStringz().idup
+	);
 }
 
-TextEditCandidateEvent convert(in SDL_TextEditingCandidatesEvent event)
+TextEditCandidateEvent text_edit_candidate_event(in SDL_TextEditingCandidatesEvent event) pure nothrow @trusted
 {
-	const(char*)[] candidates = event.candidates[0 .. cast(size_t) event.num_candidates];
+	scope const(char*)[] candidates = event.candidates[0 .. cast(size_t) event.num_candidates];
 	return TextEditCandidateEvent(
 		candidates.map!(str => str.fromStringz().idup).array()
 	);
 }
 
-TextInputEvent convert(in SDL_TextInputEvent event)
+TextInputEvent text_input_event(in SDL_TextInputEvent event) pure nothrow @trusted
 {
 	return TextInputEvent(event.text.fromStringz().idup);
 }
