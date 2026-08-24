@@ -74,7 +74,7 @@ struct Mouse
 		return;
 	}
 
-	bool moved()
+	bool moved() const pure nothrow @nogc @safe
 	{
 		if (this.state_list.tail.rel_pos != Vec2(0f, 0f))
 		{
@@ -86,22 +86,22 @@ struct Mouse
 		}
 	}
 
-	bool pressed(MouseButton button_type)
+	bool pressed(in MouseButton button_type) const pure nothrow @nogc @safe
 	{
 		return this.state_list.tail.button[button_type].pressed;
 	}
 
-	bool pressed_just(MouseButton button_type)
+	bool pressed_just(in MouseButton button_type) const pure nothrow @nogc @safe
 	{
 		return this.state_list.tail.button[button_type].pressed_just;
 	}
 
-	bool released(MouseButton button_type)
+	bool released(in MouseButton button_type) const pure nothrow @nogc @safe
 	{
 		return !this.state_list.tail.button[button_type].pressed;
 	}
 
-	bool released_just(MouseButton button_type)
+	bool released_just(in MouseButton button_type) const pure nothrow @nogc @safe
 	{
 		return this.state_list.tail.button[button_type].released_just;
 	}

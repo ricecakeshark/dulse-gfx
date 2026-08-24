@@ -12,7 +12,7 @@ class GamepadManager
 {
 	Gamepad[4] gamepad_list;
 
-	Gamepad opIndex(size_t index) pure nothrow @nogc @safe
+	Gamepad opIndex(in size_t index) pure nothrow @nogc @safe
 	in (index < gamepad_list.length)
 	{
 		return this.gamepad_list[index];

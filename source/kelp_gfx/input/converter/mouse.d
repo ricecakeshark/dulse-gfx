@@ -29,7 +29,7 @@ MouseWheelEvent mouse_wheel_event(in SDL_MouseWheelEvent wheel) pure nothrow @no
 	);
 }
 
-MouseButton mouse_button_type(ubyte flags) pure nothrow @nogc @safe
+MouseButton mouse_button_type(in ubyte flags) pure nothrow @nogc @safe
 {
 	final switch (flags)
 	{

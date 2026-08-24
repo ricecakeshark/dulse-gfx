@@ -7,7 +7,7 @@ import std.algorithm : map;
 import std.array : array;
 
 
-TextEditingEvent text_editing_event(SDL_TextEditingEvent event) pure nothrow @trusted
+TextEditingEvent text_editing_event(in SDL_TextEditingEvent event) pure nothrow @trusted
 {
 	return TextEditingEvent(
 		event.text.fromStringz().idup

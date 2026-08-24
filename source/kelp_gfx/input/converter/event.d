@@ -106,7 +106,7 @@ Event convert(in SDL_Event in_event) pure nothrow @trusted
 }
 
 EventType event_type(
-	SDL_EventType event_type,
+	in SDL_EventType event_type,
 ) pure nothrow @nogc @safe
 {
 	switch (event_type)

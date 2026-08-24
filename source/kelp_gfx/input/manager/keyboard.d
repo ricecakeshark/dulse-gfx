@@ -95,22 +95,22 @@ struct Keyboard
 		return this;
 	}
 
-	bool pressed(Scancode scancode) pure nothrow @nogc @safe
+	bool pressed(in Scancode scancode) pure nothrow @nogc @safe
 	{
 		return this.state_list.tail.pressed(scancode);
 	}
 
-	bool released(Scancode scancode) pure nothrow @nogc @safe
+	bool released(in Scancode scancode) pure nothrow @nogc @safe
 	{
 		return this.state_list.tail.pressed(scancode);
 	}
 
-	bool pressed_just(Scancode scancode) pure nothrow @nogc @safe
+	bool pressed_just(in Scancode scancode) pure nothrow @nogc @safe
 	{
 		return this.state_list.tail.key_list[scancode].pressed_just == true;
 	}
 
-	bool released_just(Scancode scancode) pure nothrow @nogc @safe
+	bool released_just(in Scancode scancode) pure nothrow @nogc @safe
 	{
 		return this.state_list.tail.key_list[scancode].released_just == true;
 	}

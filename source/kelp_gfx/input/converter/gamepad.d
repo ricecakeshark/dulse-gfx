@@ -21,17 +21,17 @@ GamepadAxisEvent gamepad_axis_event(in SDL_GamepadAxisEvent gaxis) pure nothrow 
 	);
 }
 
-GamepadButton gamepad_button(ubyte button) pure nothrow @nogc @safe
+GamepadButton gamepad_button(in ubyte button) pure nothrow @nogc @safe
 {
 	return cast(GamepadButton) button;
 }
 
-GamepadAxis gamepad_axis(ubyte axis) pure nothrow @nogc @safe
+GamepadAxis gamepad_axis(in ubyte axis) pure nothrow @nogc @safe
 {
 	return cast(GamepadAxis) axis;
 }
 
-Vec1 gamepad_axis_value(short value) pure nothrow @nogc @safe
+Vec1 gamepad_axis_value(in short value) pure nothrow @nogc @safe
 {
 	return Vec1(1.0 / value);
 }
