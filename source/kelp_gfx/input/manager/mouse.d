@@ -5,7 +5,7 @@ import kelp_core.core.container.ring_buffer;
 import kelp_core.math.linalg.vector;
 import kelp_sdl.input.mouse;
 
-class MouseManager
+final class MouseManager
 {
 	Mouse mouse;
 

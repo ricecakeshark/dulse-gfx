@@ -14,6 +14,7 @@ class GfxInputSubsystem : Subsystem
 	public KeyboardManager keyboard;
 	public MouseManager mouse;
 	public GamepadManager gamepad;
+	public TextManager text;
 
 	this(Core core)
 	{
@@ -21,6 +22,7 @@ class GfxInputSubsystem : Subsystem
 		this.keyboard = new KeyboardManager();
 		this.mouse = new MouseManager();
 		this.gamepad = new GamepadManager();
+		this.text = new TextManager();
 		return;
 	}
 
@@ -34,6 +36,7 @@ class GfxInputSubsystem : Subsystem
 		this.keyboard.initialize();
 		this.mouse.initialize();
 		this.gamepad.initialize();
+		this.text.initialize();
 		return this;
 	}
 
@@ -42,6 +45,7 @@ class GfxInputSubsystem : Subsystem
 		this.keyboard.finalize();
 		this.mouse.finalize();
 		this.gamepad.finalize();
+		this.text.finalize();
 		return this;
 	}
 
@@ -65,7 +69,9 @@ class GfxInputSubsystem : Subsystem
 		this.gamepad.process();
 		this.gamepad.update();
 		this.gamepad.apply(event_pool);
-
+		this.text.process();
+		this.text.update();
+		this.text.apply(event_pool);
 		return this;
 	}
 }

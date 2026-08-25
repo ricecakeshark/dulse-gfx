@@ -5,11 +5,11 @@ import kelp_gfx;
 
 Core append_gio_subsystem(ref Core core)
 {
-	core.subsystem.append(
-		new SDLSubsystem(core),
-		new GfxGraphicsSubsystem(core),
-		new GfxAudioSubsystem(core),
-		new GfxInputSubsystem(core),
+	core.subsystem.append!(
+		SDLSubsystem,
+		GfxGraphicsSubsystem,
+		GfxAudioSubsystem,
+		GfxInputSubsystem,
 	);
 	return core;
 }

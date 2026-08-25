@@ -5,7 +5,7 @@ import kelp_core.core.container.ring_buffer;
 import kelp_sdl.input.keyboard;
 import core.time : MonoTime;
 
-class KeyboardManager
+final class KeyboardManager
 {
 	Keyboard keyboard;
 
