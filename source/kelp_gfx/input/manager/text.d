@@ -3,12 +3,12 @@ module kelp_gfx.input.manager.text;
 import kelp_core.input.event.event;
 import kelp_core.input.state.text;
 import kelp_sdl.input.text;
-import kelp_sdl.graphics.core.gpu_window;
+import kelp_sdl.video.window;
 
 final class TextManager
 {
 	InputTextState state;
-	GpuWindow window;
+	Window window;
 
 	this()
 	{

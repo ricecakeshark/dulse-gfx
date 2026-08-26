@@ -1,22 +1,24 @@
 module kelp_gfx.graphics.graphics_context;
 
-import bindbc.sdl;
+import sdl.gpu;
 import kelp_core.core.container;
-import kelp_sdl;
-import kelp_gfx;
+import kelp_sdl.graphics;
+
+import kelp_sdl.video.window;
+import kelp_gfx.graphics;
+import kelp_gfx.text.text_context;
 import std.format : format;
 import std.sumtype;
 
 class GfxGraphicsContext
 {
 	public GpuDevice device;
-	public GpuWindow window;
+	public Window window;
 	protected int[3] _client_size;
 
 	public ResourceStore!ResourceType resource_store;
 
 	alias ResourceType = SumType!(
-
 		GpuGraphicsPipeline,
 		GpuComputePipeline,
 		GpuVertexShader,
@@ -63,7 +65,7 @@ class GfxGraphicsContext
 	{
 		this.device = new GpuDevice();
 		this.device.create(backend);
-		this.window = new GpuWindow();
+		this.window = new Window();
 		this.window.create(client_width, client_height, clinet_title);
 		this._client_size = [client_width, client_height, 1];
 		this.device.claim(this.window);

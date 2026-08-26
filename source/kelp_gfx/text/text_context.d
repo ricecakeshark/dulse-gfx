@@ -5,7 +5,7 @@ import kelp_core.graphics;
 import kelp_core.math;
 import kelp_sdl.graphics;
 import kelp_sdl.text;
-import kelp_sdl.image;
+import kelp_sdl.video.surface;
 import bindbc.sdl;
 
 import std.array : array, Appender, RefAppender;
