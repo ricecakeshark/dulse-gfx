@@ -1,15 +1,14 @@
-name "kelp-gfx"
-description "shared library of kelp"
+name "dulse-gfx"
+description "shared library of dulse"
 authors "RiceShark"
 copyright "Copyright © 2025, RiceShark"
 license "proprietary"
 
-dependency "kelp-core" path="..\\kelp_core"
-dependency "kelp-sdl" path="..\\kelp_sdl"
-//dependency "bindbc-sdl" version="~>2.4.2"
+dependency "dulse" path="..\\dulse"
+dependency "dulse-sdl" path="..\\dulse_sdl"
 
 targetType "sourceLibrary"
-targetName "kelp_gfx"
+targetName "dulse_gfx"
 targetPath "build"
 importPaths "source"
 

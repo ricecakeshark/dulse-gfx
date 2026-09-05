@@ -4,7 +4,7 @@
 		"bindbc-common": "1.0.5",
 		"bindbc-loader": "1.1.5",
 		"bindbc-sdl": "2.4.2",
-		"kelp-core": {"path":"../kelp_core"},
-		"kelp-sdl": {"path":"../kelp_sdl"}
+		"kelp-core": {"path":"../dulse"},
+		"kelp-sdl": {"path":"../dulse_sdl"}
 	}
 }
