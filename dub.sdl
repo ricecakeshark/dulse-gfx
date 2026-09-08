@@ -1,17 +1,13 @@
 name "dulse-gfx"
-description "shared library of dulse"
+description "dulse-gfx is assisting to create graphical app."
 authors "RiceShark"
-copyright "Copyright © 2025, RiceShark"
-license "proprietary"
+copyright "Copyright © 2025-2026, RiceShark"
+license "Mozilla Public License Version 2.0"
 
-dependency "dulse" path="..\\dulse"
-dependency "dulse-sdl" path="..\\dulse_sdl"
+dependency "dulse" version=">=0.0.0"
+dependency "dulse-sdl" version=">=0.0.0"
 
 targetType "sourceLibrary"
 targetName "dulse_gfx"
 targetPath "build"
-importPaths "source"
-
-//dflags "-H" "-Hd=include"
-//dflags "-preview=in"
-
+importPaths "src"
