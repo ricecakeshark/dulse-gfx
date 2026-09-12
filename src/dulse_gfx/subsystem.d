@@ -8,7 +8,8 @@ Core append_gio_subsystem(ref Core core)
 	core.subsystem.append!(
 		SDLSubsystem,
 		GfxGraphicsSubsystem,
-		GfxAudioSubsystem,
+		//GfxAudioSubsystem,
+		MixerSubsystem,
 		GfxInputSubsystem,
 	);
 	return core;
