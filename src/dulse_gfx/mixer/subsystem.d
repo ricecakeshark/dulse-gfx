@@ -5,11 +5,13 @@ import dulse_sdl.mixer;
 import dulse.core.core;
 import std.exception : enforce;
 
+debug import std.stdio;
+
 class MixerSubsystem : Subsystem
 {
 	Mixer mixer;
 	Track track;
-	Audio[] audio_list;
+	//Audio[] audio_list;
 
 	this(Core core)
 	{
@@ -21,8 +23,8 @@ class MixerSubsystem : Subsystem
 	{
 		mixer = new Mixer();
 		mixer.create();
-		track = new Track(mixer);
-		track.create();
+		//track = new Track(mixer);
+		//track.create();
 		return this;
 	}
 
@@ -36,23 +38,36 @@ class MixerSubsystem : Subsystem
 		return this;
 	}
 
-	typeof(this) open(string path)
+	typeof(this) create(TypeList...)(ref TypeList list)
+	in (this.mixer.is_valid)
 	{
-		this.audio_list ~= new Audio(this.mixer)
-			.load(path);
+		foreach (ref elm; list)
+		{
+			this.create(elm);
+		}
 		return this;
 	}
 
-	typeof(this) set(size_t index)
+	typeof(this) create(ref Track track)
+	in (this.mixer.is_valid)
 	{
-		enforce(index < audio_list.length);
-		this.track.set(audio_list[index]);
+		if (track !is null)
+		{
+			return this;
+		}
+		track = new Track(this.mixer)
+			.create();
 		return this;
 	}
 
-	typeof(this) play()
+	typeof(this) create(ref Audio audio)
+	in (this.mixer.is_valid)
 	{
-		this.track.play();
+		if (audio !is null)
+		{
+			return this;
+		}
+		audio = new Audio(this.mixer);
 		return this;
 	}
 }
