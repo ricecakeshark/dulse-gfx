@@ -274,7 +274,7 @@ class GfxGraphicsContext
 		return this.device.support_format(format, type, usage);
 	}
 
-	deprecated GpuTextureFormat get_swapchain_texture_format()
+	GpuTextureFormat get_swapchain_texture_format()
 	in (this.device !is null)
 	in (this.device.handle !is null)
 	in (this.window !is null)
