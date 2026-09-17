@@ -4,7 +4,7 @@ import dulse_sdl.audio;
 import dulse.core.core;
 import dulse.core.subsystem;
 
-class GfxAudioSubsystem : Subsystem
+class AudioSubsystem : Subsystem!AudioSubsystem
 {
 	this(Core core)
 	{
@@ -12,17 +12,17 @@ class GfxAudioSubsystem : Subsystem
 		return;
 	}
 
-	typeof(this) initialize()
+	override typeof(this) initialize()
 	{
 		return this;
 	}
 
-	typeof(this) finalize()
+	override typeof(this) finalize()
 	{
 		return this;
 	}
 
-	typeof(this) process()
+	override typeof(this) process()
 	{
 		return this;
 	}

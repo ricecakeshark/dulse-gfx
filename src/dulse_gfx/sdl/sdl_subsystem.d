@@ -5,7 +5,7 @@ import dulse.logger;
 import dulse_sdl.core;
 import std.format : format;
 
-class SDLSubsystem : Subsystem
+class SDLSubsystem : Subsystem!SDLSubsystem
 {
 	protected LibrarySDL sdl;
 	protected LibrarySDLImage sdl_image;
@@ -24,7 +24,7 @@ class SDLSubsystem : Subsystem
 		return;
 	}
 
-	typeof(this) initialize()
+	override typeof(this) initialize()
 	{
 		if (initialized == true)
 		{
@@ -67,7 +67,7 @@ class SDLSubsystem : Subsystem
 		return this;
 	}
 
-	typeof(this) finalize()
+	override typeof(this) finalize()
 	{
 		sdl_mixer.finalize();
 		sdl_ttf.finalize();
@@ -76,7 +76,7 @@ class SDLSubsystem : Subsystem
 		return this;
 	}
 
-	typeof(this) process()
+	override typeof(this) process()
 	{
 		return this;
 	}

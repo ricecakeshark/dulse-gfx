@@ -7,7 +7,7 @@ import std.exception : enforce;
 
 debug import std.stdio;
 
-class MixerSubsystem : Subsystem
+class MixerSubsystem : Subsystem!MixerSubsystem
 {
 	Mixer mixer;
 	Track track;
@@ -19,7 +19,7 @@ class MixerSubsystem : Subsystem
 		return;
 	}
 
-	typeof(this) initialize()
+	override typeof(this) initialize()
 	{
 		mixer = new Mixer();
 		mixer.create();
@@ -28,12 +28,12 @@ class MixerSubsystem : Subsystem
 		return this;
 	}
 
-	typeof(this) finalize()
+	override typeof(this) finalize()
 	{
 		return this;
 	}
 
-	typeof(this) process()
+	override typeof(this) process()
 	{
 		return this;
 	}

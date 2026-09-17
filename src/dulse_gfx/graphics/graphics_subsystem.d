@@ -8,7 +8,7 @@ import dulse.core.container.resource_store;
 
 import std.exception : enforce;
 
-class GfxGraphicsSubsystem : Subsystem
+class GraphicsSubsystem : Subsystem!GraphicsSubsystem
 {
 	GfxGraphicsContext _context;
 
@@ -17,18 +17,18 @@ class GfxGraphicsSubsystem : Subsystem
 		super(core);
 	}
 
-	typeof(this) initialize()
+	override typeof(this) initialize()
 	{
 		this._context = new GfxGraphicsContext();
 		return this;
 	}
 
-	typeof(this) finalize()
+	override typeof(this) finalize()
 	{
 		return this;
 	}
 
-	typeof(this) process()
+	override typeof(this) process()
 	{
 		return this;
 	}
