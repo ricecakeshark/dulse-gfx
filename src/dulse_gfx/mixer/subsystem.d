@@ -5,8 +5,6 @@ import dulse_sdl.mixer;
 import dulse.core.core;
 import std.exception : enforce;
 
-debug import std.stdio;
-
 class MixerSubsystem : Subsystem!MixerSubsystem
 {
 	Mixer mixer;

@@ -9,7 +9,7 @@ import sdl.events;
 import std.array : appender, Appender, RefAppender;
 import core.time : MonoTime;
 
-class GfxInputSubsystem : Subsystem
+class InputSubsystem : Subsystem!InputSubsystem
 {
 	public KeyboardManager keyboard;
 	public MouseManager mouse;
@@ -31,7 +31,7 @@ class GfxInputSubsystem : Subsystem
 		return;
 	}
 
-	typeof(this) initialize()
+	override typeof(this) initialize()
 	{
 		this.keyboard.initialize();
 		this.mouse.initialize();
@@ -40,7 +40,7 @@ class GfxInputSubsystem : Subsystem
 		return this;
 	}
 
-	typeof(this) finalize()
+	override typeof(this) finalize()
 	{
 		this.keyboard.finalize();
 		this.mouse.finalize();
@@ -49,7 +49,7 @@ class GfxInputSubsystem : Subsystem
 		return this;
 	}
 
-	typeof(this) process()
+	override typeof(this) process()
 	{
 		scope Event[] event_pool;
 		event_pool = poll_sdl_event();
