@@ -16,7 +16,7 @@ final class MouseManager
 
 	void initialize()
 	{
-		mouse.initalize();
+		mouse.initialize();
 		return;
 	}
 
@@ -50,19 +50,19 @@ struct Mouse
 {
 	RingBuffer!(MouseState, 5) state_list;
 
-	ref typeof(this) initalize()
+	ref typeof(this) initialize()
 	{
 		this.state_list.fill();
 		return this;
 	}
 
-	void process()
+	ref typeof(this) process()
 	{
 		this.state_list.append(this.state_list[$ - 1]);
-		return;
+		return this;
 	}
 
-	typeof(this) update()
+	ref typeof(this) update()
 	{
 		apply_mouse_state(this.state_list.tail);
 		return this;

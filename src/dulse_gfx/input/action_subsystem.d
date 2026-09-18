@@ -9,9 +9,9 @@ class ActionSubsystem : Subsystem!ActionSubsystem
 {
 	protected InputSubsystem input;
 	TypeTable!(ActionState!Vec1, ActionState!Vec2) state_table;
-	TypeTable!(ActionBinding!Vec1, ActionBinding!Vec2) binding_table;
+	MonoPool!ActionBinding binding_pool;
 	alias state = state_table;
-	alias binding = binding_table;
+	alias binding = binding_pool;
 
 	this(Core core)
 	{
@@ -23,7 +23,7 @@ class ActionSubsystem : Subsystem!ActionSubsystem
 	{
 		core.subsystem.query(input);
 		this.state_table.clear();
-		this.binding_table.clear();
+		this.binding_pool.clear();
 		return this;
 	}
 
@@ -39,14 +39,10 @@ class ActionSubsystem : Subsystem!ActionSubsystem
 		input_state = InputState(
 			input.keyboard.keyboard.state_list.head,
 			input.mouse.mouse.state_list.head,
-			input.gamepad[0].state_list.head,
+			GamepadState.init,
 		);
 
-		foreach (binding; binding_table.query!(ActionBinding!Vec1))
-		{
-			binding.handle(input_state, state_table);
-		}
-		foreach (binding; binding_table.query!(ActionBinding!Vec2))
+		foreach (binding; binding_pool.all)
 		{
 			binding.handle(input_state, state_table);
 		}
