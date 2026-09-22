@@ -31,12 +31,6 @@ final class KeyboardManager
 		return;
 	}
 
-	void update()
-	{
-		this.keyboard.update();
-		return;
-	}
-
 	void apply(in Event[] event_list...) pure nothrow
 	{
 		this.keyboard.apply(event_list);
@@ -77,15 +71,10 @@ struct Keyboard
 		return this;
 	}
 
-	ref typeof(this) process() return pure nothrow @nogc @safe
+	ref typeof(this) process() return nothrow @safe
 	{
 		this.state_list.append(this.state_list.tail);
-		return this;
-	}
-
-	ref typeof(this) update() return nothrow @safe
-	{
-		this.state_list.tail.update();
+		this.state_list.tail.catch_up();
 		return this;
 	}
 

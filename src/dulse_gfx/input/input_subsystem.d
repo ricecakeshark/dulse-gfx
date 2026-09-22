@@ -61,13 +61,10 @@ class InputSubsystem : Subsystem!InputSubsystem
 			}
 		}
 		this.keyboard.process();
-		this.keyboard.update();
 		this.keyboard.apply(event_pool);
 		this.mouse.process();
-		this.mouse.update();
 		this.mouse.apply(event_pool);
 		this.gamepad.process();
-		this.gamepad.update();
 		this.gamepad.apply(event_pool);
 		this.text.process();
 		this.text.update();

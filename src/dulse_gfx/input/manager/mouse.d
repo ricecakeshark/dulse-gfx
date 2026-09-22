@@ -31,12 +31,6 @@ final class MouseManager
 		return this;
 	}
 
-	typeof(this) update()
-	{
-		this.mouse.update();
-		return this;
-	}
-
 	typeof(this) apply(in Event[] event_list)
 	{
 		this.mouse.apply(event_list);
@@ -58,13 +52,8 @@ struct Mouse
 
 	ref typeof(this) process()
 	{
-		this.state_list.append(this.state_list[$ - 1]);
-		return this;
-	}
-
-	ref typeof(this) update()
-	{
-		apply_mouse_state(this.state_list.tail);
+		this.state_list.append(this.state_list.tail);
+		catch_up(this.state_list.tail);
 		return this;
 	}
 
@@ -76,14 +65,7 @@ struct Mouse
 
 	bool moved() const pure nothrow @nogc @safe
 	{
-		if (this.state_list.tail.rel_pos != Vec2(0f, 0f))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return (this.state_list.tail.rel_pos != Vec2(0f, 0f));
 	}
 
 	bool pressed(in MouseButton button_type) const pure nothrow @nogc @safe

@@ -49,12 +49,6 @@ class GamepadManager
 		return this;
 	}
 
-	typeof(this) update()
-	{
-		this.gamepad_list[0].update();
-		return this;
-	}
-
 	typeof(this) apply(in Event[] event_list...) pure nothrow
 	{
 		this.gamepad_list[0].apply(event_list);
