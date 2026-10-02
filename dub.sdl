@@ -11,3 +11,5 @@ targetType "sourceLibrary"
 targetName "dulse_gfx"
 targetPath "build"
 importPaths "src"
+
+copyFiles "shader/"
