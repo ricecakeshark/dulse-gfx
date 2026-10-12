@@ -1,3 +1,3 @@
 module dulse_gfx.mixer;
 
-public import dulse_gfx.mixer.subsystem;
+public import dulse_gfx.mixer.mixer_subsystem;

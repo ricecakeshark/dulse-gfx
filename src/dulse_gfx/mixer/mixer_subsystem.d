@@ -1,8 +1,8 @@
-module dulse_gfx.mixer.subsystem;
+module dulse_gfx.mixer.mixer_subsystem;
 
-import dulse.core.subsystem;
+import dulse.subsystem;
 import dulse_sdl.mixer;
-import dulse.core.core;
+//import dulse.core.core;
 import std.exception : enforce;
 
 class MixerSubsystem : Subsystem!MixerSubsystem

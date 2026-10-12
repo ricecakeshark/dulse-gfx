@@ -1,8 +1,7 @@
 module dulse_gfx.input.input_subsystem;
 
 import dulse.core.core;
-import dulse.core.subsystem;
-import dulse.core.message_bus;
+import dulse.subsystem;
 import dulse.input.event;
 import dulse_gfx.input;
 import sdl.events;

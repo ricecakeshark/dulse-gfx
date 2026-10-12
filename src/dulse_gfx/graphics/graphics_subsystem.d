@@ -3,7 +3,7 @@ module dulse_gfx.graphics.graphics_subsystem;
 import dulse_gfx;
 
 import dulse.core.core;
-import dulse.core.subsystem;
+import dulse.subsystem;
 import dulse.core.container.resource_store;
 
 import std.exception : enforce;

@@ -1,6 +1,7 @@
 module dulse_gfx.input.action_subsystem;
 
-import dulse.core;
+import dulse.core.container : MonoPool, TypeTable;
+import dulse.subsystem;
 import dulse.input;
 import dulse.math.linalg : Vec1, Vec2;
 import dulse_gfx.input;

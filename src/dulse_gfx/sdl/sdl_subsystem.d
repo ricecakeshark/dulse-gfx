@@ -1,6 +1,6 @@
 module dulse_gfx.sdl.sdl_subsystem;
 
-import dulse.core;
+import dulse.subsystem;
 import dulse.logger;
 import dulse_sdl.core;
 import std.format : format;

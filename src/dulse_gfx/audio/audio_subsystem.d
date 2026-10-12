@@ -2,7 +2,7 @@ module dulse_gfx.audio.audio_subsystem;
 
 import dulse_sdl.audio;
 import dulse.core.core;
-import dulse.core.subsystem;
+import dulse.subsystem;
 
 class AudioSubsystem : Subsystem!AudioSubsystem
 {
