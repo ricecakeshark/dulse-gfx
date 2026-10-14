@@ -5,7 +5,7 @@ import dulse_gfx;
 
 GfxGraphicsContext create_pipeline_post_blur(
 	ref GfxGraphicsContext graphics_context,
-	out GpuComputePipeline post_blur_pipeline,
+	ref GpuComputePipeline post_blur_pipeline,
 )
 {
 	graphics_context.create(post_blur_pipeline);

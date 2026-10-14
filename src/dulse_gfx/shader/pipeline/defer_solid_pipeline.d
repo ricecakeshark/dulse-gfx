@@ -5,7 +5,7 @@ import dulse_gfx;
 
 GfxGraphicsContext create_pipeline_defer_solid(
 	ref GfxGraphicsContext graphics_context,
-	out GpuGraphicsPipeline defer_pipeline
+	ref GpuGraphicsPipeline defer_pipeline
 )
 {
 	scope GpuVertexShader vertex_shader;

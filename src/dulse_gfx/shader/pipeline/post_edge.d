@@ -5,7 +5,7 @@ import dulse_gfx;
 
 GfxGraphicsContext create_pipeline_post_edge(
 	ref GfxGraphicsContext graphics_context,
-	out GpuComputePipeline post_edge_pipeline,
+	ref GpuComputePipeline post_edge_pipeline,
 )
 {
 	graphics_context.create(post_edge_pipeline);

@@ -44,9 +44,9 @@ GpuVertexAttribute[] vertex_attributes(TypeList...)(
 }
 
 GpuVertexAttribute vertex_attribute(Type : float[N], size_t N)(
-	uint buffer_slot,
-	uint location,
-	uint offset,
+	in uint buffer_slot,
+	in uint location,
+	in uint offset,
 )
 {
 	static if (N == 2)

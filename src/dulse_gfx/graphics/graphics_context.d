@@ -9,6 +9,9 @@ import dulse_gfx.graphics;
 import dulse_gfx.text.text_context;
 import std.format : format;
 import std.sumtype;
+import std.meta : AliasSeq, staticIndexOf;
+
+alias GraphicsContext = GfxGraphicsContext;
 
 class GfxGraphicsContext
 {
@@ -30,10 +33,49 @@ class GfxGraphicsContext
 		GpuDrawBuffer,
 		GpuStorageBuffer,
 		GpuTexture,
+		GfxTexture,
 		GpuSampler,
 		GpuFence,
 		GfxTextContext,
 	);
+
+	alias ResourcePipeline = AliasSeq!(
+		GpuGraphicsPipeline,
+		GpuComputePipeline,
+	);
+	alias ResourceShader = AliasSeq!(
+		GpuVertexShader,
+		GpuFragmentShader,
+	);
+	alias ResourceTransferBuffer = AliasSeq!(
+		GpuBufferTransferBuffer,
+		GpuTextureTransferBuffer,
+	);
+	alias ResourceBuffer = AliasSeq!(
+		GpuVertexBuffer,
+		GpuIndexBuffer,
+		GpuDrawBuffer,
+		GpuStorageBuffer,
+	);
+	alias ResourceTexture = AliasSeq!(
+		GfxTexture,
+		SwapchainTexture,
+	);
+	alias ResourceAbstract = AliasSeq!(
+		GfxTextContext
+	);
+	alias ResourceReleasable = AliasSeq!(
+		ResourcePipeline,
+		ResourceShader,
+		ResourceTransferBuffer,
+		ResourceBuffer,
+		Texture,
+		TextureAlternate,
+		GpuSampler,
+		GpuFence,
+	);
+
+	alias GfxResource = AliasSeq!(GfxTexture, GfxTextureAlternate);
 
 	this()
 	{
@@ -99,167 +141,81 @@ class GfxGraphicsContext
 	}
 
 	// variable creation
-	typeof(this) create(TypeList...)(out TypeList arg_list)
+	typeof(this) create(TypeList...)(ref TypeList arg_list)
 	{
-		static foreach (arg; arg_list)
+		foreach (ref arg; arg_list)
 		{
 			this.create(arg);
 		}
 		return this;
 	}
 
-	typeof(this) release_all_shader()
+	typeof(this) create(Resource)(ref Resource resource)
+	if (staticIndexOf!(Resource, ResourceReleasable) >= 0)
 	{
-		this.resource_store.release!(
-			GpuVertexShader, GpuFragmentShader,
-		);
+		if (resource !is null)
+		{
+			return this;
+		}
+		static if (staticIndexOf!(Resource, GfxResource) >= 0)
+		{
+			resource = new Resource(this);
+		}
+		else
+		{
+			resource = new Resource(this.device);
+		}
+		this.resource_store.register(resource);
 		return this;
 	}
 
-	typeof(this) release_transfer_buffer()
-	{
-		this.resource_store.release!(
-			GpuBufferTransferBuffer, GpuTextureTransferBuffer,
-		);
-		return this;
-	}
-
-	typeof(this) release_buffer()
-	{
-		this.resource_store.release!(
-			GpuVertexBuffer,
-			GpuIndexBuffer,
-			GpuDrawBuffer,
-			GpuStorageBuffer,
-		);
-		return this;
-	}
 	// command buffer
-	typeof(this) create(out GpuCommandBuffer command_buffer)
+	typeof(this) create(ref CommandBuffer command_buffer)
 	{
-		command_buffer = new GpuCommandBuffer(this.device, this.window);
+		command_buffer = new CommandBuffer(this.device, this.window);
 		return this;
 	}
 	// swapchain texture
-	typeof(this) create(out GpuSwapchainTexture swapchain_texture)
+	typeof(this) create(ref SwapchainTexture swapchain_texture)
 	{
-		swapchain_texture = new GpuSwapchainTexture(this.device, this.window);
+		swapchain_texture = new SwapchainTexture(this.device, this.window);
 		return this;
 	}
-	// vertex shader
-	typeof(this) create(out GpuVertexShader vertex_shader)
-	{
-		vertex_shader = new GpuVertexShader(this.device);
-		this.resource_store.register(vertex_shader);
-		return this;
-	}
-	// fragment shader
-	typeof(this) create(out GpuFragmentShader fragment_shader)
-	{
-		fragment_shader = new GpuFragmentShader(this.device);
-		this.resource_store.register(fragment_shader);
-		return this;
-	}
-	// graphics pipeline
-	typeof(this) create(out GpuGraphicsPipeline pipeline)
-	{
-		pipeline = new GpuGraphicsPipeline(this.device);
-		this.resource_store.register(pipeline);
-		return this;
-	}
-	// compute pipeline
-	typeof(this) create(out GpuComputePipeline pipeline)
-	{
-		pipeline = new GpuComputePipeline(this.device);
-		this.resource_store.register(pipeline);
-		return this;
-	}
-	// buffer transfer buffer
-	typeof(this) create(out GpuBufferTransferBuffer transfer_buffer)
-	{
-		transfer_buffer = new GpuBufferTransferBuffer(this.device);
-		this.resource_store.register(transfer_buffer);
-		return this;
-	}
-	// texture transfer buffer
-	typeof(this) create(out GpuTextureTransferBuffer transfer_buffer)
-	{
-		transfer_buffer = new GpuTextureTransferBuffer(this.device);
-		this.resource_store.register(transfer_buffer);
-		return this;
-	}
-	// vertex buffer
-	typeof(this) create(out GpuVertexBuffer buffer)
-	{
-		buffer = new GpuVertexBuffer(this.device);
-		this.resource_store.register(buffer);
-		return this;
-	}
-	// index buffer
-	typeof(this) create(out GpuIndexBuffer buffer)
-	{
-		buffer = new GpuIndexBuffer(this.device);
-		this.resource_store.register(buffer);
-		return this;
-	}
-	// draw buffer
-	typeof(this) create(out GpuDrawBuffer buffer)
-	{
-		buffer = new GpuDrawBuffer(this.device);
-		this.resource_store.register(buffer);
-		return this;
-	}
-	// storage buffer
-	typeof(this) create(out GpuStorageBuffer buffer)
-	{
-		buffer = new GpuStorageBuffer(this.device);
-		this.resource_store.register(buffer);
-		return this;
-	}
-	// texture
-	typeof(this) create(out GpuTexture texture)
-	{
-		texture = new GpuTexture(this.device);
-		this.resource_store.register(texture);
-		return this;
-	}
-	// sampler
-	typeof(this) create(out GpuSampler sampler)
-	{
-		sampler = new GpuSampler(this.device);
-		this.resource_store.register(sampler);
-		return this;
-	}
-	// fence
-	typeof(this) create(out GpuFence fence)
-	{
-		fence = new GpuFence(this.device);
-		this.resource_store.register(fence);
-		return this;
-	}
-	// render context
-	/+typeof(this) create(out GfxRenderContext context)
-	{
-		context = new GfxRenderContext(this);
-		return this;
-	}
-	// compute context
-	typeof(this) create(out GfxComputeContext context)
-	{
-		context = new GfxComputeContext(this);
-		return this;
-	}+/
 	// text context
-	typeof(this) create(out GfxTextContext context)
+	typeof(this) create(ref GfxTextContext context)
 	{
 		context = new GfxTextContext(this.device);
 		this.resource_store.register(context);
 		return this;
 	}
 	// texture alternate
-	typeof(this) create(out GfxTextureAlternate texture_alternate)
+	typeof(this) create(ref TextureAlternate texture_alternate)
 	{
-		texture_alternate = GfxTextureAlternate(this);
+		texture_alternate = TextureAlternate(this);
+		return this;
+	}
+
+	typeof(this) release(ResourceList...)()
+	{
+		this.resource_store.release!ResourceList();
+		return this;
+	}
+
+	typeof(this) release_all_shader()
+	{
+		this.resource_store.release!ResourceShader();
+		return this;
+	}
+
+	typeof(this) release_transfer_buffer()
+	{
+		this.resource_store.release!ResourceTransferBuffer();
+		return this;
+	}
+
+	typeof(this) release_buffer()
+	{
+		this.resource_store.release!ResourceBuffer();
 		return this;
 	}
 
@@ -307,4 +263,108 @@ class GfxGraphicsContext
 	{
 		return format("supported driver: %(%s,%)", this.device.get_driver_list());
 	}
+}
+
+TexturePreset preset(ref GfxGraphicsContext gc,)
+{
+	return TexturePreset(gc);
+}
+
+struct TexturePreset
+{
+	GfxGraphicsContext gc;
+	this(GfxGraphicsContext gc)
+	{
+		this.gc = gc;
+		return;
+	}
+
+	GpuTextureCreateInfo depth()
+	{
+		return this._depth.apply(gc);
+	}
+
+	GpuTextureCreateInfo albedo()
+	{
+		return this._albedo.apply(gc);
+	}
+
+	GpuTextureCreateInfo normal()
+	{
+		return this._normal.apply(gc);
+	}
+
+	GpuTextureCreateInfo material()
+	{
+		return this._material.apply(gc);
+	}
+
+	GpuTextureCreateInfo entity()
+	{
+		return this._entity.apply(gc);
+	}
+
+	GpuTextureCreateInfo color()
+	{
+		return this._color.apply(gc);
+	}
+
+	GpuTextureCreateInfo edge()
+	{
+		return this._edge.apply(gc);
+	}
+
+	enum _depth = GpuTextureCreateInfo(
+			GpuTextureType._2d, GpuTextureFormat.d32_float,
+			GpuTextureUsageFlags.depth_stencil_target | GpuTextureUsageFlags.sampler,
+			0, 0,
+		);
+
+	enum _albedo = GpuTextureCreateInfo(
+			GpuTextureType._2d, GpuTextureFormat.r8g8b8a8_unorm,
+			GpuTextureUsageFlags.sampler | GpuTextureUsageFlags.color_target,
+			0, 0, 1, 1,
+		);
+	enum _normal = GpuTextureCreateInfo(
+			GpuTextureType._2d, GpuTextureFormat.r16g16b16a16_float,
+			GpuTextureUsageFlags.sampler | GpuTextureUsageFlags.color_target,
+			0, 0, 1, 1,
+		);
+	enum _material = GpuTextureCreateInfo(
+			GpuTextureType._2d, GpuTextureFormat.r16g16b16a16_float,
+			GpuTextureUsageFlags.sampler | GpuTextureUsageFlags.color_target,
+			0, 0, 1, 1,
+		);
+	enum _entity = GpuTextureCreateInfo(
+			GpuTextureType._2d, GpuTextureFormat.r32g32_int,
+			GpuTextureUsageFlags.sampler | GpuTextureUsageFlags.color_target,
+			0, 0, 1, 1,
+		);
+	enum _color = GpuTextureCreateInfo(
+			GpuTextureType._2d, GpuTextureFormat.r16g16b16a16_float,
+			GpuTextureUsageFlags.sampler | GpuTextureUsageFlags.compute_storage_write,
+			0, 0, 1, 1,
+		);
+	enum _edge = GpuTextureCreateInfo(
+			GpuTextureType._2d, GpuTextureFormat.r8g8b8a8_unorm,
+			GpuTextureUsageFlags.sampler | GpuTextureUsageFlags.compute_storage_write,
+			0, 0, 1, 1,
+		);
+}
+
+GpuTextureCreateInfo apply(GpuTextureCreateInfo info, GfxGraphicsContext gc)
+{
+	info.width = gc.client_width;
+	info.height = gc.client_height;
+	return info;
+}
+
+enum TexturePresetName
+{
+	albedo,
+	normal,
+	material,
+	entity,
+	color,
+	edge,
 }

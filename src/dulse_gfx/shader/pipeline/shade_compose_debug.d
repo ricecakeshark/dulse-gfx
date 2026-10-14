@@ -5,7 +5,7 @@ import dulse_gfx;
 
 GfxGraphicsContext create_pipeline_compose_debug(
 	ref GfxGraphicsContext graphics_context,
-	out GpuComputePipeline compose_pipeline,
+	ref GpuComputePipeline compose_pipeline,
 )
 {
 	graphics_context.create(compose_pipeline);

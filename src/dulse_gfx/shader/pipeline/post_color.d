@@ -5,7 +5,7 @@ import dulse_gfx;
 
 GfxGraphicsContext create_pipeline_post_color(
 	ref GfxGraphicsContext graphics_context,
-	out GpuComputePipeline post_color_pipeline,
+	ref GpuComputePipeline post_color_pipeline,
 )
 {
 	graphics_context.create(post_color_pipeline);

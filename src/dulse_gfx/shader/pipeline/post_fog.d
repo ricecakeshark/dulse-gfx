@@ -5,7 +5,7 @@ import dulse_gfx;
 
 GfxGraphicsContext create_pipeline_post_fog(
 	ref GfxGraphicsContext graphics_context,
-	out GpuComputePipeline post_fog_pipeline,
+	ref GpuComputePipeline post_fog_pipeline,
 )
 {
 	graphics_context.create(post_fog_pipeline);

@@ -2,6 +2,8 @@ module dulse_gfx.graphics.pipeline;
 
 import dulse_sdl.graphics;
 
+//alias GraphicsPipeline = GpuGraphicsPipeline;
+
 struct GfxGraphicsPipeline
 {
 	GpuGraphicsPipeline graphics_pipeline;

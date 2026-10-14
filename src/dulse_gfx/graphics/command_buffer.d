@@ -3,6 +3,8 @@ module dulse_gfx.graphics.command_buffer;
 import dulse_sdl.graphics;
 import dulse_gfx.graphics;
 
+alias CommandBuffer = GpuCommandBuffer;
+
 GpuCommandBuffer acquire(
 	GpuCommandBuffer command_buffer,
 )

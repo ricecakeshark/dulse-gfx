@@ -1,19 +1,23 @@
 module dulse_gfx.graphics.texture_alternate;
 
 import dulse_sdl.graphics;
-import dulse_gfx.graphics.graphics_context;
+import dulse_gfx.graphics;
+
+alias TextureAlternate = GfxTextureAlternate;
 
 struct GfxTextureAlternate
 {
 	int swap_state = 0;
-	GpuTexture texture_alpha, texture_beta;
+	Texture texture_alpha, texture_beta;
 
 	this(GfxGraphicsContext context)
 	{
-		context.create(
+		texture_alpha = new Texture(context);
+		texture_beta = new Texture(context);
+		/+context.create(
 			this.texture_alpha,
 			this.texture_beta,
-		);
+		);+/
 		return;
 	}
 

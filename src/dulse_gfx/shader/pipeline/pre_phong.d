@@ -5,7 +5,7 @@ import dulse_gfx;
 
 GfxGraphicsContext create_pipeline_phong(
 	ref GfxGraphicsContext graphics_context,
-	out GpuComputePipeline pipeline,
+	ref GpuComputePipeline pipeline,
 )
 {
 	graphics_context.create(pipeline);
