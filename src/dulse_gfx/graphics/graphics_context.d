@@ -22,21 +22,24 @@ class GfxGraphicsContext
 	public ResourceStore!ResourceType resource_store;
 
 	alias ResourceType = SumType!(
-		GpuGraphicsPipeline,
-		GpuComputePipeline,
-		GpuVertexShader,
-		GpuFragmentShader,
-		GpuBufferTransferBuffer,
-		GpuTextureTransferBuffer,
-		GpuVertexBuffer,
-		GpuIndexBuffer,
-		GpuDrawBuffer,
-		GpuStorageBuffer,
-		GpuTexture,
-		GfxTexture,
-		GpuSampler,
+		ResourcePipeline,
+		ResourceShader,
+		ResourceTransferBuffer,
+		ResourceBuffer,
+		Texture,
+		Sampler,
 		GpuFence,
 		GfxTextContext,
+	);
+	alias ResourceReleasable = AliasSeq!(
+		ResourcePipeline,
+		ResourceShader,
+		ResourceTransferBuffer,
+		ResourceBuffer,
+		Texture,
+		TextureAlternate,
+		Sampler,
+		GpuFence,
 	);
 
 	alias ResourcePipeline = AliasSeq!(
@@ -58,21 +61,11 @@ class GfxGraphicsContext
 		GpuStorageBuffer,
 	);
 	alias ResourceTexture = AliasSeq!(
-		GfxTexture,
+		Texture,
 		SwapchainTexture,
 	);
 	alias ResourceAbstract = AliasSeq!(
 		GfxTextContext
-	);
-	alias ResourceReleasable = AliasSeq!(
-		ResourcePipeline,
-		ResourceShader,
-		ResourceTransferBuffer,
-		ResourceBuffer,
-		Texture,
-		TextureAlternate,
-		GpuSampler,
-		GpuFence,
 	);
 
 	alias GfxResource = AliasSeq!(GfxTexture, GfxTextureAlternate);
