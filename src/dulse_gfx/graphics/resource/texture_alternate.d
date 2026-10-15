@@ -1,4 +1,4 @@
-module dulse_gfx.graphics.texture_alternate;
+module dulse_gfx.graphics.resource.texture_alternate;
 
 import dulse_sdl.graphics;
 import dulse_gfx.graphics;

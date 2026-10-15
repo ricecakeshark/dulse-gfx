@@ -1,7 +1,7 @@
-module dulse_gfx.graphics.sampler;
+module dulse_gfx.graphics.resource.sampler;
 
 import dulse_sdl.graphics.resource.texture;
-import dulse_gfx.graphics.texture;
+import dulse_gfx.graphics.resource.texture;
 
 alias Sampler = GpuSampler;
 
