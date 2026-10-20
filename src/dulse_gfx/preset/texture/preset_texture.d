@@ -1,6 +1,8 @@
 module dulse_gfx.preset.texture.preset_texture;
 
+import dulse_gfx.graphics.desc;
 import dulse_gfx.graphics.graphics_context;
+import dulse_gfx.graphics.resource;
 
 TexturePreset preset(ref GfxGraphicsContext gc,)
 {
@@ -10,7 +12,7 @@ TexturePreset preset(ref GfxGraphicsContext gc,)
 struct TexturePreset
 {
 	GfxGraphicsContext gc;
-	
+
 	this(GfxGraphicsContext gc)
 	{
 		this.gc = gc;
