@@ -1,4 +1,4 @@
-module dulse_gfx.shader.pipeline.shade_compose;
+module dulse_gfx.preset.pipeline.shade_compose;
 
 import dulse_sdl;
 import dulse_gfx;

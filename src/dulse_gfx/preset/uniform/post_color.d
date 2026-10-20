@@ -1,4 +1,4 @@
-module dulse_gfx.shader.uniform.post_color;
+module dulse_gfx.preset.uniform.post_color;
 
 struct UniformColor
 {

@@ -1,4 +1,4 @@
-module dulse_gfx.shader.uniform.post_edge;
+module dulse_gfx.preset.uniform.post_edge;
 
 import dulse.math;
 

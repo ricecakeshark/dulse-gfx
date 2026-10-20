@@ -1,4 +1,4 @@
-module dulse_gfx.shader.pipeline.defer_texture_pipeline;
+module dulse_gfx.preset.pipeline.defer_texture_pipeline;
 
 import dulse_sdl;
 import dulse_gfx;

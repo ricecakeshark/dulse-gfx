@@ -1,4 +1,4 @@
-module dulse_gfx.shader.uniform.post_blur;
+module dulse_gfx.preset.uniform.post_blur;
 
 import dulse;
 

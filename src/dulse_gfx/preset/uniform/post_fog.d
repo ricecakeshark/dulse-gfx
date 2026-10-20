@@ -1,4 +1,4 @@
-module dulse_gfx.shader.uniform.post_fog;
+module dulse_gfx.preset.uniform.post_fog;
 
 import dulse;
 

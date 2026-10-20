@@ -1,4 +1,4 @@
-module dulse_gfx.shader.uniform.defer_texture;
+module dulse_gfx.preset.uniform.defer_texture;
 
 import dulse.math;
 
