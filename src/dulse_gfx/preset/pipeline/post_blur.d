@@ -3,14 +3,14 @@ module dulse_gfx.preset.pipeline.post_blur;
 import dulse_sdl;
 import dulse_gfx;
 
-GfxGraphicsContext create_pipeline_post_blur(
-	ref GfxGraphicsContext graphics_context,
-	ref GpuComputePipeline post_blur_pipeline,
+GraphicsContext create_pipeline_post_blur(
+	ref GraphicsContext graphics_context,
+	ref ComputePipeline post_blur_pipeline,
 )
 {
 	graphics_context.create(post_blur_pipeline);
 	//GpuComputePipelineCreateInfo pipeline_create_info;
-	auto pipeline_create_info = GpuComputePipelineCreateInfo(
+	auto pipeline_create_info = ComputePipelineCreateInfo(
 		ShaderFile("post_blur.comp", GpuShaderFormat.spirv)
 	);
 	with (pipeline_create_info)
@@ -23,8 +23,8 @@ GfxGraphicsContext create_pipeline_post_blur(
 		threadcount_y = 8;
 		threadcount_z = 1;
 	}
-	post_blur_pipeline.create(
-		pipeline_create_info
-	);
+	post_blur_pipeline
+		.bind(pipeline_create_info)
+		.create();
 	return graphics_context;
 }

@@ -1,20 +1,20 @@
-module dulse_gfx.graphics.command_buffer;
+module dulse_gfx.graphics.command.command_buffer;
 
 import dulse_sdl.graphics;
-import dulse_gfx.graphics;
+import dulse_gfx.graphics.command;
 
 alias CommandBuffer = GpuCommandBuffer;
 
-GpuCommandBuffer acquire(
-	GpuCommandBuffer command_buffer,
+CommandBuffer acquire(
+	CommandBuffer command_buffer,
 )
 {
 	command_buffer.acquire_buffer();
 	return command_buffer;
 }
 
-GpuCommandBuffer acquire(
-	GpuCommandBuffer command_buffer,
+CommandBuffer acquire(
+	CommandBuffer command_buffer,
 	ref GpuSwapchainTexture swapchain_texture,
 )
 {
@@ -23,8 +23,8 @@ GpuCommandBuffer acquire(
 	return command_buffer;
 }
 
-GpuCommandBuffer copy(
-	GpuCommandBuffer command_buffer,
+CommandBuffer copy(
+	CommandBuffer command_buffer,
 	void delegate(ref GpuCopyPass) dlg,
 )
 {
@@ -35,14 +35,14 @@ GpuCommandBuffer copy(
 	return command_buffer;
 }
 
-GpuCommandBuffer render(
-	GpuCommandBuffer command_buffer,
-	void delegate(ref GpuRenderPass) dlg,
+CommandBuffer render(
+	CommandBuffer command_buffer,
+	void delegate(ref RenderPass) dlg,
 	in GpuColorTargetInfo[] color_target_info_list,
 	in GpuDepthStencilTargetInfo depth_stencil_target_info,
 )
 {
-	scope GpuRenderPass render_pass = GpuRenderPass(command_buffer);
+	scope RenderPass render_pass = RenderPass(command_buffer);
 	render_pass.begin(
 		color_target_info_list,
 		depth_stencil_target_info,
@@ -52,13 +52,13 @@ GpuCommandBuffer render(
 	return command_buffer;
 }
 
-GpuCommandBuffer render(
-	GpuCommandBuffer command_buffer,
-	void delegate(ref GpuRenderPass) dlg,
+CommandBuffer render(
+	CommandBuffer command_buffer,
+	void delegate(ref RenderPass) dlg,
 	in GpuColorTargetInfo[] color_target_info_list,
 )
 {
-	scope GpuRenderPass render_pass = GpuRenderPass(command_buffer);
+	scope RenderPass render_pass = RenderPass(command_buffer);
 	render_pass.begin(
 		color_target_info_list,
 	);
@@ -68,8 +68,8 @@ GpuCommandBuffer render(
 }
 
 // begin() -> process -> end() with Compute pass.
-GpuCommandBuffer compute(
-	GpuCommandBuffer command_buffer,
+CommandBuffer compute(
+	CommandBuffer command_buffer,
 	void delegate(ref GpuComputePass) dlg,
 	in GpuStorageTextureReadWriteBinding[] texture_binding_list,
 	in GpuStorageBufferReadWriteBinding[] buffer_binding_list,
@@ -85,8 +85,8 @@ GpuCommandBuffer compute(
 	return command_buffer;
 }
 
-GpuCommandBuffer compute(
-	GpuCommandBuffer command_buffer,
+CommandBuffer compute(
+	CommandBuffer command_buffer,
 	void delegate(
 		ref GpuComputePass) dlg,
 	in GpuStorageTextureReadWriteBinding[] texture_binding_list,

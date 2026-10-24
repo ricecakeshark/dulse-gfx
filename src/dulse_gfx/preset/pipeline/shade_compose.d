@@ -3,14 +3,14 @@ module dulse_gfx.preset.pipeline.shade_compose;
 import dulse_sdl;
 import dulse_gfx;
 
-GfxGraphicsContext create_pipeline_compose(
-	ref GfxGraphicsContext graphics_context,
-	ref GpuComputePipeline compose_pipeline,
+GraphicsContext create_pipeline_compose(
+	ref GraphicsContext graphics_context,
+	ref ComputePipeline compose_pipeline,
 )
 {
 	graphics_context.create(compose_pipeline);
 	//GpuComputePipelineCreateInfo pipeline_create_info;
-	auto pipeline_create_info = GpuComputePipelineCreateInfo(
+	auto pipeline_create_info = ComputePipelineCreateInfo(
 		ShaderFile("shade_compose.comp", GpuShaderFormat.spirv)
 	);
 	with (pipeline_create_info)
@@ -23,8 +23,8 @@ GfxGraphicsContext create_pipeline_compose(
 		threadcount_y = 8;
 		threadcount_z = 1;
 	}
-	compose_pipeline.create(
-		pipeline_create_info
-	);
+	compose_pipeline
+		.bind(pipeline_create_info)
+		.create();
 	return graphics_context;
 }

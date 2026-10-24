@@ -5,11 +5,11 @@ import dulse_gfx.graphics.desc;
 import dulse_sdl.graphics.desc;
 import dulse_sdl.graphics.resource : GpuComputePipeline;
 
-alias ComputePipeline = GpuComputePipeline;
+alias ComputePipeline = GfxComputePipeline;
 
 class GfxComputePipeline : GpuComputePipeline
 {
-	protected ComputePipelineCreateInfo _create_info;
+	protected GfxComputePipelineCreateInfo _create_info;
 
 	this(GraphicsContext gc)
 	{
@@ -17,9 +17,15 @@ class GfxComputePipeline : GpuComputePipeline
 		return;
 	}
 
-	@property ref ComputePipelineCreateInfo create_info() pure nothrow @nogc @safe
+	@property ref GfxComputePipelineCreateInfo create_info() pure nothrow @nogc @safe
 	{
 		return this._create_info;
+	}
+
+	typeof(this) bind(GfxComputePipelineCreateInfo info)
+	{
+		this._create_info = info;
+		return this;
 	}
 
 	typeof(this) create()

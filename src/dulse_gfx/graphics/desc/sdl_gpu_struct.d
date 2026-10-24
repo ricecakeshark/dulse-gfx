@@ -3,37 +3,12 @@ module dulse_gfx.graphics.desc.sdl_gpu_struct;
 public import dulse_sdl.graphics.desc;
 import dulse_sdl.graphics.resource.shader;
 import sdl.gpu;
+import dulse_gfx.graphics.resource;
 
-struct GfxGraphicsPipelineCreateInfo
+/+GpuTextureSamplerBinding binding(GfxTexture texture, Sampler sampler)
 {
-	GpuVertexShader vertex_shader;
-	GpuFragmentShader fragment_shader;
-	SDL_GPUVertexInputState vertex_input_state;
-	SDL_GPUPrimitiveType primitive_type;
-	SDL_GPURasterizerState rasterizer_state;
-	SDL_GPUMultisampleState multisample_state;
-	SDL_GPUDepthStencilState depth_stencil_state;
-	SDL_GPUGraphicsPipelineTargetInfo target_info;
-
-	alias input_state = vertex_input_state;
-	alias primitive = primitive_type;
-	alias multisample = multisample_state;
-	alias depth_stencil = depth_stencil_state;
-
-	GpuGraphicsPipelineCreateInfo opCast(Type : GpuGraphicsPipelineCreateInfo)() const
-	{
-		return GpuGraphicsPipelineCreateInfo(
-			vertex_shader.handle,
-			fragment_shader.handle,
-			vertex_input_state,
-			primitive_type,
-			rasterizer_state,
-			multisample_state,
-			depth_stencil_state,
-			target_info,
-		);
-	}
-}
+	return GpuTextureSamplerBinding(texture.handle, sampler.handle);
+}+/
 
 struct GfxComputePipelineCreateInfo
 {
@@ -62,6 +37,51 @@ struct GfxComputePipelineCreateInfo
 			num_readwrite_storage_buffers,
 			num_uniform_buffers,
 			threadcount_x, threadcount_y, threadcount_z,
+		);
+	}
+}
+
+struct GfxGraphicsPipelineCreateInfo
+{
+	GpuVertexShader vertex_shader;
+	GpuFragmentShader fragment_shader;
+	GpuVertexInputState vertex_input_state;
+	GpuPrimitiveType primitive_type;
+	GpuRasterizerState rasterizer_state;
+	GpuMultisampleState multisample_state;
+	GpuDepthStencilState depth_stencil_state;
+	GfxGraphicsPipelineTargetInfo target_info;
+
+	alias input_state = vertex_input_state;
+	alias primitive = primitive_type;
+	alias multisample = multisample_state;
+	alias depth_stencil = depth_stencil_state;
+
+	GpuGraphicsPipelineCreateInfo opCast(Type : GpuGraphicsPipelineCreateInfo)() const
+	{
+		return GpuGraphicsPipelineCreateInfo(
+			cast(SDL_GPUShader*)vertex_shader.handle,
+			cast(SDL_GPUShader*)fragment_shader.handle,
+			cast()vertex_input_state,
+			primitive_type,
+			rasterizer_state,
+			multisample_state,
+			depth_stencil_state,
+			cast(GpuGraphicsPipelineTargetInfo)target_info,
+		);
+	}
+}
+
+struct GfxGraphicsPipelineTargetInfo
+{
+	GpuColorTargetDescription[] color_target_descriptions;
+	GpuTextureFormat depth_stencil_format = GpuTextureFormat.invalid;
+
+	GpuGraphicsPipelineTargetInfo opCast(Type : GpuGraphicsPipelineTargetInfo)() inout
+	{
+		return GpuGraphicsPipelineTargetInfo(
+			color_target_descriptions,
+			depth_stencil_format,
 		);
 	}
 }

@@ -19,7 +19,7 @@ struct RenderGraph
 
 	ref typeof(this) render(
 		string name,
-		void delegate(ref GpuRenderPass) dlg,
+		void delegate(ref RenderPass) dlg,
 	)
 	{
 		if (index(name).depth_target.isNull)

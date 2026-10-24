@@ -3,13 +3,13 @@ module dulse_gfx.preset.pipeline.pre_phong;
 import dulse_sdl;
 import dulse_gfx;
 
-GfxGraphicsContext create_pipeline_phong(
-	ref GfxGraphicsContext graphics_context,
-	ref GpuComputePipeline pipeline,
+GraphicsContext create_pipeline_phong(
+	ref GraphicsContext graphics_context,
+	ref ComputePipeline pipeline,
 )
 {
 	graphics_context.create(pipeline);
-	auto pipeline_create_info = GpuComputePipelineCreateInfo(
+	auto pipeline_create_info = ComputePipelineCreateInfo(
 		ShaderFile("pre_phong.comp", GpuShaderFormat.spirv)
 	);
 	with (pipeline_create_info)
@@ -22,8 +22,8 @@ GfxGraphicsContext create_pipeline_phong(
 		threadcount_y = 8;
 		threadcount_z = 1;
 	}
-	pipeline.create(
-		pipeline_create_info
-	);
+	pipeline
+		.bind(pipeline_create_info)
+		.create();
 	return graphics_context;
 }

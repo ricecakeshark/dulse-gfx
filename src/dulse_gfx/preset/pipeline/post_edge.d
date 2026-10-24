@@ -3,14 +3,14 @@ module dulse_gfx.preset.pipeline.post_edge;
 import dulse_sdl;
 import dulse_gfx;
 
-GfxGraphicsContext create_pipeline_post_edge(
-	ref GfxGraphicsContext graphics_context,
-	ref GpuComputePipeline post_edge_pipeline,
+GraphicsContext create_pipeline_post_edge(
+	ref GraphicsContext graphics_context,
+	ref ComputePipeline post_edge_pipeline,
 )
 {
 	graphics_context.create(post_edge_pipeline);
 	//GpuComputePipelineCreateInfo pipeline_create_info;
-	auto pipeline_create_info = GpuComputePipelineCreateInfo(
+	auto pipeline_create_info = ComputePipelineCreateInfo(
 		ShaderFile("post_edge.comp", GpuShaderFormat.spirv)
 	);
 	with (pipeline_create_info)
@@ -23,8 +23,8 @@ GfxGraphicsContext create_pipeline_post_edge(
 		threadcount_y = 8;
 		threadcount_z = 1;
 	}
-	post_edge_pipeline.create(
-		pipeline_create_info
-	);
+	post_edge_pipeline
+		.bind(pipeline_create_info)
+		.create();
 	return graphics_context;
 }

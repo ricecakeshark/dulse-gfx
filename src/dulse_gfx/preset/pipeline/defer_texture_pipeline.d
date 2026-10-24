@@ -3,9 +3,9 @@ module dulse_gfx.preset.pipeline.defer_texture_pipeline;
 import dulse_sdl;
 import dulse_gfx;
 
-GfxGraphicsContext create_pipeline_defer_texture(
-	ref GfxGraphicsContext graphics_context,
-	ref GpuGraphicsPipeline defer_pipeline
+GraphicsContext create_pipeline_defer_texture(
+	ref GraphicsContext graphics_context,
+	ref GraphicsPipeline defer_pipeline
 )
 {
 	scope GpuVertexShader vertex_shader;
@@ -20,9 +20,9 @@ GfxGraphicsContext create_pipeline_defer_texture(
 		GpuShaderArguments(1, 4, 0, 0),
 	);
 	// Defer Pipeline
-	scope GpuGraphicsPipelineCreateInfo defer_pipeline_info;
-	defer_pipeline_info.vertex_shader = vertex_shader.handle;
-	defer_pipeline_info.fragment_shader = fragment_shader.handle;
+	scope GraphicsPipelineCreateInfo defer_pipeline_info;
+	defer_pipeline_info.vertex_shader = vertex_shader;
+	defer_pipeline_info.fragment_shader = fragment_shader;
 	with (defer_pipeline_info)
 	{
 		vertex_input_state = GpuVertexInputState(
@@ -44,7 +44,7 @@ GfxGraphicsContext create_pipeline_defer_texture(
 			0u, 0u,
 			true, true, false,
 		);
-		target_info = GpuGraphicsPipelineTargetInfo(
+		target_info = GraphicsPipelineTargetInfo(
 			[
 			GpuColorTargetDescription(
 				GpuTextureFormat.r8g8b8a8_unorm
@@ -58,6 +58,8 @@ GfxGraphicsContext create_pipeline_defer_texture(
 		], GpuTextureFormat.d32_float,
 		);
 	}
-	defer_pipeline.create(defer_pipeline_info);
+	defer_pipeline
+		.bind(defer_pipeline_info)
+		.create();
 	return graphics_context;
 }

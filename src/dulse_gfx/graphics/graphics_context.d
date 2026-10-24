@@ -43,8 +43,8 @@ class GfxGraphicsContext
 	);
 
 	alias ResourcePipeline = AliasSeq!(
-		GpuGraphicsPipeline,
-		GpuComputePipeline,
+		GfxGraphicsPipeline,
+		GfxComputePipeline,
 	);
 	alias ResourceShader = AliasSeq!(
 		GpuVertexShader,
@@ -68,7 +68,11 @@ class GfxGraphicsContext
 		GfxTextContext
 	);
 
-	alias GfxResource = AliasSeq!(GfxTexture, GfxTextureAlternate);
+	alias GfxResource = AliasSeq!(
+		GfxGraphicsPipeline,
+		GfxComputePipeline,
+		GfxTexture, GfxTextureAlternate
+	);
 
 	this()
 	{

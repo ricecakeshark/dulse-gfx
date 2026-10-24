@@ -3,14 +3,14 @@ module dulse_gfx.preset.pipeline.post_color;
 import dulse_sdl;
 import dulse_gfx;
 
-GfxGraphicsContext create_pipeline_post_color(
-	ref GfxGraphicsContext graphics_context,
-	ref GpuComputePipeline post_color_pipeline,
+GraphicsContext create_pipeline_post_color(
+	ref GraphicsContext graphics_context,
+	ref ComputePipeline post_color_pipeline,
 )
 {
 	graphics_context.create(post_color_pipeline);
 	//GpuComputePipelineCreateInfo pipeline_create_info;
-	auto pipeline_create_info = GpuComputePipelineCreateInfo(
+	auto pipeline_create_info = ComputePipelineCreateInfo(
 		ShaderFile("post_color.comp", GpuShaderFormat.spirv)
 	);
 	with (pipeline_create_info)
@@ -23,8 +23,8 @@ GfxGraphicsContext create_pipeline_post_color(
 		threadcount_y = 8;
 		threadcount_z = 1;
 	}
-	post_color_pipeline.create(
-		pipeline_create_info
-	);
+	post_color_pipeline
+		.bind(pipeline_create_info)
+		.create();
 	return graphics_context;
 }

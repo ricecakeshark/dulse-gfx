@@ -1,6 +1,6 @@
 module dulse_gfx.input.action_subsystem;
 
-import dulse.core.container : MonoPool, TypeTable;
+import dulse.core.container : MonoPool, TypedTable;
 import dulse.subsystem;
 import dulse.input;
 import dulse.math.linalg : Vec1, Vec2;
@@ -9,7 +9,7 @@ import dulse_gfx.input;
 class ActionSubsystem : Subsystem!ActionSubsystem
 {
 	protected InputSubsystem input;
-	TypeTable!(ActionState!Vec1, ActionState!Vec2) state_table;
+	TypedTable!(ActionState!Vec1, ActionState!Vec2) state_table;
 	MonoPool!ActionBinding binding_pool;
 	alias state = state_table;
 	alias binding = binding_pool;
