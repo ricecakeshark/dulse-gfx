@@ -21,9 +21,9 @@ struct GfxRenderPass
 		return;
 	}
 
-	ref typeof(this) bind(TypeList...)(TypeList bindable_list)
+	ref typeof(this) bind(TypeSeq...)(TypeSeq bindable_list)
 	{
-		static if (contain_type!(GraphicsPipeline, TypeList))
+		static if (contain_type!(GraphicsPipeline, TypeSeq))
 		{
 			this.derived.bind(
 				[
@@ -31,7 +31,7 @@ struct GfxRenderPass
 				][0]
 			);
 		}
-		static if (contain_type!(VertexBuffer, TypeList))
+		static if (contain_type!(VertexBuffer, TypeSeq))
 		{
 			this.derived.bind(
 				[
@@ -39,7 +39,7 @@ struct GfxRenderPass
 				],0u
 			);
 		}
-		static if (contain_type!(IndexBuffer, TypeList))
+		static if (contain_type!(IndexBuffer, TypeSeq))
 		{
 			this.derived.bind(
 				[
@@ -47,7 +47,7 @@ struct GfxRenderPass
 				][0]
 			);
 		}
-		static if (contain_type!(GpuTextureSamplerBinding, TypeList))
+		static if (contain_type!(GpuTextureSamplerBinding, TypeSeq))
 		{
 			this.derived.bind(
 				[
