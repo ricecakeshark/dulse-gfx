@@ -60,14 +60,14 @@ struct GfxGraphicsPipelineCreateInfo
 	GpuGraphicsPipelineCreateInfo opCast(Type : GpuGraphicsPipelineCreateInfo)() const
 	{
 		return GpuGraphicsPipelineCreateInfo(
-			cast(SDL_GPUShader*)vertex_shader.handle,
-			cast(SDL_GPUShader*)fragment_shader.handle,
-			cast()vertex_input_state,
+			cast(SDL_GPUShader*) vertex_shader.handle,
+			cast(SDL_GPUShader*) fragment_shader.handle,
+			cast() vertex_input_state,
 			primitive_type,
 			rasterizer_state,
 			multisample_state,
 			depth_stencil_state,
-			cast(GpuGraphicsPipelineTargetInfo)target_info,
+			cast(GpuGraphicsPipelineTargetInfo) target_info,
 		);
 	}
 }
@@ -76,13 +76,38 @@ struct GfxGraphicsPipelineTargetInfo
 {
 	GpuColorTargetDescription[] color_target_descriptions;
 	GpuTextureFormat depth_stencil_format = GpuTextureFormat.invalid;
+	bool has_depth_stencil_target = false;
 
-	GpuGraphicsPipelineTargetInfo opCast(Type : GpuGraphicsPipelineTargetInfo)() inout
+	this(GpuColorTargetDescription[] desc,)
 	{
-		return GpuGraphicsPipelineTargetInfo(
-			color_target_descriptions,
-			depth_stencil_format,
-		);
+		this.color_target_descriptions = desc;
+		return;
+	}
+
+	this(GpuColorTargetDescription[] desc, GpuTextureFormat ds_format)
+	{
+		this.color_target_descriptions = desc;
+		this.depth_stencil_format = ds_format;
+		this.has_depth_stencil_target = true;
+		return;
+	}
+
+	GpuGraphicsPipelineTargetInfo opCast(Type : GpuGraphicsPipelineTargetInfo)() const
+	{
+		if (has_depth_stencil_target)
+		{
+			return GpuGraphicsPipelineTargetInfo(
+				color_target_descriptions.dup,
+				depth_stencil_format,
+			);
+		}
+		else
+		{
+			return GpuGraphicsPipelineTargetInfo(
+				color_target_descriptions.dup,
+			);
+		}
+
 	}
 }
 
