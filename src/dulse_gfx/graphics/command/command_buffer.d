@@ -1,7 +1,11 @@
 module dulse_gfx.graphics.command.command_buffer;
 
 import dulse_sdl.graphics;
+import dulse_sdl.graphics.desc;
 import dulse_gfx.graphics.command;
+import dulse_gfx.graphics.desc.dulse_gfx_struct;
+
+import dulse.core.meta;
 
 alias CommandBuffer = GpuCommandBuffer;
 
@@ -31,6 +35,33 @@ CommandBuffer copy(
 	scope GpuCopyPass copy_pass = GpuCopyPass(command_buffer);
 	copy_pass.begin();
 	dlg(copy_pass);
+	copy_pass.end();
+	return command_buffer;
+}
+
+CommandBuffer copy(TypeSeq...)(
+	CommandBuffer command_buffer,
+	TypeSeq sequence_list,
+) //if (TypeSeq.allStatisfy)
+{
+	scope GpuCopyPass copy_pass = GpuCopyPass(command_buffer);
+	copy_pass.begin();
+	foreach (sequence; filter_by_type!(
+			GfxCopyBufferSequence, sequence_list))
+	{
+		copy_pass.upload(
+			sequence.bt_buffer,
+			sequence.buffer_list,
+		);
+	}
+	foreach (sequence; filter_by_type!(
+			GfxCopyTextureSequence, sequence_list))
+	{
+		copy_pass.upload(
+			sequence.tt_buffer,
+			sequence.texture_list,
+		);
+	}
 	copy_pass.end();
 	return command_buffer;
 }

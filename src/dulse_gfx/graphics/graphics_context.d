@@ -8,7 +8,6 @@ import dulse_sdl.video.window;
 import dulse_gfx.graphics;
 import dulse_gfx.text.text_context;
 import std.format : format;
-import std.sumtype;
 import std.meta : AliasSeq, staticIndexOf;
 
 alias GraphicsContext = GfxGraphicsContext;
@@ -21,7 +20,7 @@ class GfxGraphicsContext
 
 	public ResourceStore!ResourceType resource_store;
 
-	alias ResourceType = SumType!(
+	alias ResourceType = AliasSeq!(
 		ResourcePipeline,
 		ResourceShader,
 		ResourceTransferBuffer,
