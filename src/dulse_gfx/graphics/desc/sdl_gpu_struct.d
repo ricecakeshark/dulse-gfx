@@ -5,10 +5,10 @@ import dulse_sdl.graphics.resource.shader;
 import sdl.gpu;
 import dulse_gfx.graphics.resource;
 
-/+GpuTextureSamplerBinding binding(GfxTexture texture, Sampler sampler)
+GpuTextureSamplerBinding binding(GfxTexture texture, Sampler sampler)
 {
 	return GpuTextureSamplerBinding(texture.handle, sampler.handle);
-}+/
+}
 
 struct GfxComputePipelineCreateInfo
 {
