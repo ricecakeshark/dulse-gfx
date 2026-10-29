@@ -2,7 +2,10 @@ name "dulse-gfx"
 description "dulse-gfx is assisting to create graphical app."
 authors "RiceShark"
 copyright "Copyright © 2025-2026, RiceShark"
-license "Mozilla Public License Version 2.0"
+license "MPL-2.0"
+
+subPackage "preset"
+//subPackage "./preset/"
 
 dependency "dulse" version=">=0.0.0"
 dependency "dulse-sdl" version=">=0.0.0"
@@ -11,5 +14,3 @@ targetType "sourceLibrary"
 targetName "dulse_gfx"
 targetPath "build"
 importPaths "src"
-
-copyFiles "shader/"
