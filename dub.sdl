@@ -4,8 +4,8 @@ authors "RiceShark"
 copyright "Copyright © 2025-2026, RiceShark"
 license "MPL-2.0"
 
-dependency "dulse" version=">=0.0.0"
-dependency "dulse-sdl" version=">=0.0.0"
+dependency "dulse" version="~>0.2"
+dependency "dulse-sdl" version="~>0.2"
 
 targetType "sourceLibrary"
 targetName "dulse_gfx"
