@@ -4,8 +4,6 @@ authors "RiceShark"
 copyright "Copyright © 2025-2026, RiceShark"
 license "MPL-2.0"
 
-subPackage "preset"
-
 dependency "dulse" version=">=0.0.0"
 dependency "dulse-sdl" version=">=0.0.0"
 
