@@ -66,6 +66,22 @@ CommandBuffer copy(TypeSeq...)(
 	return command_buffer;
 }
 
+CommandBuffer render(TypeSeq...)(
+	CommandBuffer command_buffer,
+	void delegate(ref RenderPass) dlg,
+	TypeSeq info_list,
+)
+{
+	scope RenderPass render_pass = RenderPass(command_buffer);
+	render_pass.begin(
+		[filter_by_type!(GpuColorTargetInfo, info_list)],
+		filter_by_type!(GpuDepthStencilTargetInfo, info_list)[0],
+	);
+	dlg(render_pass);
+	render_pass.end();
+	return command_buffer;
+}
+
 CommandBuffer render(
 	CommandBuffer command_buffer,
 	void delegate(ref RenderPass) dlg,
@@ -131,3 +147,19 @@ CommandBuffer compute(
 	compute_pass.end();
 	return command_buffer;
 }
+
+/+CommandBuffer compute(TypeSeq...)(
+	CommandBuffer command_buffer,
+	void delegate(ref GpuComputePass) dlg,
+	in TypeSeq bindable_list,
+)
+{
+	scope GpuComputePass compute_pass = GpuComputePass(command_buffer);
+	compute_pass.begin(
+		texture_binding_list,
+		buffer_binding_list,
+	);
+	dlg(compute_pass);
+	compute_pass.end();
+	return command_buffer;
+}+/
