@@ -3,6 +3,7 @@ module dulse_gfx.graphics.command.command_buffer;
 import dulse_sdl.graphics;
 import dulse_sdl.graphics.desc;
 import dulse_gfx.graphics.command;
+import dulse_gfx.graphics.resource;
 import dulse_gfx.graphics.desc.dulse_gfx_struct;
 
 import dulse.core.meta;
@@ -71,6 +72,7 @@ CommandBuffer render(TypeSeq...)(
 	void delegate(ref RenderPass) dlg,
 	TypeSeq info_list,
 )
+in (ColorTargetInfo.contain_all!TypeSeq)
 {
 	scope RenderPass render_pass = RenderPass(command_buffer);
 	render_pass.begin(
@@ -148,18 +150,43 @@ CommandBuffer compute(
 	return command_buffer;
 }
 
-/+CommandBuffer compute(TypeSeq...)(
+CommandBuffer compute(TypeSeq...)(
 	CommandBuffer command_buffer,
-	void delegate(ref GpuComputePass) dlg,
+	void delegate(ref ComputePass) dlg,
 	in TypeSeq bindable_list,
 )
+in (ComputeBinding.contain_all!TypeSeq)
 {
 	scope GpuComputePass compute_pass = GpuComputePass(command_buffer);
 	compute_pass.begin(
-		texture_binding_list,
-		buffer_binding_list,
+		[filter_by_type!(GpuStorageTextureReadWriteBinding, bindable_list)],
+		[filter_by_type!(GpuStorageBufferReadWriteBinding, bindable_list)],
 	);
 	dlg(compute_pass);
 	compute_pass.end();
 	return command_buffer;
-}+/
+}
+
+CommandBuffer blit(
+	CommandBuffer cb,
+	Texture texture_src,
+	Texture texture_dest,
+)
+{
+	cb.blit(
+		GpuBlitInfo(
+			GpuBlitRegion(texture_src),
+			GpuBlitRegion(texture_dest),
+	),
+	);
+	return cb;
+}
+
+alias ColorTargetInfo = TypeList!(
+	GpuColorTargetInfo, GpuDepthStencilTargetInfo,
+);
+
+alias ComputeBinding = TypeList!(
+	GpuStorageTextureReadWriteBinding,
+	GpuStorageBufferReadWriteBinding,
+);
