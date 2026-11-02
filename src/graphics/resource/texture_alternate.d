@@ -10,27 +10,30 @@ struct GfxTextureAlternate
 	int swap_state = 0;
 	Texture texture_alpha, texture_beta;
 
-	this(GfxGraphicsContext context)
+	this(GraphicsContext context)
 	{
-		texture_alpha = new Texture(context);
-		texture_beta = new Texture(context);
-		/+context.create(
+		context.create(
 			this.texture_alpha,
 			this.texture_beta,
-		);+/
+		);
 		return;
 	}
 
-	@property GpuTexture src() pure nothrow @nogc @safe
+	@property Texture src() pure nothrow @nogc @safe
 	{
 		return (swap_state % 2 == 0) ?
 			this.texture_alpha : this.texture_beta;
 	}
 
-	@property GpuTexture dest() pure nothrow @nogc @safe
+	@property Texture dest() pure nothrow @nogc @safe
 	{
 		return (swap_state % 2 == 0) ?
 			this.texture_beta : this.texture_alpha;
+	}
+
+	@property Texture[2] all() pure nothrow @nogc @safe
+	{
+		return [this.texture_alpha, this.texture_beta];
 	}
 
 	typeof(this) create(in GpuTextureCreateInfo tci)
