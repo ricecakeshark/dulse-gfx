@@ -117,6 +117,36 @@ CommandBuffer render(
 }
 
 // begin() -> process -> end() with Compute pass.
+CommandBuffer compute(TypeSeq...)(
+	CommandBuffer command_buffer,
+	void delegate(ref ComputePass) dlg,
+	TypeSeq bindable_list,
+)
+in (ComputeBinding.contain_all!TypeSeq)
+{
+	import std : map, array;
+
+	scope GpuComputePass compute_pass = GpuComputePass(command_buffer);
+
+	compute_pass.begin(
+		[
+			filter_by_type!(GpuStorageTextureReadWriteBinding, bindable_list),
+		]
+			~ (cast(GfxTexture[])[filter_by_type!(GfxTexture, bindable_list)])
+			.map!(tex => GpuStorageTextureReadWriteBinding(tex))
+			.array,
+			[
+				filter_by_type!(GpuStorageBufferReadWriteBinding, bindable_list),
+			]
+			~ (cast(GpuStorageBuffer[])[filter_by_type!(GpuStorageBuffer, bindable_list)])
+			.map!(sb => GpuStorageBufferReadWriteBinding(sb))
+			.array
+	);
+	dlg(compute_pass);
+	compute_pass.end();
+	return command_buffer;
+}
+
 CommandBuffer compute(
 	CommandBuffer command_buffer,
 	void delegate(ref GpuComputePass) dlg,
@@ -150,23 +180,6 @@ CommandBuffer compute(
 	return command_buffer;
 }
 
-CommandBuffer compute(TypeSeq...)(
-	CommandBuffer command_buffer,
-	void delegate(ref ComputePass) dlg,
-	in TypeSeq bindable_list,
-)
-in (ComputeBinding.contain_all!TypeSeq)
-{
-	scope GpuComputePass compute_pass = GpuComputePass(command_buffer);
-	compute_pass.begin(
-		[filter_by_type!(GpuStorageTextureReadWriteBinding, bindable_list)],
-		[filter_by_type!(GpuStorageBufferReadWriteBinding, bindable_list)],
-	);
-	dlg(compute_pass);
-	compute_pass.end();
-	return command_buffer;
-}
-
 CommandBuffer blit(
 	CommandBuffer cb,
 	Texture texture_src,
@@ -189,4 +202,17 @@ alias ColorTargetInfo = TypeList!(
 alias ComputeBinding = TypeList!(
 	GpuStorageTextureReadWriteBinding,
 	GpuStorageBufferReadWriteBinding,
+	GfxTexture, GpuStorageBuffer,
 );
+
+template to_strw_binding(alias symbol)
+{
+	static assert(is(typeof(symbol) == GfxTexture));
+	alias to_strw_binding = GpuStorageTextureReadWriteBinding(symbol);
+}
+
+template to_sbrw_binding(alias symbol)
+{
+	static assert(is(typeof(symbol) == GpuStorageBuffer));
+	alias to_sbrw_binding = GpuStorageBufferReadWriteBinding(symbol);
+}
