@@ -195,11 +195,11 @@ CommandBuffer blit(
 	return cb;
 }
 
-alias ColorTargetInfo = TypeList!(
+alias ColorTargetInfo = AliasList!(
 	GpuColorTargetInfo, GpuDepthStencilTargetInfo,
 );
 
-alias ComputeBinding = TypeList!(
+alias ComputeBinding = AliasList!(
 	GpuStorageTextureReadWriteBinding,
 	GpuStorageBufferReadWriteBinding,
 	GfxTexture, GpuStorageBuffer,

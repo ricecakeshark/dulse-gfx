@@ -10,3 +10,5 @@ dependency "dulse-sdl" version="~>0.2"
 targetType "sourceLibrary"
 targetName "dulse_gfx"
 targetPath "build"
+
+importPaths "src"
