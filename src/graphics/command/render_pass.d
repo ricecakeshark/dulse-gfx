@@ -63,8 +63,10 @@ struct GfxRenderPass
 					AliasList!(bindable_list).filter_by_type!GfxTexture.seq
 				]).map!(elm => binding(elm)).array;
 		}
-		this.derived.bind(texture_sampler_binding);
-
+		if (texture_sampler_binding.length >= 1)
+		{
+			this.derived.bind(texture_sampler_binding);
+		}
 		return this;
 	}
 
