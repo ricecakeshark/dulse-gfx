@@ -4,3 +4,4 @@ import dulse_sdl.graphics.resource.buffer;
 
 alias VertexBuffer = GpuVertexBuffer;
 alias IndexBuffer = GpuIndexBuffer;
+alias StorageBuffer = GpuStorageBuffer;

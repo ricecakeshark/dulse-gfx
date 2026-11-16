@@ -9,6 +9,7 @@ import dulse_gfx.graphics.desc.dulse_gfx_struct;
 import dulse.core.meta;
 
 alias CommandBuffer = GpuCommandBuffer;
+alias GfxCommandBuffer = GpuCommandBuffer;
 
 CommandBuffer acquire(
 	CommandBuffer command_buffer,
@@ -117,27 +118,39 @@ CommandBuffer render(
 }
 
 // begin() -> process -> end() with Compute pass.
+CommandBuffer compute(
+	CommandBuffer command_buffer,
+	void delegate(ref GfxComputePass) dlg,
+)
+{
+	scope GfxComputePass compute_pass = GfxComputePass(command_buffer);
+	compute_pass.begin();
+	dlg(compute_pass);
+	compute_pass.end();
+	return command_buffer;
+}
+
 CommandBuffer compute(TypeSeq...)(
 	CommandBuffer command_buffer,
-	void delegate(ref ComputePass) dlg,
+	void delegate(ref GfxComputePass) dlg,
 	TypeSeq bindable_list,
 )
-in (ComputeBinding.contain_all!TypeSeq)
+//in (ComputeBinding.contain_all!TypeSeq)
 {
 	import std : map, array;
 
-	scope GpuComputePass compute_pass = GpuComputePass(command_buffer);
+	scope GfxComputePass compute_pass = GfxComputePass(command_buffer);
 
 	compute_pass.begin(
-		[
+		(cast(GpuStorageTextureReadWriteBinding[])[
 			filter_by_type!(GpuStorageTextureReadWriteBinding, bindable_list),
-		]
+		])
 			~ (cast(GfxTexture[])[filter_by_type!(GfxTexture, bindable_list)])
 			.map!(tex => GpuStorageTextureReadWriteBinding(tex))
 			.array,
-			[
+			(cast(GpuStorageBufferReadWriteBinding[])[
 				filter_by_type!(GpuStorageBufferReadWriteBinding, bindable_list),
-			]
+			])
 			~ (cast(GpuStorageBuffer[])[filter_by_type!(GpuStorageBuffer, bindable_list)])
 			.map!(sb => GpuStorageBufferReadWriteBinding(sb))
 			.array
@@ -149,12 +162,12 @@ in (ComputeBinding.contain_all!TypeSeq)
 
 CommandBuffer compute(
 	CommandBuffer command_buffer,
-	void delegate(ref GpuComputePass) dlg,
+	void delegate(ref GfxComputePass) dlg,
 	in GpuStorageTextureReadWriteBinding[] texture_binding_list,
 	in GpuStorageBufferReadWriteBinding[] buffer_binding_list,
 )
 {
-	scope GpuComputePass compute_pass = GpuComputePass(command_buffer);
+	scope GfxComputePass compute_pass = GfxComputePass(command_buffer);
 	compute_pass.begin(
 		texture_binding_list,
 		buffer_binding_list,
@@ -167,11 +180,11 @@ CommandBuffer compute(
 CommandBuffer compute(
 	CommandBuffer command_buffer,
 	void delegate(
-		ref GpuComputePass) dlg,
+		ref GfxComputePass) dlg,
 	in GpuStorageTextureReadWriteBinding[] texture_binding_list,
 )
 {
-	scope GpuComputePass compute_pass = GpuComputePass(command_buffer);
+	scope GfxComputePass compute_pass = GfxComputePass(command_buffer);
 	compute_pass.begin(
 		texture_binding_list,
 	);
@@ -200,9 +213,13 @@ alias ColorTargetInfo = AliasList!(
 );
 
 alias ComputeBinding = AliasList!(
+	GfxComputePipeline,
+	GfxTexture,
 	GpuStorageTextureReadWriteBinding,
 	GpuStorageBufferReadWriteBinding,
-	GfxTexture, GpuStorageBuffer,
+	GpuStorageBuffer,
+	GpuTextureSamplerBinding,
+	
 );
 
 template to_strw_binding(alias symbol)
