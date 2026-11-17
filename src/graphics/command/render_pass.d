@@ -10,65 +10,51 @@ import dulse.core.meta;
 import std.algorithm : map;
 import std.array : array, staticArray;
 
-alias RenderPass = GfxRenderPass;
+alias RenderPass = GpuRenderPass;
 
-struct GfxRenderPass
+ref RenderPass bind_all(TypeSeq...)(return ref RenderPass pass, TypeSeq bindable_list)
 {
-	GpuRenderPass derived;
-	uint current_index;
-
-	this(CommandBuffer cb)
+	static if (contain_type!(GraphicsPipeline, TypeSeq))
 	{
-		derived = GpuRenderPass(cb);
-		return;
+		pass.bind(
+			[
+				filter_by_type!(GraphicsPipeline, bindable_list)
+			][0]
+		);
+	}
+	static if (contain_type!(VertexBuffer, TypeSeq))
+	{
+		pass.bind(
+			[
+				filter_by_type!(VertexBuffer, bindable_list)
+			], 0u
+		);
+	}
+	static if (contain_type!(IndexBuffer, TypeSeq))
+	{
+		pass.bind(
+			[filter_by_type!(IndexBuffer, bindable_list)][0]
+		);
 	}
 
-	ref typeof(this) bind(TypeSeq...)(TypeSeq bindable_list)
+	scope GpuTextureSamplerBinding[] texture_sampler_binding;
+
+	static if (contain_type!(GpuTextureSamplerBinding, TypeSeq))
 	{
-		static if (contain_type!(GraphicsPipeline, TypeSeq))
-		{
-			this.derived.bind(
-				[
-					filter_by_type!(GraphicsPipeline, bindable_list)
-				][0]
-			);
-		}
-		static if (contain_type!(VertexBuffer, TypeSeq))
-		{
-			this.derived.bind(
-				[
-					filter_by_type!(VertexBuffer, bindable_list)
-				], 0u
-			);
-		}
-		static if (contain_type!(IndexBuffer, TypeSeq))
-		{
-			this.derived.bind(
-				[filter_by_type!(IndexBuffer, bindable_list)][0]
-			);
-		}
-
-		scope GpuTextureSamplerBinding[] texture_sampler_binding;
-
-		static if (contain_type!(GpuTextureSamplerBinding, TypeSeq))
-		{
-			texture_sampler_binding ~= (cast(GpuTextureSamplerBinding[])[
-					AliasList!(bindable_list)
-					.filter_by_type!GpuTextureSamplerBinding.seq
-				]);
-		}
-		static if (contain_type!(GfxTexture, TypeSeq))
-		{
-			texture_sampler_binding ~= (cast(GfxTexture[])[
-					AliasList!(bindable_list).filter_by_type!GfxTexture.seq
-				]).map!(elm => binding(elm)).array;
-		}
-		if (texture_sampler_binding.length >= 1)
-		{
-			this.derived.bind(texture_sampler_binding);
-		}
-		return this;
+		texture_sampler_binding ~= (cast(GpuTextureSamplerBinding[])[
+				AliasList!(bindable_list)
+				.filter_by_type!GpuTextureSamplerBinding.seq
+			]);
 	}
-
-	alias derived this;
+	static if (contain_type!(GfxTexture, TypeSeq))
+	{
+		texture_sampler_binding ~= (cast(GfxTexture[])[
+				AliasList!(bindable_list).filter_by_type!GfxTexture.seq
+			]).map!(elm => binding(elm)).array;
+	}
+	if (texture_sampler_binding.length >= 1)
+	{
+		pass.bind(texture_sampler_binding);
+	}
+	return pass;
 }
