@@ -8,56 +8,47 @@ import dulse_gfx.graphics.command;
 import dulse_gfx.graphics.resource;
 import std : array, map;
 
-alias ComputePass = GfxComputePass;
-
-struct GfxComputePass
+alias ComputePass = GpuComputePass;
+// issue:
+// 		dulse_sdl's ComputePass.bind() hide dulse_gfx's ComputePass.bind(),
+//		then I forced to rename bind_all() from bind()
+ref ComputePass bind_all(TypeSeq...)(return ref ComputePass pass, TypeSeq bindable_list)
 {
-	GpuComputePass derived;
+	GpuTextureSamplerBinding[] sampler_binding;
 
-	this(CommandBuffer cb)
+	static if (contain_type!(GfxComputePipeline, TypeSeq))
 	{
-		derived = GpuComputePass(cb);
-		return;
+		pass.bind(
+			cast(GpuComputePipeline)[
+				filter_by_type!(GfxComputePipeline, bindable_list)
+			][0]
+		);
 	}
-
-	ref typeof(this) bind(TypeSeq...)(TypeSeq bindable_list)
+	static if (contain_type!(StorageBuffer, TypeSeq))
 	{
-		static if (contain_type!(ComputePipeline, TypeSeq))
-		{
-			this.derived.bind(cast(GpuComputePipeline)[
-				filter_by_type!(ComputePipeline, bindable_list)
-			][0]);
-		}
-		static if (contain_type!(StorageBuffer, TypeSeq))
-		{
-			this.derived.bind(cast(GpuStorageBuffer[])[
+		pass.bind(
+			0, cast(StorageBuffer[])[
 				filter_by_type!(StorageBuffer, bindable_list)
-			],);
-		}
-
-		scope GpuTextureSamplerBinding[] binding;
-
-		static if (contain_type!(GfxTexture, TypeSeq))
-		{
-			binding ~= (cast(GfxTexture[])[filter_by_type!(GfxTexture, bindable_list)])
-				.map!(elm => elm.binding)
-				.array();
-		}
-		static if (contain_type!(GpuTextureSamplerBinding, TypeSeq))
-		{
-			binding ~= (cast(GpuTextureSamplerBinding[])[
+			]
+		);
+	}
+	static if (contain_type!(GfxTexture, TypeSeq))
+	{
+		sampler_binding ~= (cast(GfxTexture[])[
+				filter_by_type!(GfxTexture, bindable_list)
+			])
+			.map!(elm => elm.binding)
+			.array();
+	}
+	static if (contain_type!(GpuTextureSamplerBinding, TypeSeq))
+	{
+		sampler_binding ~= (cast(GpuTextureSamplerBinding[])[
 				filter_by_type!(GpuTextureSamplerBinding, bindable_list)
 			]);
-		}
-		static if (
-			contain_type!(GfxTexture, TypeSeq)
-			|| contain_type!(GpuTextureSamplerBinding, TypeSeq)
-			)
-		{
-			this.derived.bind(binding,);
-		}
-		return this;
 	}
-
-	alias derived this;
+	if (sampler_binding.length > 0)
+	{
+		pass.bind(0, sampler_binding,);
+	}
+	return pass;
 }
