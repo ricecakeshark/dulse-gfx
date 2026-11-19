@@ -55,7 +55,6 @@ class GfxTexture : GpuTexture
 
 	typeof(this) create()
 	in (this.create_info != GpuTextureCreateInfo.init)
-	in (this.sampler !is null)
 	{
 		super.create(this.create_info);
 		return this;
